@@ -21,7 +21,8 @@ namespace LSG.DAL.Repositories
 
         public async Task<Account> Login(string username, string password)
         {
-            var account = _context.Accounts.FirstOrDefault(x => x.Username == username);
+            var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Username == username);
+            Console.WriteLine($"authrep: {account.Username}");
             if (account == null)
                 return null;
 
@@ -75,7 +76,7 @@ namespace LSG.DAL.Repositories
                         return false;
                 }
 
-                return false;
+                return true;
             }
         }
     }

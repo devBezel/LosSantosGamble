@@ -48,7 +48,7 @@ namespace LSG.API.Controllers
         public async Task<IActionResult> Login([FromBody] AccountForLoginDto accountForLogin)
         {
             var accountFromRepo = await _repository.Login(accountForLogin.Username, accountForLogin.Password);
-
+            Console.WriteLine(accountFromRepo.Username);
             if (accountFromRepo == null)
                 return Unauthorized();
 

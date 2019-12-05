@@ -6,4 +6,3 @@ B:\Projekty\GTA 5\lsg-serverside\LSG.GM\obj\Debug\netcoreapp3.0\LSG.GM.AssemblyI
 B:\Projekty\GTA 5\lsg-serverside\LSG.GM\obj\Debug\netcoreapp3.0\LSG.GM.AssemblyInfo.cs
 B:\Projekty\GTA 5\lsg-serverside\LSG.GM\obj\Debug\netcoreapp3.0\LSG.GM.dll
 B:\Projekty\GTA 5\lsg-serverside\LSG.GM\obj\Debug\netcoreapp3.0\LSG.GM.pdb
-B:\Projekty\GTA 5\lsg-serverside\LSG.GM\obj\Debug\netcoreapp3.0\LSG.GM.csproj.CoreCompileInputs.cache

@@ -11,4 +11,3 @@ B:\Projekty\GTA 5\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.Assembl
 B:\Projekty\GTA 5\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.csproj.CopyComplete
 B:\Projekty\GTA 5\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.dll
 B:\Projekty\GTA 5\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.pdb
-B:\Projekty\GTA 5\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.csproj.CoreCompileInputs.cache
