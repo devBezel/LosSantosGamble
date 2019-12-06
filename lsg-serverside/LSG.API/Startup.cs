@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using LSG.DAL.Database;
 using LSG.DAL.Repositories;
 using LSG.DAL.Repositories.IRepository;
@@ -34,6 +35,7 @@ namespace LSG.API
         {
             services.AddControllers();
             services.AddMvc();
+            services.AddAutoMapper();
             services.AddDbContext<RoleplayContext>(x => x.UseMySql("Server=localhost;Database=lsg;User=root;Password=; convert zero datetime=True"));
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -13,6 +13,7 @@ import { AuthGuard } from './_guards/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './_modules/material/material.module';
+import { PlayerPanelModule } from './_modules/player-panel/player-panel.module';
 
 
 export function tokenGetter() {
@@ -41,6 +42,7 @@ export function tokenGetter() {
     }),
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule,
+    PlayerPanelModule,
   ],
   providers: [
     AuthService,

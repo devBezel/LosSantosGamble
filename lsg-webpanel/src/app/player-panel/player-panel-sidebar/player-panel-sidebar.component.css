@@ -1,0 +1,6 @@
+mat-sidenav, mat-sidenav-content {
+    padding: 16px;
+}
+mat-sidenav-container {
+    height: 100vh;
+}

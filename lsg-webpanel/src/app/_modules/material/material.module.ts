@@ -19,7 +19,7 @@ import {
   MatSortModule, MatStepperModule,
   MatTableModule,
   MatTabsModule,
-  MatToolbarModule, MatTreeModule
+  MatToolbarModule, MatTreeModule, MatSidenavModule, MatChipsModule
 } from '@angular/material';
 
 @NgModule({
@@ -47,7 +47,9 @@ import {
     MatProgressSpinnerModule,
     MatBottomSheetModule,
     MatSnackBarModule,
-    MatStepperModule
+    MatStepperModule,
+    MatSidenavModule,
+    MatChipsModule
   ],
   exports: [
     MatIconModule,
@@ -73,7 +75,9 @@ import {
     MatProgressSpinnerModule,
     MatBottomSheetModule,
     MatSnackBarModule,
-    MatStepperModule
+    MatStepperModule,
+    MatSidenavModule,
+    MatChipsModule
   ]
 })
 export class MaterialModule {
