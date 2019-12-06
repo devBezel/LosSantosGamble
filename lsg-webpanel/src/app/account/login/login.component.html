@@ -1,0 +1,20 @@
+<div class="form-login">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar class="logo"></div>
+      <mat-card-title>Los Santos Gamble</mat-card-title>
+      <mat-card-subtitle>Zaloguj się, aby skorzystać z panelu.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <input matInput placeholder="Login" [(ngModel)]="model.username">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Hasło" [(ngModel)]="model.password">
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button (click)="login()">Zaloguj</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
