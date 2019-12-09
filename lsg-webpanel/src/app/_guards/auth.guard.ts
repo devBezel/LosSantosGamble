@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
             return true;
         }
         console.log('Nie masz uprawnień, aby wejść na tą stronę');
-        this.router.navigate(['']);
+        this.router.navigate(['/logowanie']);
         return false;
     }
 }

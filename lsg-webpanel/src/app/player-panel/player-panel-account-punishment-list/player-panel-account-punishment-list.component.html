@@ -1,0 +1,26 @@
+<div class="container">
+  <table mat-table [dataSource]="elementData" class="mat-elevation-z8">
+    <ng-container matColumnDef="Date">
+      <th mat-header-cell *matHeaderCellDef>Data nadania</th>
+      <td mat-cell *matCellDef>07.12.2019</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Character">
+      <th mat-header-cell *matHeaderCellDef>Postać</th>
+      <td mat-cell *matCellDef>Richard McCartney</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Type">
+        <th mat-header-cell *matHeaderCellDef>Typ kary</th>
+        <td mat-cell *matCellDef>Kick</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Administrator">
+        <th mat-header-cell *matHeaderCellDef>Administrator</th>
+        <td mat-cell *matCellDef>Algorytm</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

@@ -1,0 +1,58 @@
+<mat-card>
+  <mat-card-header>
+    <img mat-card-avatar src="https://eu.ui-avatars.com/api/?name=Ricahrd+McCartney" />
+    <mat-card-title>{{ data.name }}</mat-card-title>
+    <mat-card-subtitle>
+        <mat-chip-list aria-label="Kontrolki gracza" class="character-control">
+            <mat-chip  class="chip-character-success">Aktywna</mat-chip>
+            <mat-chip color="primary">129h</mat-chip>
+        </mat-chip-list>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card style="margin-bottom: 20px;">
+      <mat-card-header>
+          <mat-card-title>Statystyki:</mat-card-title>
+      </mat-card-header>
+      <p>UID: 1</p>
+      <p>Ostatnio: 09.12.2019</p>
+      <p>Płeć: Mężczyzna</p>
+      <p>Wiek: 39 lat</p>
+      <p>Wzrost: 190 cm</p>
+      <p>Waga: 90kg</p>
+      <p>Gotówka: $291231</p>
+      <p>Bank: $12921</p>
+  </mat-card>
+
+  <mat-card>
+      <mat-card-header>
+          <mat-card-title>Pojazdy:</mat-card-title>
+      </mat-card-header>
+
+      <table matSort>
+        <tr>
+          <th mat-sort-header="name">VID</th>
+          <th mat-sort-header="name">Nazwa</th>
+          <th mat-sort-header="name">Przebieg</th>
+          <th mat-sort-header="name">Paliwo</th>
+        </tr>
+
+        <tr>
+          <td>
+            21
+          </td>
+          <td>
+            Infernus
+          </td>
+          <td>
+              101 km
+          </td>
+          <td>
+              20 L
+          </td>
+        </tr>
+      </table>
+  </mat-card>
+
+
+</mat-card>

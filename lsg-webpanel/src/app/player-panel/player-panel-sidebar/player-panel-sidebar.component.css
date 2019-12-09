@@ -4,3 +4,7 @@ mat-sidenav, mat-sidenav-content {
 mat-sidenav-container {
     height: 100vh;
 }
+.sidebar-button {
+    width: 100%; 
+    height: 6vh;
+}

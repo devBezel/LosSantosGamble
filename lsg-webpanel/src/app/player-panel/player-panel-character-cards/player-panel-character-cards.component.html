@@ -1,0 +1,33 @@
+
+
+
+<div class="container">
+  <mat-grid-list [cols]="breakpoint" rowHeight="2:1" (window:resize)="onResize($event)">
+    <mat-grid-tile>
+        <mat-card class="character-card">
+            <mat-card-header>
+              <img mat-card-avatar="mat-card-avatar" src="https://eu.ui-avatars.com/api/?name=Ricahrd+McCartney"/>
+              <mat-card-title>Richard McCartney</mat-card-title>
+              <mat-card-subtitle>129h</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-footer>
+                <app-player-panel-character-detail></app-player-panel-character-detail>
+              </mat-card-footer>
+          </mat-card>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+        <mat-card class="character-card">
+            <mat-card-header>
+              <img mat-card-avatar="mat-card-avatar" src="https://eu.ui-avatars.com/api/?name=John+Doe"/>
+              <mat-card-title>John Doe</mat-card-title>
+              <mat-card-subtitle>26h</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-footer>
+              <button mat-button>Wejdź</button>
+            </mat-card-footer>
+          </mat-card>
+    </mat-grid-tile>
+
+  </mat-grid-list>
+</div>

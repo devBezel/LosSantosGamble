@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-player-panel-sidebar',
@@ -10,9 +12,15 @@ export class PlayerPanelSidebarComponent implements OnInit {
   opened = true;
   events = [];
 
-  constructor() { }
+  constructor(private router: Router, public authService: AuthService) { }
 
   ngOnInit() {
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    console.log('Zostałeś wylogowany');
+    this.router.navigate(['/home']);
   }
 
 }

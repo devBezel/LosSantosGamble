@@ -1,0 +1,15 @@
+.first-text h1{
+    font-family: 'Roboto', sans-serif;
+    
+    text-align: center;
+}
+.first-text p {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+}
+
+.history-characters {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}

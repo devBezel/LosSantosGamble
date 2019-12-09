@@ -1,1 +1,6 @@
-<router-outlet></router-outlet>
+<div class="login" *ngIf="!loggedIn()">
+    <router-outlet></router-outlet>
+</div>
+<div class="navbar" *ngIf="loggedIn()">
+    <app-player-panel-sidebar></app-player-panel-sidebar>
+</div>

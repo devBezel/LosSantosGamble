@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,6 +32,7 @@ export function tokenGetter() {
     FormsModule,
     BrowserAnimationsModule,
     MaterialModule,
+    ReactiveFormsModule,
     JwtModule.forRoot({
       config: {
         // tslint:disable-next-line:object-literal-shorthand
@@ -46,7 +47,7 @@ export function tokenGetter() {
   ],
   providers: [
     AuthService,
-    AuthGuard
+    AuthGuard,
   ],
   bootstrap: [AppComponent]
 })

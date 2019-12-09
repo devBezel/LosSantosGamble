@@ -6,18 +6,67 @@
 
     <mat-card>
       <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>Algorytm</mat-card-title>
+        <img mat-card-avatar src="https://eu.ui-avatars.com/api/?name={{authService.decodedToken?.unique_name}}" />
+        <mat-card-title>{{ authService.decodedToken?.unique_name }}</mat-card-title>
+        <mat-card-subtitle>Gracz</mat-card-subtitle>
+        <button mat-button [matMenuTriggerFor]="profile"><i class="material-icons">
+          person
+          </i>Profil</button>
+          <mat-menu #profile="matMenu">
+            <button mat-menu-item (click)="logout()">Wyloguj</button>
+          </mat-menu>
       </mat-card-header>
-    </mat-card>
-    <button mat-button>Click me!</button>
 
-    
+      <mat-grid-list cols="4" rowHeight="1:1">
+          <mat-grid-tile>
+              <mat-icon matBadge="1" matBadgeColor="warn">lock</mat-icon>
+          </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-icon matBadge="1" matBadgeColor="sucess">message</mat-icon>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-icon matBadge="15" matBadgeColor="success">notifications</mat-icon>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-icon matBadge="15" matBadgeColor="success">person_add</mat-icon>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <mat-grid-list cols="1" rowHeight="3:1">
+          <mat-grid-tile>
+            <button class="sidebar-button" mat-button [matMenuTriggerFor]="characters">
+              <i class="material-icons">supervisor_account</i> Postacie 
+              </button>
+              <mat-menu #characters="matMenu">
+                <button mat-menu-item [matMenuTriggerFor]="ownCharacters">Moje postacie</button>
+                <button mat-menu-item [matMenuTriggerFor]="manageCharacter">Zarządzaj</button>
+              </mat-menu>
+              <mat-menu #ownCharacters="matMenu">
+                <button mat-menu-item>Richard McCartney</button>
+              </mat-menu>
+              <mat-menu #manageCharacter="matMenu">
+                <button mat-menu-item [routerLink]="['/player/panel/character/create']" routerLinkActive="router-link-active" >Utwórz</button>
+              </mat-menu>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button class="sidebar-button" mat-button [matMenuTriggerFor]="groups">
+                <i class="material-icons">store</i>
+                Grupy
+            </button>
+            <mat-menu #groups="matMenu">
+              <button mat-menu-item  [matMenuTriggerFor]="ownGroup">Moje grupy</button>
+            </mat-menu>
+
+            <mat-menu #ownGroup="matMenu">
+              <button mat-menu-item>Los Santos Police Departament</button>
+            </mat-menu>
+          </mat-grid-tile>
+        </mat-grid-list>
+    </mat-card>    
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <p><button mat-button (click)="sidenav.toggle()">|||</button></p>
-
+    <p><button mat-button (click)="sidenav.toggle()">| | |</button></p>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
