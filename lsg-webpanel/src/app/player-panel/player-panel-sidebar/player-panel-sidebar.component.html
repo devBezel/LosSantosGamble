@@ -19,16 +19,16 @@
 
       <mat-grid-list cols="4" rowHeight="1:1">
           <mat-grid-tile>
-              <mat-icon matBadge="1" matBadgeColor="warn">lock</mat-icon>
+              <mat-icon matBadge="3" matBadgeColor="warn">lock</mat-icon>
           </mat-grid-tile>
         <mat-grid-tile>
-            <mat-icon matBadge="1" matBadgeColor="sucess">message</mat-icon>
+            <mat-icon matBadge="0" matBadgeColor="sucess">message</mat-icon>
         </mat-grid-tile>
         <mat-grid-tile>
-            <mat-icon matBadge="15" matBadgeColor="success">notifications</mat-icon>
+            <mat-icon matBadge="0" matBadgeColor="success">notifications</mat-icon>
         </mat-grid-tile>
         <mat-grid-tile>
-            <mat-icon matBadge="15" matBadgeColor="success">person_add</mat-icon>
+            <mat-icon matBadge="1" matBadgeColor="success">person_add</mat-icon>
         </mat-grid-tile>
       </mat-grid-list>
 
@@ -60,6 +60,34 @@
             <mat-menu #ownGroup="matMenu">
               <button mat-menu-item>Los Santos Police Departament</button>
             </mat-menu>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button class="sidebar-button" mat-button [matMenuTriggerFor]="vehicles">
+              <i class="material-icons">directions_car</i>
+                Pojazdy
+            </button>
+
+            <mat-menu #vehicles="matMenu">
+              <button mat-menu-item>Twoje pojazdy</button>
+            </mat-menu>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button class="sidebar-button" mat-button>
+              <i class="material-icons">email</i>
+                Zgłoszenia
+            </button>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button class="sidebar-button" mat-button>
+              <i class="material-icons">message</i>
+                Wiadomości
+            </button>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button class="sidebar-button" mat-button>
+              <i class="material-icons">how_to_reg</i>
+                Znajomi
+            </button>
           </mat-grid-tile>
         </mat-grid-list>
     </mat-card>    

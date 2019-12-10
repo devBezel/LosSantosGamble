@@ -34,6 +34,63 @@ namespace LSG.DAL.Migrations
 
                     b.ToTable("Accounts");
                 });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.Character", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("AccountId");
+
+                    b.Property<float>("Armor");
+
+                    b.Property<float>("Bank");
+
+                    b.Property<bool>("BankStatus");
+
+                    b.Property<string>("Description");
+
+                    b.Property<float>("DirtyMoney");
+
+                    b.Property<string>("Gender");
+
+                    b.Property<float>("Health");
+
+                    b.Property<float>("Height");
+
+                    b.Property<string>("History");
+
+                    b.Property<float>("Money");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("PicUrl");
+
+                    b.Property<float>("PosX");
+
+                    b.Property<float>("PosY");
+
+                    b.Property<float>("PosZ");
+
+                    b.Property<float>("Rotation");
+
+                    b.Property<string>("Surname");
+
+                    b.Property<float>("Weight");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Characters");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.Character", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId");
+                });
 #pragma warning restore 612, 618
         }
     }

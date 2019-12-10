@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using LSG.BLL.Mappers;
+using LSG.BLL.Services;
+using LSG.BLL.Services.Interfaces;
 using LSG.DAL.Database;
 using LSG.DAL.Repositories;
 using LSG.DAL.Repositories.IRepository;
+using LSG.DAL.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,9 +39,12 @@ namespace LSG.API
         {
             services.AddControllers();
             services.AddMvc();
+            Mapper.Initialize(cfg => cfg.AddProfile<AutoMapperProfiles>());
             services.AddAutoMapper();
             services.AddDbContext<RoleplayContext>(x => x.UseMySql("Server=localhost;Database=lsg;User=root;Password=; convert zero datetime=True"));
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICharacterService, CharacterService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
