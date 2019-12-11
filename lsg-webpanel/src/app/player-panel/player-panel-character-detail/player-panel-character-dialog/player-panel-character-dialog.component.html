@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
-    <img mat-card-avatar src="https://eu.ui-avatars.com/api/?name=Ricahrd+McCartney" />
-    <mat-card-title>{{ data.name }}</mat-card-title>
+    <img mat-card-avatar src="https://eu.ui-avatars.com/api/?name={{ data.character.name }}+{{ data.character.surname  }}" />
+    <mat-card-title>{{ data.character.name }} {{ data.character.surname  }}</mat-card-title>
     <mat-card-subtitle>
         <mat-chip-list aria-label="Kontrolki gracza" class="character-control">
             <mat-chip  class="chip-character-success">Aktywna</mat-chip>
@@ -14,14 +14,14 @@
       <mat-card-header>
           <mat-card-title>Statystyki:</mat-card-title>
       </mat-card-header>
-      <p>UID: 1</p>
+      <p>UID: {{ data.character.id }}</p>
       <p>Ostatnio: 09.12.2019</p>
-      <p>Płeć: Mężczyzna</p>
-      <p>Wiek: 39 lat</p>
-      <p>Wzrost: 190 cm</p>
-      <p>Waga: 90kg</p>
-      <p>Gotówka: $291231</p>
-      <p>Bank: $12921</p>
+      <p>Płeć: {{ data.character.gender }}</p>
+      <p>Wiek: {{ data.character.age }} lat</p>
+      <p>Wzrost: {{ data.character.height }} cm</p>
+      <p>Waga: {{ data.character.weight }} kg</p>
+      <p>Gotówka: $ {{ data.character.money }}</p>
+      <p>Bank: $ {{ data.character.bank }}</p>
   </mat-card>
 
   <mat-card>
@@ -29,29 +29,31 @@
           <mat-card-title>Pojazdy:</mat-card-title>
       </mat-card-header>
 
-      <table matSort>
-        <tr>
-          <th mat-sort-header="name">VID</th>
-          <th mat-sort-header="name">Nazwa</th>
-          <th mat-sort-header="name">Przebieg</th>
-          <th mat-sort-header="name">Paliwo</th>
-        </tr>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
 
-        <tr>
-          <td>
-            21
-          </td>
-          <td>
-            Infernus
-          </td>
-          <td>
-              101 km
-          </td>
-          <td>
-              20 L
-          </td>
-        </tr>
+        <ng-container matColumnDef="model">
+          <th mat-header-cell *matHeaderCellDef>Model</th>
+          <td mat-cell *matCellDef="let element">{{ element.model }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="health">
+          <th mat-header-cell *matHeaderCellDef>Życie</th>
+          <td mat-cell *matCellDef="let element">{{ element.health }} hp</td>
+        </ng-container>
+
+        <ng-container matColumnDef="option">
+          <th mat-header-cell *matHeaderCellDef>Opcje</th>
+          <td mat-cell *matCellDef="let element"><a class="option"><i class="material-icons">arrow_forward</i></a></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+
   </mat-card>
 
 

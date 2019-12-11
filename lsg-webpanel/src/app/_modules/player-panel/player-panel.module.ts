@@ -16,14 +16,20 @@ import { PlayerPanelAccountPunishmentListComponent } from 'src/app/player-panel/
 import { PlayerPanelCharacterDetailComponent } from 'src/app/player-panel/player-panel-character-detail/player-panel-character-detail.component';
 // tslint:disable-next-line:max-line-length
 import { PlayerPanelCharacterDialogComponent } from 'src/app/player-panel/player-panel-character-detail/player-panel-character-dialog/player-panel-character-dialog.component';
+import { CharacterService } from 'src/app/_services/character.service';
+import { CharacterCardResolver } from 'src/app/_resolvers/character-card.resolver';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   imports: [
+    BrowserModule,
     CommonModule,
     FormsModule,
     MaterialModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   declarations: [
     PlayerPanelHomeComponent,
@@ -35,8 +41,13 @@ import { PlayerPanelCharacterDialogComponent } from 'src/app/player-panel/player
     PlayerPanelCharacterDetailComponent,
     PlayerPanelCharacterDialogComponent
   ],
+  providers: [
+    CharacterService,
+    CharacterCardResolver
+  ],
   exports: [
-    PlayerPanelSidebarComponent
+    PlayerPanelSidebarComponent,
+
   ],
   entryComponents: [
     PlayerPanelCharacterDialogComponent

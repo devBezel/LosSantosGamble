@@ -10,6 +10,7 @@ namespace LSG.DAL.Database.Models
         public Account Account { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public int Age { get; set; }
         public string Gender { get; set; }
         public float Height { get; set; }
         public float Weight { get; set; }
@@ -26,7 +27,6 @@ namespace LSG.DAL.Database.Models
         public bool BankStatus { get; set; }
         public float Health { get; set; }
         public float Armor { get; set; }
-
-
+        public IEnumerable<Vehicle> Vehicles { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace LSG.DAL.Repositories
 
         public async Task<IEnumerable<Character>> GetAccountCharacters(int id)
         {
-            var characters = await _context.Characters.Where(x => x.Id == id).Include(a => a.Account).ToListAsync();
+            var characters = await _context.Characters.Where(x => x.Account.Id == id).Include(a => a.Account).Include(v => v.Vehicles).ToListAsync();
 
             return characters;
         }

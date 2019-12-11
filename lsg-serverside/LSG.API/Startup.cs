@@ -22,6 +22,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Newtonsoft.Json;
 
 namespace LSG.API
 {
@@ -38,7 +40,9 @@ namespace LSG.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddMvc();
+            services.AddMvc(option => option.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             Mapper.Initialize(cfg => cfg.AddProfile<AutoMapperProfiles>());
             services.AddAutoMapper();
             services.AddDbContext<RoleplayContext>(x => x.UseMySql("Server=localhost;Database=lsg;User=root;Password=; convert zero datetime=True"));

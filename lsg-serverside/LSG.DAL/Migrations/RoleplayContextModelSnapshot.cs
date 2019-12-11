@@ -42,6 +42,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int?>("AccountId");
 
+                    b.Property<int>("Age");
+
                     b.Property<float>("Armor");
 
                     b.Property<float>("Bank");
@@ -85,11 +87,52 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Characters");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.Vehicle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("B");
+
+                    b.Property<int>("G");
+
+                    b.Property<int>("Health");
+
+                    b.Property<string>("Model");
+
+                    b.Property<int?>("OwnerId");
+
+                    b.Property<float>("PosX");
+
+                    b.Property<float>("PosY");
+
+                    b.Property<float>("PosZ");
+
+                    b.Property<int>("R");
+
+                    b.Property<float>("Rot");
+
+                    b.Property<bool>("State");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Vehicles");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.Character", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.Vehicle", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.Character", "Owner")
+                        .WithMany("Vehicles")
+                        .HasForeignKey("OwnerId");
                 });
 #pragma warning restore 612, 618
         }

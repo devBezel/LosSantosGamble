@@ -5,3 +5,9 @@
     background-color: #368f3e !important;
     color: white;
 }
+table {
+    width: 100%;
+}
+.option {
+    cursor: pointer;
+}

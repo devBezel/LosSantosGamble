@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using LSG.BLL.Dto.Account;
+using LSG.BLL.Dto.Vehicle;
 using LSG.DAL.Database.Models;
 
 namespace LSG.BLL.Dto.Character
@@ -12,6 +13,7 @@ namespace LSG.BLL.Dto.Character
         public AccountForCharacterDto Account { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public int Age { get; set; }
         public string Gender { get; set; }
         public float Height { get; set; }
         public float Weight { get; set; }
@@ -28,5 +30,6 @@ namespace LSG.BLL.Dto.Character
         public bool BankStatus { get; set; }
         public float Health { get; set; }
         public float Armor { get; set; }
+        public IEnumerable<VehicleToCharacterDto> Vehicles { get; set; }
     }
 }

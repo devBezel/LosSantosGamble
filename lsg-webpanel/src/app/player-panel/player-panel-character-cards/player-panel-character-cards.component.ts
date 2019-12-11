@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Character } from 'src/app/_models/character';
 
 @Component({
   selector: 'app-player-panel-character-cards',
@@ -8,10 +9,12 @@ import { Component, OnInit } from '@angular/core';
 export class PlayerPanelCharacterCardsComponent implements OnInit {
 
   breakpoint: number;
+  @Input() characters: Character[];
 
   constructor() { }
 
   ngOnInit() {
+    console.log(this.characters);
     this.breakpoint = (window.innerWidth <= 400) ? 1 : 5;
   }
 

@@ -1,8 +1,11 @@
+import { Vehicle } from './vehicle';
+
 export interface Character {
     id: number;
     account: Account;
     name: string;
     surname: string;
+    age: number;
     gender: string;
     height: number;
     weight: number;
@@ -19,4 +22,5 @@ export interface Character {
     bankStatus: boolean;
     health: number;
     armor: number;
+    vehicles: Vehicle[];
 }
