@@ -7,7 +7,6 @@
   <ItemGroup>
     <ProjectReference Include="..\LSG.BLL\LSG.BLL.csproj" />
     <ProjectReference Include="..\LSG.DAL\LSG.DAL.csproj" />
-    <ProjectReference Include="..\LSG.GM\LSG.GM.csproj" />
   </ItemGroup>
 
   <ItemGroup>

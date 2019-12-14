@@ -16,6 +16,7 @@ namespace LSG.BLL.Mappers
             CreateMap<Account, AccountForCharacterDto>();
             CreateMap<Character, CharacterForListDto>();
             CreateMap<Vehicle, VehicleToCharacterDto>();
+            CreateMap<CharacterDescription, CharacterDescriptionForScriptDto>();
         }
     }
 }

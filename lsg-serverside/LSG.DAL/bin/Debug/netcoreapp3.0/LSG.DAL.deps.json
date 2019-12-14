@@ -9,7 +9,6 @@
       "LSG.DAL/1.0.0": {
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "4.0.1",
-          "LSG.GM": "1.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "2.2.0",
           "Microsoft.EntityFrameworkCore": "2.2.4",
           "Microsoft.EntityFrameworkCore.Design": "2.2.4",
@@ -1518,11 +1517,6 @@
           "System.Xml.ReaderWriter": "4.3.0",
           "System.Xml.XmlDocument": "4.3.0"
         }
-      },
-      "LSG.GM/1.0.0": {
-        "runtime": {
-          "LSG.GM.dll": {}
-        }
       }
     }
   },
@@ -2588,11 +2582,6 @@
       "sha512": "sha512-VShQJhOxgD/5M2Z1IWm1vMaSqlbjo1zdFf8H7Ahte6bTvSUhUko/gDpAVVhGgGgTDeue4QyNg1fu1Zz2GKSEuQ==",
       "path": "system.xml.xmlserializer/4.3.0",
       "hashPath": "system.xml.xmlserializer.4.3.0.nupkg.sha512"
-    },
-    "LSG.GM/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     }
   }
 }

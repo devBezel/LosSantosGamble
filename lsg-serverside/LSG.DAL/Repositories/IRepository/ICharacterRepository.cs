@@ -9,5 +9,6 @@ namespace LSG.DAL.Repositories.IRepository
     public interface ICharacterRepository : IGenericRepository<Character>
     {
         Task<IEnumerable<Character>> GetAccountCharacters(int id);
+        Task<IEnumerable<CharacterDescription>> GetCharacterDescriptions(int id);
     }
 }

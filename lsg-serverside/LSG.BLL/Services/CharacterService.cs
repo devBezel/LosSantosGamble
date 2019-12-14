@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LSG.BLL.Dto.Character;
 using LSG.BLL.Services.Interfaces;
+using LSG.DAL.Database.Models;
 using LSG.DAL.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,15 @@ namespace LSG.BLL.Services
             var characterToReturn = _mapper.Map<IEnumerable<CharacterForListDto>>(characters);
 
             return characterToReturn;
+        }
+
+        public async Task<IEnumerable<CharacterDescriptionForScriptDto>> GetCharacterDescriptions(int id)
+        {
+            IEnumerable<CharacterDescription> characterDescriptions = await _unitOfWork.CharacterRepository.GetCharacterDescriptions(id);
+
+            IEnumerable<CharacterDescriptionForScriptDto> characterDescriptionsToReturn = _mapper.Map<IEnumerable<CharacterDescriptionForScriptDto>>(characterDescriptions);
+
+            return characterDescriptionsToReturn;
         }
 
         public void Dispose()

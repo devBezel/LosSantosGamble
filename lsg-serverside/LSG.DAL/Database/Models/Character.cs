@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace LSG.DAL.Database.Models
@@ -28,5 +29,6 @@ namespace LSG.DAL.Database.Models
         public float Health { get; set; }
         public float Armor { get; set; }
         public IEnumerable<Vehicle> Vehicles { get; set; }
+        public IEnumerable<CharacterDescription> CharacterDescriptions { get; set; }
     }
 }

@@ -87,6 +87,24 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Characters");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterDescription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("CharacterId");
+
+                    b.Property<string>("Content");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.ToTable("CharacterDescriptions");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.Vehicle", b =>
                 {
                     b.Property<int>("Id")
@@ -126,6 +144,13 @@ namespace LSG.DAL.Migrations
                     b.HasOne("LSG.DAL.Database.Models.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterDescription", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.Character", "Character")
+                        .WithMany("CharacterDescriptions")
+                        .HasForeignKey("CharacterId");
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.Vehicle", b =>

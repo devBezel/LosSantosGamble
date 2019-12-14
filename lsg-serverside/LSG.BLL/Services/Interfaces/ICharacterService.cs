@@ -9,6 +9,7 @@ namespace LSG.BLL.Services.Interfaces
     public interface ICharacterService : IDisposable
     {
         Task<IEnumerable<CharacterForListDto>> GetAccountCharacters(int id);
+        Task<IEnumerable<CharacterDescriptionForScriptDto>> GetCharacterDescriptions(int id);
         new void Dispose();
     }
 }

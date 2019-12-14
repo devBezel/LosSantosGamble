@@ -1,4 +1,5 @@
-﻿using LSG.BLL.Services.Interfaces;
+﻿using LSG.BLL.Dto.Character;
+using LSG.BLL.Services.Interfaces;
 using LSG.DAL.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -33,6 +34,17 @@ namespace LSG.API.Controllers
             var characters = await _service.GetAccountCharacters(id);
 
             return Ok(characters);
+        }
+
+        [HttpGet("description/{id}/{characterId}")]
+        public async Task<IActionResult> GetCharacterDescription(int id, int characterId)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            IEnumerable<CharacterDescriptionForScriptDto> characterDescriptions = await _service.GetCharacterDescriptions(id);
+
+            return Ok(characterDescriptions);
         }
         
     }

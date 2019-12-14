@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj": {}
+    "B:\\Projekty\\LSGamble-Serverside\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj": {}
   },
   "projects": {
-    "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj": {
+    "B:\\Projekty\\LSGamble-Serverside\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj",
+        "projectUniqueName": "B:\\Projekty\\LSGamble-Serverside\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj",
         "projectName": "LSG.DAL",
-        "projectPath": "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj",
+        "projectPath": "B:\\Projekty\\LSGamble-Serverside\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj",
         "packagesPath": "C:\\Users\\Dawid\\.nuget\\packages\\",
-        "outputPath": "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.DAL\\obj\\",
+        "outputPath": "B:\\Projekty\\LSGamble-Serverside\\lsg-serverside\\LSG.DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -29,11 +29,7 @@
         },
         "frameworks": {
           "netcoreapp3.0": {
-            "projectReferences": {
-              "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.GM\\LSG.GM.csproj": {
-                "projectPath": "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.GM\\LSG.GM.csproj"
-              }
-            }
+            "projectReferences": {}
           }
         },
         "warningProperties": {
@@ -76,61 +72,6 @@
               "version": "[1.1.2, )"
             }
           },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.101\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.GM\\LSG.GM.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.GM\\LSG.GM.csproj",
-        "projectName": "LSG.GM",
-        "projectPath": "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.GM\\LSG.GM.csproj",
-        "packagesPath": "C:\\Users\\Dawid\\.nuget\\packages\\",
-        "outputPath": "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.GM\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\Dawid\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "netcoreapp3.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "netcoreapp3.0": {
-            "projectReferences": {}
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "netcoreapp3.0": {
           "imports": [
             "net461",
             "net462",

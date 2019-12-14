@@ -2274,16 +2274,6 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
-      },
-      "LSG.GM/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.0",
-        "compile": {
-          "bin/placeholder/LSG.GM.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/LSG.GM.dll": {}
-        }
       }
     }
   },
@@ -7496,17 +7486,11 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
-    },
-    "LSG.GM/1.0.0": {
-      "type": "project",
-      "path": "../LSG.GM/LSG.GM.csproj",
-      "msbuildProject": "../LSG.GM/LSG.GM.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.0": [
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 4.0.1",
-      "LSG.GM >= 1.0.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 2.2.0",
       "Microsoft.EntityFrameworkCore >= 2.2.4",
       "Microsoft.EntityFrameworkCore.Design >= 2.2.4",
@@ -7522,11 +7506,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj",
+      "projectUniqueName": "B:\\Projekty\\LSGamble-Serverside\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj",
       "projectName": "LSG.DAL",
-      "projectPath": "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj",
+      "projectPath": "B:\\Projekty\\LSGamble-Serverside\\lsg-serverside\\LSG.DAL\\LSG.DAL.csproj",
       "packagesPath": "C:\\Users\\Dawid\\.nuget\\packages\\",
-      "outputPath": "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.DAL\\obj\\",
+      "outputPath": "B:\\Projekty\\LSGamble-Serverside\\lsg-serverside\\LSG.DAL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -7544,11 +7528,7 @@
       },
       "frameworks": {
         "netcoreapp3.0": {
-          "projectReferences": {
-            "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.GM\\LSG.GM.csproj": {
-              "projectPath": "B:\\Projekty\\GTA 5\\lsg-serverside\\LSG.GM\\LSG.GM.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {

@@ -21,9 +21,18 @@ namespace LSG.DAL.Repositories
 
         public async Task<IEnumerable<Character>> GetAccountCharacters(int id)
         {
-            var characters = await _context.Characters.Where(x => x.Account.Id == id).Include(a => a.Account).Include(v => v.Vehicles).ToListAsync();
+            var characters = await _context.Characters.Where(x => x.Account.Id == id).Include(a => a.Account)
+                .Include(v => v.Vehicles)
+                .Include(d => d.CharacterDescriptions).ToListAsync();
 
             return characters;
+        }
+
+        public async Task<IEnumerable<CharacterDescription>> GetCharacterDescriptions(int id)
+        {
+            IEnumerable<CharacterDescription> characterDescriptions = await _context.CharacterDescriptions.Where(x => x.Character.Id == id).ToListAsync();
+
+            return characterDescriptions;
         }
     }
 }

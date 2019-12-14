@@ -11,3 +11,16 @@ B:\Projekty\GTA 5\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.Assembl
 B:\Projekty\GTA 5\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.csproj.CopyComplete
 B:\Projekty\GTA 5\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.dll
 B:\Projekty\GTA 5\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.pdb
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\bin\Debug\netcoreapp3.0\LSG.BLL.deps.json
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\bin\Debug\netcoreapp3.0\LSG.BLL.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\bin\Debug\netcoreapp3.0\LSG.BLL.pdb
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\bin\Debug\netcoreapp3.0\LSG.DAL.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\bin\Debug\netcoreapp3.0\LSG.GM.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\bin\Debug\netcoreapp3.0\LSG.DAL.pdb
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\bin\Debug\netcoreapp3.0\LSG.GM.pdb
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.csprojAssemblyReference.cache
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.AssemblyInfoInputs.cache
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.AssemblyInfo.cs
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.csproj.CopyComplete
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.BLL\obj\Debug\netcoreapp3.0\LSG.BLL.pdb

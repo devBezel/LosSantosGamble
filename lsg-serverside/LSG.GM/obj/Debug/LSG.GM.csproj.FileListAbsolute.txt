@@ -1,0 +1,9 @@
+C:\Users\Dawid\Desktop\alt_server\resources\ls_gamble\LSG.GM.deps.json
+C:\Users\Dawid\Desktop\alt_server\resources\ls_gamble\LSG.GM.dll
+C:\Users\Dawid\Desktop\alt_server\resources\ls_gamble\LSG.GM.pdb
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.GM\obj\Debug\LSG.GM.AssemblyInfoInputs.cache
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.GM\obj\Debug\LSG.GM.AssemblyInfo.cs
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.GM\obj\Debug\LSG.GM.csproj.CopyComplete
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.GM\obj\Debug\LSG.GM.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.GM\obj\Debug\LSG.GM.pdb
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.GM\obj\Debug\LSG.GM.csprojAssemblyReference.cache
