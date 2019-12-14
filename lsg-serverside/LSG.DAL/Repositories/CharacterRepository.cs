@@ -35,5 +35,10 @@ namespace LSG.DAL.Repositories
             return characterDescriptions;
         }
 
+        public async Task<CharacterDescription> GetCharacterDescription(int id)
+        {
+            return await _context.CharacterDescriptions.SingleOrDefaultAsync(c => c.Id == id);
+        }
+
     }
 }

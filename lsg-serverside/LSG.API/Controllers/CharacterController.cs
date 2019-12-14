@@ -49,14 +49,25 @@ namespace LSG.API.Controllers
         }
 
         [HttpPost("description/add/{id}")]
-        public IActionResult CreateCharacterDescription(int id, CharacterDescriptionForScriptDto characterDescription)
+        public async Task<IActionResult> CreateCharacterDescription(int id, CharacterDescriptionForScriptDto characterDescription)
         {
             if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
 
-            CharacterDescriptionForScriptDto characterDesc =  _service.CreateDescription(characterDescription);
+            CharacterDescriptionForScriptDto characterDesc =  await _service.CreateDescription(characterDescription);
 
             return Ok(characterDesc);
+        }
+
+        [HttpDelete("description/delete/{id}/{characterDescription}")]
+        public async Task<IActionResult> DeleteCharacterDescription(int id, int characterDescription)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            bool result = await _service.DeleteDescription(characterDescription);
+
+            return Ok(result);
         }
         
     }

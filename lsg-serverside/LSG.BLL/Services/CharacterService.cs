@@ -40,15 +40,30 @@ namespace LSG.BLL.Services
             return characterDescriptionsToReturn;
         }
 
-        public CharacterDescriptionForScriptDto CreateDescription(CharacterDescriptionForScriptDto entity)
+        public async Task<CharacterDescriptionForScriptDto> CreateDescription(CharacterDescriptionForScriptDto entity)
         {
+            if (entity.Title.Length > 20)
+                entity.Title = entity.Title.Remove(20);
             CharacterDescription characterDescription = _mapper.Map<CharacterDescription>(entity);
 
             _unitOfWork.CharacterRepository.Add<CharacterDescription>(characterDescription);
-            Console.WriteLine(characterDescription);
-            _unitOfWork.CharacterRepository.SaveAll();
+            
+            await _unitOfWork.CharacterRepository.SaveAll();
+
+            entity.Id = characterDescription.Id;
 
             return entity;
+        }
+
+        public async Task<bool> DeleteDescription(int id)
+        {
+            CharacterDescription characterDescription = await _unitOfWork.CharacterRepository.GetCharacterDescription(id);
+            _unitOfWork.CharacterRepository.Delete<CharacterDescription>(characterDescription);
+
+            if (await _unitOfWork.CharacterRepository.SaveAll())
+                return true;
+
+            return false;
         }
 
         public void Dispose()

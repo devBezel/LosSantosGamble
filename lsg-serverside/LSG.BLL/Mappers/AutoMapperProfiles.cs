@@ -18,8 +18,7 @@ namespace LSG.BLL.Mappers
             CreateMap<Vehicle, VehicleToCharacterDto>();
             CreateMap<CharacterDescription, CharacterDescriptionForScriptDto>()
                 .ForMember(d => d.CharacterId, opt => opt.MapFrom(c => c.Character.Id));
-            CreateMap<CharacterDescriptionForScriptDto, CharacterDescription>()
-                .ForPath(c => c.Character.Id, opt => opt.MapFrom(c => c.CharacterId));
+            CreateMap<CharacterDescriptionForScriptDto, CharacterDescription>();
         }
     }
 }

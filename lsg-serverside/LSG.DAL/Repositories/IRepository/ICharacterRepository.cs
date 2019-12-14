@@ -10,5 +10,6 @@ namespace LSG.DAL.Repositories.IRepository
     {
         Task<IEnumerable<Character>> GetAccountCharacters(int id);
         Task<IEnumerable<CharacterDescription>> GetCharacterDescriptions(int id);
+        Task<CharacterDescription> GetCharacterDescription(int id);
     }
 }

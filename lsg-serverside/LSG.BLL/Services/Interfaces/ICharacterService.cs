@@ -11,7 +11,8 @@ namespace LSG.BLL.Services.Interfaces
     {
         Task<IEnumerable<CharacterForListDto>> GetAccountCharacters(int id);
         Task<IEnumerable<CharacterDescriptionForScriptDto>> GetCharacterDescriptions(int id);
-        CharacterDescriptionForScriptDto CreateDescription(CharacterDescriptionForScriptDto characterDescription);
+        Task<CharacterDescriptionForScriptDto> CreateDescription(CharacterDescriptionForScriptDto characterDescription);
+        Task<bool> DeleteDescription(int id);
         new void Dispose();
     }
 }
