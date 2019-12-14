@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace LSG.DAL.Repositories.IRepository
 {
-    public interface IGenericRepository<T> where T : class
+    public interface IGenericRepository
     {
-        Task<IEnumerable<T>> GetAllAsync();
-        void Create(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        void Add<T>(T entity) where T : class;
+        void Delete<T>(T entity) where T : class;
+        Task<bool> SaveAll();
     }
 }

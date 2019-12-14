@@ -1,4 +1,5 @@
 ﻿using LSG.BLL.Dto.Character;
+using LSG.DAL.Database.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,7 @@ namespace LSG.BLL.Services.Interfaces
     {
         Task<IEnumerable<CharacterForListDto>> GetAccountCharacters(int id);
         Task<IEnumerable<CharacterDescriptionForScriptDto>> GetCharacterDescriptions(int id);
+        CharacterDescriptionForScriptDto CreateDescription(CharacterDescriptionForScriptDto characterDescription);
         new void Dispose();
     }
 }

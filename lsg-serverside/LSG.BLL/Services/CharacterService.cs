@@ -40,6 +40,17 @@ namespace LSG.BLL.Services
             return characterDescriptionsToReturn;
         }
 
+        public CharacterDescriptionForScriptDto CreateDescription(CharacterDescriptionForScriptDto entity)
+        {
+            CharacterDescription characterDescription = _mapper.Map<CharacterDescription>(entity);
+
+            _unitOfWork.CharacterRepository.Add<CharacterDescription>(characterDescription);
+            Console.WriteLine(characterDescription);
+            _unitOfWork.CharacterRepository.SaveAll();
+
+            return entity;
+        }
+
         public void Dispose()
         {
             _unitOfWork?.Dispose();

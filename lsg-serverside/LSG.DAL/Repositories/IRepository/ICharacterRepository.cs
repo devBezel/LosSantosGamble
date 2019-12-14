@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LSG.DAL.Repositories.IRepository
 {
-    public interface ICharacterRepository : IGenericRepository<Character>
+    public interface ICharacterRepository : IGenericRepository
     {
         Task<IEnumerable<Character>> GetAccountCharacters(int id);
         Task<IEnumerable<CharacterDescription>> GetCharacterDescriptions(int id);

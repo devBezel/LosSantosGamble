@@ -40,7 +40,7 @@ namespace LSG.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AccountId");
+                    b.Property<int>("AccountId");
 
                     b.Property<int>("Age");
 
@@ -92,7 +92,7 @@ namespace LSG.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CharacterId");
+                    b.Property<int>("CharacterId");
 
                     b.Property<string>("Content");
 
@@ -118,7 +118,7 @@ namespace LSG.DAL.Migrations
 
                     b.Property<string>("Model");
 
-                    b.Property<int?>("OwnerId");
+                    b.Property<int>("OwnerId");
 
                     b.Property<float>("PosX");
 
@@ -143,21 +143,24 @@ namespace LSG.DAL.Migrations
                 {
                     b.HasOne("LSG.DAL.Database.Models.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.CharacterDescription", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.Character", "Character")
                         .WithMany("CharacterDescriptions")
-                        .HasForeignKey("CharacterId");
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.Vehicle", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.Character", "Owner")
                         .WithMany("Vehicles")
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

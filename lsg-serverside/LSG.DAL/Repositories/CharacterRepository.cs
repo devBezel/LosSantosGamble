@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LSG.DAL.Repositories
 {
-    public class CharacterRepository : GenericRepository<Character>, ICharacterRepository
+    public class CharacterRepository : GenericRepository, ICharacterRepository
     {
         private readonly RoleplayContext _context;
 
@@ -30,9 +30,10 @@ namespace LSG.DAL.Repositories
 
         public async Task<IEnumerable<CharacterDescription>> GetCharacterDescriptions(int id)
         {
-            IEnumerable<CharacterDescription> characterDescriptions = await _context.CharacterDescriptions.Where(x => x.Character.Id == id).ToListAsync();
+            IEnumerable<CharacterDescription> characterDescriptions = await _context.CharacterDescriptions.Where(x => x.Character.Id == id).Include(c => c.Character).ToListAsync();
 
             return characterDescriptions;
         }
+
     }
 }

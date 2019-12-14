@@ -1,5 +1,6 @@
 ﻿using LSG.BLL.Dto.Character;
 using LSG.BLL.Services.Interfaces;
+using LSG.DAL.Database.Models;
 using LSG.DAL.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -45,6 +46,17 @@ namespace LSG.API.Controllers
             IEnumerable<CharacterDescriptionForScriptDto> characterDescriptions = await _service.GetCharacterDescriptions(id);
 
             return Ok(characterDescriptions);
+        }
+
+        [HttpPost("description/add/{id}")]
+        public IActionResult CreateCharacterDescription(int id, CharacterDescriptionForScriptDto characterDescription)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            CharacterDescriptionForScriptDto characterDesc =  _service.CreateDescription(characterDescription);
+
+            return Ok(characterDesc);
         }
         
     }

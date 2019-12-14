@@ -9,6 +9,7 @@ namespace LSG.DAL.Database.Models
     {
         public int Id { get; set; }
         public string Model { get; set; }
+        public int OwnerId { get; set; }
         public Character Owner { get; set; }
         public float PosX { get; set; }
         public float PosY { get; set; }

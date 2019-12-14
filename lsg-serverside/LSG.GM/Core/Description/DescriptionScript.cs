@@ -10,12 +10,10 @@ namespace LSG.GM.Core.Description
 {
     public class DescriptionScript : IScript
     {
-        [Command("test")]
-        public void TestCommand(IPlayer player)
+        [Command("opis")]
+        public void GetCharacterDescriptionCMD(IPlayer player)
         {
-            player.GetData("character-data", out Character character);
-
-            player.SendChatMessage($"Witaj {character.Name}");
+            player.Emit("description:getCharacterDescription");
         }
     }
 }

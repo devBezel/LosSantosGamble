@@ -8,32 +8,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LSG.DAL.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository : IGenericRepository
     {
         private readonly RoleplayContext _context;
-        private DbSet<T> _dbSet;
-
         public GenericRepository(RoleplayContext context)
         {
             _context = context;
-            _dbSet = _context.Set<T>();
         }
-        public async Task <IEnumerable<T>> GetAllAsync()
+
+        public void Add<T>(T entity) where T : class
         {
-            var entity = await _dbSet.ToListAsync();
-            return entity;
+            _context.Add(entity);
         }
-        public void Create(T entity)
+
+        public void Delete<T>(T entity) where T : class
         {
-            _dbSet.Add(entity);
+            _context.Remove(entity);
         }
-        public void Update(T entity)
+
+        public async Task<bool> SaveAll()
         {
-            _context.Entry(entity).State = EntityState.Modified;
-        }
-        public void Delete(T entity)
-        {
-            _dbSet.Remove(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
