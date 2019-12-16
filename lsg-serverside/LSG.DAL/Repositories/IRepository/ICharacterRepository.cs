@@ -1,4 +1,5 @@
 ﻿using LSG.DAL.Database.Models;
+using LSG.DAL.Database.Models.CharacterModels;
 using System;
 using System.Collections.Generic;
 using System.Text;

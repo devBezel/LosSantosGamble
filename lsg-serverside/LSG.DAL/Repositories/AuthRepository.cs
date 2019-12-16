@@ -1,5 +1,6 @@
 ﻿using LSG.DAL.Database;
 using LSG.DAL.Database.Models;
+using LSG.DAL.Database.Models.AccountModels;
 using LSG.DAL.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System;

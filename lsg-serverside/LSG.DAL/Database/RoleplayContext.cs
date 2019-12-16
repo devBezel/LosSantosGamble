@@ -1,4 +1,7 @@
 ﻿using LSG.DAL.Database.Models;
+using LSG.DAL.Database.Models.AccountModels;
+using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Database.Models.VehicleModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
