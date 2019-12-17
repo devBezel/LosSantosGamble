@@ -2,6 +2,7 @@
 using LSG.BLL.Dto.Character;
 using LSG.BLL.Services.Interfaces;
 using LSG.DAL.Database.Models;
+using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.UnitOfWork;
 using System;
 using System.Collections.Generic;

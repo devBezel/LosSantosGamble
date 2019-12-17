@@ -1,5 +1,6 @@
 ﻿using LSG.BLL.Dto.Account;
 using LSG.DAL.Database.Models;
+using LSG.DAL.Database.Models.AccountModels;
 using LSG.DAL.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

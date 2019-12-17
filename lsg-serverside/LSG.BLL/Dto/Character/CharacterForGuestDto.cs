@@ -11,7 +11,7 @@ namespace LSG.BLL.Dto.Character
         public string Name { get; set; }
         public string Surname { get; set; }
         public int Age { get; set; }
-        public string Gender { get; set; }
+        public bool Gender { get; set; }
         public float Height { get; set; }
         public float Weight { get; set; }
         public string Description { get; set; }

@@ -17,7 +17,7 @@ namespace LSG.DAL.Migrations
                 .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.Account", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.AccountModels.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -35,7 +35,7 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.Character", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.Character", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -54,7 +54,7 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float>("DirtyMoney");
 
-                    b.Property<string>("Gender");
+                    b.Property<bool>("Gender");
 
                     b.Property<float>("Health");
 
@@ -87,7 +87,7 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Characters");
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterDescription", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterDescription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -105,7 +105,7 @@ namespace LSG.DAL.Migrations
                     b.ToTable("CharacterDescriptions");
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.Vehicle", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -139,25 +139,25 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Vehicles");
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.Character", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.Character", b =>
                 {
-                    b.HasOne("LSG.DAL.Database.Models.Account", "Account")
+                    b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterDescription", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterDescription", b =>
                 {
-                    b.HasOne("LSG.DAL.Database.Models.Character", "Character")
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
                         .WithMany("CharacterDescriptions")
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.Vehicle", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
                 {
-                    b.HasOne("LSG.DAL.Database.Models.Character", "Owner")
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Owner")
                         .WithMany("Vehicles")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade);

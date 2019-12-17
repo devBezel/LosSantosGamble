@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using LSG.DAL.Database;
 using LSG.DAL.Repositories;
 using AltV.Net.Data;
+using LSG.DAL.Database.Models.CharacterModels;
 
 namespace LSG.GM.Core.Login
 {
@@ -34,6 +35,11 @@ namespace LSG.GM.Core.Login
             player.Spawn(new Position(character.PosX, character.PosY, character.PosZ));
             player.SetHealthAsync((ushort)character.Health);
             player.SetModelAsync(0x705E61F2);
+
+            if(character.Gender)
+            {
+                player.SetModelAsync(0x9C9EFFD8);
+            }
 
         });
 
