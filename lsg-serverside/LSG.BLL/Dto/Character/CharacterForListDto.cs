@@ -4,6 +4,7 @@ using System.Text;
 using LSG.BLL.Dto.Account;
 using LSG.BLL.Dto.Vehicle;
 using LSG.DAL.Database.Models;
+using LSG.DAL.Database.Models.CharacterModels;
 
 namespace LSG.BLL.Dto.Character
 {
@@ -32,5 +33,6 @@ namespace LSG.BLL.Dto.Character
         public float Armor { get; set; }
         public IEnumerable<VehicleToCharacterDto> Vehicles { get; set; }
         public IEnumerable<CharacterDescriptionForScriptDto> CharacterDescriptions { get; set; }
+        public IEnumerable<CharacterDetailForListDto> CharacterDetails { get; set; }
     }
 }

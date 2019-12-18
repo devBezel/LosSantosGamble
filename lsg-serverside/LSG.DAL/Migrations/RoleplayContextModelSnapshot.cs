@@ -105,6 +105,58 @@ namespace LSG.DAL.Migrations
                     b.ToTable("CharacterDescriptions");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CharacterFaceId");
+
+                    b.Property<int>("CharacterId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterFaceId");
+
+                    b.HasIndex("CharacterId");
+
+                    b.ToTable("CharacterDetails");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterFace", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CharacterId");
+
+                    b.Property<bool>("IsParent");
+
+                    b.Property<int>("ShapeFirstID");
+
+                    b.Property<float>("ShapeMix");
+
+                    b.Property<int>("ShapeSecondID");
+
+                    b.Property<int>("ShapeThirdID");
+
+                    b.Property<int>("SkinFirstID");
+
+                    b.Property<float>("SkinMix");
+
+                    b.Property<int>("SkinSecondID");
+
+                    b.Property<int>("SkinThirdID");
+
+                    b.Property<float>("ThirdMix");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.ToTable("CharacterFaces");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
                 {
                     b.Property<int>("Id")
@@ -151,6 +203,27 @@ namespace LSG.DAL.Migrations
                 {
                     b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
                         .WithMany("CharacterDescriptions")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterDetail", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.CharacterFace", "CharacterFace")
+                        .WithMany()
+                        .HasForeignKey("CharacterFaceId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
+                        .WithMany("CharacterDetails")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterFace", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
+                        .WithMany()
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

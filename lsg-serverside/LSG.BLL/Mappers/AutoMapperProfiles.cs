@@ -16,12 +16,26 @@ namespace LSG.BLL.Mappers
     {
         public AutoMapperProfiles()
         {
+            //Konto
             CreateMap<Account, AccountForCharacterDto>();
+
+            // Postacie
             CreateMap<Character, CharacterForListDto>();
+
+            // Pojazdy
             CreateMap<Vehicle, VehicleToCharacterDto>();
+
+            //Opisy postaci
             CreateMap<CharacterDescription, CharacterDescriptionForScriptDto>()
                 .ForMember(d => d.CharacterId, opt => opt.MapFrom(c => c.Character.Id));
             CreateMap<CharacterDescriptionForScriptDto, CharacterDescription>();
+
+
+
+            //Wygląd postaci
+            CreateMap<CharacterDetail, CharacterDetailForListDto>()
+                .ForMember(c => c.CharacterFace, opt => opt.MapFrom(d => d.CharacterFace));
+            CreateMap<CharacterFace, CharacterFaceForListDto>();
         }
     }
 }
