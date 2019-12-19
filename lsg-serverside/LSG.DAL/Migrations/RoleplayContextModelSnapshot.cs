@@ -105,56 +105,80 @@ namespace LSG.DAL.Migrations
                     b.ToTable("CharacterDescriptions");
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("CharacterFaceId");
-
-                    b.Property<int>("CharacterId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CharacterFaceId");
-
-                    b.HasIndex("CharacterId");
-
-                    b.ToTable("CharacterDetails");
-                });
-
-            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterFace", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterLook", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("CharacterId");
 
-                    b.Property<bool>("IsParent");
+                    b.Property<byte?>("EarsId");
 
-                    b.Property<int>("ShapeFirstID");
+                    b.Property<byte?>("EarsTexture");
 
-                    b.Property<float>("ShapeMix");
+                    b.Property<float>("EyeBrowsOpacity");
 
-                    b.Property<int>("ShapeSecondID");
+                    b.Property<byte?>("EyebrowsId");
 
-                    b.Property<int>("ShapeThirdID");
+                    b.Property<byte?>("FatherFaceId");
 
-                    b.Property<int>("SkinFirstID");
+                    b.Property<byte?>("FirstEyebrowsColor");
 
-                    b.Property<float>("SkinMix");
+                    b.Property<byte?>("FirstLipstickColor");
 
-                    b.Property<int>("SkinSecondID");
+                    b.Property<byte?>("FirstMakeupColor");
 
-                    b.Property<int>("SkinThirdID");
+                    b.Property<byte?>("GlassesId");
 
-                    b.Property<float>("ThirdMix");
+                    b.Property<byte?>("GlassesTexture");
+
+                    b.Property<byte?>("HairColor");
+
+                    b.Property<byte?>("HairId");
+
+                    b.Property<byte?>("HairTexture");
+
+                    b.Property<byte?>("HatId");
+
+                    b.Property<byte?>("HatTexture");
+
+                    b.Property<byte?>("LegsId");
+
+                    b.Property<byte?>("LegsTexture");
+
+                    b.Property<float?>("LipstickOpacity");
+
+                    b.Property<float?>("MakeupOpacity");
+
+                    b.Property<byte?>("MotherFaceId");
+
+                    b.Property<byte?>("SecondEyebrowsColor");
+
+                    b.Property<byte?>("SecondLipstickColor");
+
+                    b.Property<byte?>("SecondMakeupColor");
+
+                    b.Property<float?>("ShapeMix");
+
+                    b.Property<byte?>("ShoesId");
+
+                    b.Property<byte?>("ShoesTexture");
+
+                    b.Property<byte?>("SkinColour");
+
+                    b.Property<byte?>("TopId");
+
+                    b.Property<byte?>("TopTexture");
+
+                    b.Property<byte?>("TorsoId");
+
+                    b.Property<byte?>("UndershirtId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CharacterId");
 
-                    b.ToTable("CharacterFaces");
+                    b.ToTable("CharacterLooks");
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
@@ -207,20 +231,7 @@ namespace LSG.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterDetail", b =>
-                {
-                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.CharacterFace", "CharacterFace")
-                        .WithMany()
-                        .HasForeignKey("CharacterFaceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
-                        .WithMany("CharacterDetails")
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterFace", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterLook", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
                         .WithMany()

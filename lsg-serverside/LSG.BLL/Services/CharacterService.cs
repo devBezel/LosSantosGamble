@@ -32,6 +32,16 @@ namespace LSG.BLL.Services
             return characterToReturn;
         }
 
+        public async Task<CharacterLookDto> GetCharacterLook(int characterId)
+        {
+            CharacterLook characterLook = await _unitOfWork.CharacterRepository.GetCharacterLook(characterId);
+
+            CharacterLookDto characterLookToReturn = _mapper.Map<CharacterLookDto>(characterLook);
+
+            return characterLookToReturn;
+
+        }
+
         public async Task<IEnumerable<CharacterDescriptionForScriptDto>> GetCharacterDescriptions(int id)
         {
             IEnumerable<CharacterDescription> characterDescriptions = await _unitOfWork.CharacterRepository.GetCharacterDescriptions(id);

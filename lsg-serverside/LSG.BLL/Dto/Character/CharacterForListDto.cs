@@ -33,6 +33,5 @@ namespace LSG.BLL.Dto.Character
         public float Armor { get; set; }
         public IEnumerable<VehicleToCharacterDto> Vehicles { get; set; }
         public IEnumerable<CharacterDescriptionForScriptDto> CharacterDescriptions { get; set; }
-        public IEnumerable<CharacterDetailForListDto> CharacterDetails { get; set; }
     }
 }

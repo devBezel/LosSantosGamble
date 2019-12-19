@@ -33,9 +33,7 @@ namespace LSG.BLL.Mappers
 
 
             //Wygląd postaci
-            CreateMap<CharacterDetail, CharacterDetailForListDto>()
-                .ForMember(c => c.CharacterFace, opt => opt.MapFrom(d => d.CharacterFace));
-            CreateMap<CharacterFace, CharacterFaceForListDto>();
+            CreateMap<CharacterLook, CharacterLookDto>();
         }
     }
 }

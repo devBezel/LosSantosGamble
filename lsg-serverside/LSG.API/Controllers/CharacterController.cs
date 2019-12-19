@@ -69,6 +69,18 @@ namespace LSG.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("look/{id}/{characterId}")]
+        public async Task<IActionResult> GetCharacterLook(int id, int characterId)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            CharacterLookDto characterLook = await _service.GetCharacterLook(characterId);
+
+            return Ok(characterLook);
+        }
+
         
     }
 }
