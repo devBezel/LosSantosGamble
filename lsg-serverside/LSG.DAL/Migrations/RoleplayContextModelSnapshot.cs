@@ -134,6 +134,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<byte?>("HairColor");
 
+                    b.Property<byte?>("HairColorTwo");
+
                     b.Property<byte?>("HairId");
 
                     b.Property<byte?>("HairTexture");
