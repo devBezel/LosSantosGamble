@@ -174,6 +174,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<byte?>("TorsoId");
 
+                    b.Property<byte?>("TorsoTexture");
+
                     b.Property<byte?>("UndershirtId");
 
                     b.HasKey("Id");

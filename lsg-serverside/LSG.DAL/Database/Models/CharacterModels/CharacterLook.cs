@@ -36,7 +36,9 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public byte? TopId { get; set; }
         public byte? TopTexture { get; set; }
         public byte? TorsoId { get; set; }
+        public byte? TorsoTexture { get; set; }
         public byte? UndershirtId { get; set; }
+        public byte? UndershirtTexture { get; set; }
         public byte? LegsId { get; set; }
         public byte? LegsTexture { get; set; }
         public byte? ShoesId { get; set; }
