@@ -112,13 +112,31 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int>("CharacterId");
 
+                    b.Property<float?>("CheeksBoneWidth");
+
+                    b.Property<float?>("CheeksWidth");
+
+                    b.Property<float?>("ChimpBoneLenght");
+
+                    b.Property<float?>("ChimpBoneLowering");
+
+                    b.Property<float?>("ChimpBoneWidth");
+
+                    b.Property<float?>("ChimpHole");
+
                     b.Property<byte?>("EarsId");
 
                     b.Property<byte?>("EarsTexture");
 
+                    b.Property<float?>("EyeBrownForward");
+
+                    b.Property<float?>("EyeBrownHigh");
+
                     b.Property<float>("EyeBrowsOpacity");
 
                     b.Property<byte?>("EyebrowsId");
+
+                    b.Property<float?>("EyesOpenning");
 
                     b.Property<byte?>("FatherFaceId");
 
@@ -144,15 +162,35 @@ namespace LSG.DAL.Migrations
 
                     b.Property<byte?>("HatTexture");
 
+                    b.Property<float?>("JawBoneBackLenght");
+
+                    b.Property<float?>("JawBoneWidth");
+
                     b.Property<byte?>("LegsId");
 
                     b.Property<byte?>("LegsTexture");
+
+                    b.Property<float?>("LipsThickness");
 
                     b.Property<float?>("LipstickOpacity");
 
                     b.Property<float?>("MakeupOpacity");
 
                     b.Property<byte?>("MotherFaceId");
+
+                    b.Property<float?>("NeckThikness");
+
+                    b.Property<float?>("NoseBoneHigh");
+
+                    b.Property<float?>("NoseBoneTwist");
+
+                    b.Property<float?>("NosePeakHight");
+
+                    b.Property<float?>("NosePeakLenght");
+
+                    b.Property<float?>("NosePeakLowering");
+
+                    b.Property<float?>("NoseWidth");
 
                     b.Property<byte?>("SecondEyebrowsColor");
 
@@ -177,6 +215,8 @@ namespace LSG.DAL.Migrations
                     b.Property<byte?>("TorsoTexture");
 
                     b.Property<byte?>("UndershirtId");
+
+                    b.Property<byte?>("UndershirtTexture");
 
                     b.HasKey("Id");
 
