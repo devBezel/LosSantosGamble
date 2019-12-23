@@ -7,12 +7,22 @@ namespace LSG.BLL.Dto.Character
     public class CharacterLookDto
     {
         public int Id { get; set; }
+        public int CharacterId { get; set; }
         public byte? FatherFaceId { get; set; }
         public byte? MotherFaceId { get; set; }
         public byte? SkinColour { get; set; }
         public float? ShapeMix { get; set; }
-        public byte? EarsId { get; set; }
-        public byte? EarsTexture { get; set; }
+        public byte? EarsColor { get; set; }
+        public byte? BlemishesId { get; set; }
+        public float? BlemishesOpacity { get; set; }
+        public byte? AgeingId { get; set; }
+        public float? AgeingOpacity { get; set; }
+        public byte? BlushId { get; set; }
+        public float? BlushOpacity { get; set; }
+        public byte? BlushColor { get; set; }
+        public byte? BeardId { get; set; }
+        public float? BeardOpacity { get; set; }
+        public float? BeardColor { get; set; }
 
         // Face detail
         public float? NoseWidth { get; set; }
@@ -41,9 +51,11 @@ namespace LSG.BLL.Dto.Character
         public byte? SecondEyebrowsColor { get; set; }
         public float EyeBrowsOpacity { get; set; }
         public byte? FirstEyebrowsColor { get; set; }
+        public byte? LipstickId { get; set; }
         public byte? FirstLipstickColor { get; set; }
         public float? LipstickOpacity { get; set; }
         public byte? SecondLipstickColor { get; set; }
+        public float? MakeupId { get; set; }
         public byte? FirstMakeupColor { get; set; }
         public float? MakeupOpacity { get; set; }
         public byte? SecondMakeupColor { get; set; }

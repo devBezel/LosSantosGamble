@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using LSG.DAL.Database;
+using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,11 @@ namespace LSG.DAL.Repositories
         public void Add<T>(T entity) where T : class
         {
             _context.Add(entity);
+        }
+
+        public void Update<T>(T entity) where T : class
+        {
+            _context.Update(entity);
         }
 
         public void Delete<T>(T entity) where T : class

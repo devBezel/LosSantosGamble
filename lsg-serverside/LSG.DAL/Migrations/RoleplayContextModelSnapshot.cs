@@ -110,6 +110,26 @@ namespace LSG.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<byte?>("AgeingId");
+
+                    b.Property<float?>("AgeingOpacity");
+
+                    b.Property<float?>("BeardColor");
+
+                    b.Property<byte?>("BeardId");
+
+                    b.Property<float?>("BeardOpacity");
+
+                    b.Property<byte?>("BlemishesId");
+
+                    b.Property<float?>("BlemishesOpacity");
+
+                    b.Property<byte?>("BlushColor");
+
+                    b.Property<byte?>("BlushId");
+
+                    b.Property<float?>("BlushOpacity");
+
                     b.Property<int>("CharacterId");
 
                     b.Property<float?>("CheeksBoneWidth");
@@ -124,9 +144,7 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float?>("ChimpHole");
 
-                    b.Property<byte?>("EarsId");
-
-                    b.Property<byte?>("EarsTexture");
+                    b.Property<byte?>("EarsColor");
 
                     b.Property<float?>("EyeBrownForward");
 
@@ -172,7 +190,11 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float?>("LipsThickness");
 
+                    b.Property<byte?>("LipstickId");
+
                     b.Property<float?>("LipstickOpacity");
+
+                    b.Property<float?>("MakeupId");
 
                     b.Property<float?>("MakeupOpacity");
 

@@ -48,5 +48,18 @@ namespace LSG.DAL.Repositories
             return await _context.CharacterDescriptions.SingleOrDefaultAsync(c => c.Id == id);
         }
 
+        public async Task<bool> SaveCharacterLook(int id, CharacterLook characterLook)
+        {
+            if (!_context.CharacterLooks.Any(x => x.CharacterId == id))
+            {
+                Add<CharacterLook>(characterLook);
+                return await SaveAll();
+            }
+
+            Update<CharacterLook>(characterLook);
+
+            return await SaveAll();
+        }
+
     }
 }

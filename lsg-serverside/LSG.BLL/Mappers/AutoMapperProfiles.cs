@@ -34,6 +34,7 @@ namespace LSG.BLL.Mappers
 
             //Wygląd postaci
             CreateMap<CharacterLook, CharacterLookDto>();
+
         }
     }
 }

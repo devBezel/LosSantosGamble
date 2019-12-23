@@ -80,6 +80,17 @@ namespace LSG.API.Controllers
 
             return Ok(characterLook);
         }
+        [HttpPost("save/character/{id}/{characterId}")]
+        public async Task<IActionResult> SaveCharacterLook(int id, int characterId, CharacterLookDto characterLookDto)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            if (!await _service.SaveCharacterLook(characterId, characterLookDto))
+                return BadRequest();
+
+            return Ok();
+        }
 
         
     }

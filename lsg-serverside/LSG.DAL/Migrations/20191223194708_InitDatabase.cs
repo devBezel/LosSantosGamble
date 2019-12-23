@@ -49,8 +49,7 @@ namespace LSG.DAL.Migrations
                     Bank = table.Column<float>(nullable: false),
                     BankStatus = table.Column<bool>(nullable: false),
                     Health = table.Column<float>(nullable: false),
-                    Armor = table.Column<float>(nullable: false),
-                    CharacterDetailId = table.Column<int>(nullable: false)
+                    Armor = table.Column<float>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,28 +84,82 @@ namespace LSG.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CharacterFaces",
+                name: "CharacterLooks",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CharacterId = table.Column<int>(nullable: false),
-                    ShapeFirstID = table.Column<int>(nullable: false),
-                    ShapeSecondID = table.Column<int>(nullable: false),
-                    ShapeThirdID = table.Column<int>(nullable: false),
-                    SkinFirstID = table.Column<int>(nullable: false),
-                    SkinSecondID = table.Column<int>(nullable: false),
-                    SkinThirdID = table.Column<int>(nullable: false),
-                    ShapeMix = table.Column<float>(nullable: false),
-                    SkinMix = table.Column<float>(nullable: false),
-                    ThirdMix = table.Column<float>(nullable: false),
-                    IsParent = table.Column<bool>(nullable: false)
+                    FatherFaceId = table.Column<byte>(nullable: true),
+                    MotherFaceId = table.Column<byte>(nullable: true),
+                    SkinColour = table.Column<byte>(nullable: true),
+                    ShapeMix = table.Column<float>(nullable: true),
+                    EarsColor = table.Column<byte>(nullable: true),
+                    BlemishesId = table.Column<byte>(nullable: true),
+                    BlemishesOpacity = table.Column<float>(nullable: true),
+                    AgeingId = table.Column<byte>(nullable: true),
+                    AgeingOpacity = table.Column<float>(nullable: true),
+                    BlushId = table.Column<byte>(nullable: true),
+                    BlushOpacity = table.Column<float>(nullable: true),
+                    BlushColor = table.Column<byte>(nullable: true),
+                    BeardId = table.Column<byte>(nullable: true),
+                    BeardOpacity = table.Column<float>(nullable: true),
+                    BeardColor = table.Column<float>(nullable: true),
+                    NoseWidth = table.Column<float>(nullable: true),
+                    NosePeakHight = table.Column<float>(nullable: true),
+                    NosePeakLenght = table.Column<float>(nullable: true),
+                    NoseBoneHigh = table.Column<float>(nullable: true),
+                    NosePeakLowering = table.Column<float>(nullable: true),
+                    NoseBoneTwist = table.Column<float>(nullable: true),
+                    EyeBrownHigh = table.Column<float>(nullable: true),
+                    EyeBrownForward = table.Column<float>(nullable: true),
+                    CheeksBoneWidth = table.Column<float>(nullable: true),
+                    CheeksWidth = table.Column<float>(nullable: true),
+                    EyesOpenning = table.Column<float>(nullable: true),
+                    LipsThickness = table.Column<float>(nullable: true),
+                    JawBoneWidth = table.Column<float>(nullable: true),
+                    JawBoneBackLenght = table.Column<float>(nullable: true),
+                    ChimpBoneLowering = table.Column<float>(nullable: true),
+                    ChimpBoneLenght = table.Column<float>(nullable: true),
+                    ChimpBoneWidth = table.Column<float>(nullable: true),
+                    ChimpHole = table.Column<float>(nullable: true),
+                    NeckThikness = table.Column<float>(nullable: true),
+                    EyebrowsId = table.Column<byte>(nullable: true),
+                    SecondEyebrowsColor = table.Column<byte>(nullable: true),
+                    EyeBrowsOpacity = table.Column<float>(nullable: false),
+                    FirstEyebrowsColor = table.Column<byte>(nullable: true),
+                    LipstickId = table.Column<byte>(nullable: true),
+                    FirstLipstickColor = table.Column<byte>(nullable: true),
+                    LipstickOpacity = table.Column<float>(nullable: true),
+                    SecondLipstickColor = table.Column<byte>(nullable: true),
+                    MakeupId = table.Column<float>(nullable: true),
+                    FirstMakeupColor = table.Column<byte>(nullable: true),
+                    MakeupOpacity = table.Column<float>(nullable: true),
+                    SecondMakeupColor = table.Column<byte>(nullable: true),
+                    GlassesId = table.Column<byte>(nullable: true),
+                    GlassesTexture = table.Column<byte>(nullable: true),
+                    HairId = table.Column<byte>(nullable: true),
+                    HairTexture = table.Column<byte>(nullable: true),
+                    HairColor = table.Column<byte>(nullable: true),
+                    HairColorTwo = table.Column<byte>(nullable: true),
+                    HatId = table.Column<byte>(nullable: true),
+                    HatTexture = table.Column<byte>(nullable: true),
+                    TopId = table.Column<byte>(nullable: true),
+                    TopTexture = table.Column<byte>(nullable: true),
+                    TorsoId = table.Column<byte>(nullable: true),
+                    TorsoTexture = table.Column<byte>(nullable: true),
+                    UndershirtId = table.Column<byte>(nullable: true),
+                    UndershirtTexture = table.Column<byte>(nullable: true),
+                    LegsId = table.Column<byte>(nullable: true),
+                    LegsTexture = table.Column<byte>(nullable: true),
+                    ShoesId = table.Column<byte>(nullable: true),
+                    ShoesTexture = table.Column<byte>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CharacterFaces", x => x.Id);
+                    table.PrimaryKey("PK_CharacterLooks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CharacterFaces_Characters_CharacterId",
+                        name: "FK_CharacterLooks_Characters_CharacterId",
                         column: x => x.CharacterId,
                         principalTable: "Characters",
                         principalColumn: "Id",
@@ -142,38 +195,14 @@ namespace LSG.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "CharacterDetails",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CharacterFaceId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CharacterDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CharacterDetails_CharacterFaces_CharacterFaceId",
-                        column: x => x.CharacterFaceId,
-                        principalTable: "CharacterFaces",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_CharacterDescriptions_CharacterId",
                 table: "CharacterDescriptions",
                 column: "CharacterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CharacterDetails_CharacterFaceId",
-                table: "CharacterDetails",
-                column: "CharacterFaceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CharacterFaces_CharacterId",
-                table: "CharacterFaces",
+                name: "IX_CharacterLooks_CharacterId",
+                table: "CharacterLooks",
                 column: "CharacterId");
 
             migrationBuilder.CreateIndex(
@@ -182,32 +211,18 @@ namespace LSG.DAL.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Characters_CharacterDetailId",
-                table: "Characters",
-                column: "CharacterDetailId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_OwnerId",
                 table: "Vehicles",
                 column: "OwnerId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Characters_CharacterDetails_CharacterDetailId",
-                table: "Characters",
-                column: "CharacterDetailId",
-                principalTable: "CharacterDetails",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_CharacterFaces_Characters_CharacterId",
-                table: "CharacterFaces");
-
             migrationBuilder.DropTable(
                 name: "CharacterDescriptions");
+
+            migrationBuilder.DropTable(
+                name: "CharacterLooks");
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
@@ -217,12 +232,6 @@ namespace LSG.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Accounts");
-
-            migrationBuilder.DropTable(
-                name: "CharacterDetails");
-
-            migrationBuilder.DropTable(
-                name: "CharacterFaces");
         }
     }
 }

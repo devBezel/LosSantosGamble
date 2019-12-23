@@ -77,6 +77,17 @@ namespace LSG.BLL.Services
             return false;
         }
 
+        public async Task<bool> SaveCharacterLook(int id, CharacterLookDto characterLookDto)
+        {
+            CharacterLook characterLook = _mapper.Map<CharacterLook>(characterLookDto);
+            characterLook.CharacterId = id;
+
+            if (!await _unitOfWork.CharacterRepository.SaveCharacterLook(id, characterLook))
+                return false;
+
+            return true;
+        }
+
         public void Dispose()
         {
             _unitOfWork?.Dispose();

@@ -13,5 +13,6 @@ namespace LSG.DAL.Repositories.IRepository
         Task<CharacterLook> GetCharacterLook(int id);
         Task<IEnumerable<CharacterDescription>> GetCharacterDescriptions(int id);
         Task<CharacterDescription> GetCharacterDescription(int id);
+        Task<bool> SaveCharacterLook(int id, CharacterLook characterLook);
     }
 }

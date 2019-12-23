@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LSG.DAL.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    [Migration("20191218201858_InitDatabase")]
+    [Migration("20191223194708_InitDatabase")]
     partial class InitDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,8 +52,6 @@ namespace LSG.DAL.Migrations
 
                     b.Property<bool>("BankStatus");
 
-                    b.Property<int>("CharacterDetailId");
-
                     b.Property<string>("Description");
 
                     b.Property<float>("DirtyMoney");
@@ -88,8 +86,6 @@ namespace LSG.DAL.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("CharacterDetailId");
-
                     b.ToTable("Characters");
                 });
 
@@ -111,52 +107,146 @@ namespace LSG.DAL.Migrations
                     b.ToTable("CharacterDescriptions");
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterDetail", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterLook", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CharacterFaceId");
+                    b.Property<byte?>("AgeingId");
 
-                    b.HasKey("Id");
+                    b.Property<float?>("AgeingOpacity");
 
-                    b.HasIndex("CharacterFaceId");
+                    b.Property<float?>("BeardColor");
 
-                    b.ToTable("CharacterDetails");
-                });
+                    b.Property<byte?>("BeardId");
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterFace", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<float?>("BeardOpacity");
+
+                    b.Property<byte?>("BlemishesId");
+
+                    b.Property<float?>("BlemishesOpacity");
+
+                    b.Property<byte?>("BlushColor");
+
+                    b.Property<byte?>("BlushId");
+
+                    b.Property<float?>("BlushOpacity");
 
                     b.Property<int>("CharacterId");
 
-                    b.Property<bool>("IsParent");
+                    b.Property<float?>("CheeksBoneWidth");
 
-                    b.Property<int>("ShapeFirstID");
+                    b.Property<float?>("CheeksWidth");
 
-                    b.Property<float>("ShapeMix");
+                    b.Property<float?>("ChimpBoneLenght");
 
-                    b.Property<int>("ShapeSecondID");
+                    b.Property<float?>("ChimpBoneLowering");
 
-                    b.Property<int>("ShapeThirdID");
+                    b.Property<float?>("ChimpBoneWidth");
 
-                    b.Property<int>("SkinFirstID");
+                    b.Property<float?>("ChimpHole");
 
-                    b.Property<float>("SkinMix");
+                    b.Property<byte?>("EarsColor");
 
-                    b.Property<int>("SkinSecondID");
+                    b.Property<float?>("EyeBrownForward");
 
-                    b.Property<int>("SkinThirdID");
+                    b.Property<float?>("EyeBrownHigh");
 
-                    b.Property<float>("ThirdMix");
+                    b.Property<float>("EyeBrowsOpacity");
+
+                    b.Property<byte?>("EyebrowsId");
+
+                    b.Property<float?>("EyesOpenning");
+
+                    b.Property<byte?>("FatherFaceId");
+
+                    b.Property<byte?>("FirstEyebrowsColor");
+
+                    b.Property<byte?>("FirstLipstickColor");
+
+                    b.Property<byte?>("FirstMakeupColor");
+
+                    b.Property<byte?>("GlassesId");
+
+                    b.Property<byte?>("GlassesTexture");
+
+                    b.Property<byte?>("HairColor");
+
+                    b.Property<byte?>("HairColorTwo");
+
+                    b.Property<byte?>("HairId");
+
+                    b.Property<byte?>("HairTexture");
+
+                    b.Property<byte?>("HatId");
+
+                    b.Property<byte?>("HatTexture");
+
+                    b.Property<float?>("JawBoneBackLenght");
+
+                    b.Property<float?>("JawBoneWidth");
+
+                    b.Property<byte?>("LegsId");
+
+                    b.Property<byte?>("LegsTexture");
+
+                    b.Property<float?>("LipsThickness");
+
+                    b.Property<byte?>("LipstickId");
+
+                    b.Property<float?>("LipstickOpacity");
+
+                    b.Property<float?>("MakeupId");
+
+                    b.Property<float?>("MakeupOpacity");
+
+                    b.Property<byte?>("MotherFaceId");
+
+                    b.Property<float?>("NeckThikness");
+
+                    b.Property<float?>("NoseBoneHigh");
+
+                    b.Property<float?>("NoseBoneTwist");
+
+                    b.Property<float?>("NosePeakHight");
+
+                    b.Property<float?>("NosePeakLenght");
+
+                    b.Property<float?>("NosePeakLowering");
+
+                    b.Property<float?>("NoseWidth");
+
+                    b.Property<byte?>("SecondEyebrowsColor");
+
+                    b.Property<byte?>("SecondLipstickColor");
+
+                    b.Property<byte?>("SecondMakeupColor");
+
+                    b.Property<float?>("ShapeMix");
+
+                    b.Property<byte?>("ShoesId");
+
+                    b.Property<byte?>("ShoesTexture");
+
+                    b.Property<byte?>("SkinColour");
+
+                    b.Property<byte?>("TopId");
+
+                    b.Property<byte?>("TopTexture");
+
+                    b.Property<byte?>("TorsoId");
+
+                    b.Property<byte?>("TorsoTexture");
+
+                    b.Property<byte?>("UndershirtId");
+
+                    b.Property<byte?>("UndershirtTexture");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CharacterId");
 
-                    b.ToTable("CharacterFaces");
+                    b.ToTable("CharacterLooks");
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
@@ -199,11 +289,6 @@ namespace LSG.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.CharacterDetail", "CharacterDetails")
-                        .WithMany()
-                        .HasForeignKey("CharacterDetailId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterDescription", b =>
@@ -214,15 +299,7 @@ namespace LSG.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterDetail", b =>
-                {
-                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.CharacterFace", "CharacterFace")
-                        .WithMany()
-                        .HasForeignKey("CharacterFaceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterFace", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterLook", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
                         .WithMany()

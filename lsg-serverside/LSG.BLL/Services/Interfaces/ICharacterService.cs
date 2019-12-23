@@ -14,6 +14,7 @@ namespace LSG.BLL.Services.Interfaces
         Task<CharacterDescriptionForScriptDto> CreateDescription(CharacterDescriptionForScriptDto characterDescription);
         Task<CharacterLookDto> GetCharacterLook(int characterId);
         Task<bool> DeleteDescription(int id);
+        Task<bool> SaveCharacterLook(int id, CharacterLookDto characterLookDto);
         new void Dispose();
     }
 }
