@@ -24,7 +24,8 @@ namespace LSG.DAL.Repositories
         {
             var characters = await _context.Characters.Where(x => x.Account.Id == id).Include(a => a.Account)
                 .Include(v => v.Vehicles)
-                .Include(d => d.CharacterDescriptions).ToListAsync();
+                .Include(d => d.CharacterDescriptions)
+                .Include(l => l.CharacterLook).ToListAsync();
 
             return characters;
         }

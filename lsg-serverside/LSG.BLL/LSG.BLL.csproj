@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AltV.Net" Version="1.21.0-beta" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LSG.DAL\LSG.DAL.csproj" />
-    <ProjectReference Include="..\LSG.GM\LSG.GM.csproj" />
   </ItemGroup>
 
 </Project>

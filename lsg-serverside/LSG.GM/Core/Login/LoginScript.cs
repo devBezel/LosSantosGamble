@@ -11,6 +11,7 @@ using LSG.DAL.Database;
 using LSG.DAL.Repositories;
 using AltV.Net.Data;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.BLL.Dto.Character;
 
 namespace LSG.GM.Core.Login
 {
@@ -28,7 +29,7 @@ namespace LSG.GM.Core.Login
 
         private async Task SetCharacterSettings(IPlayer player, object[] args) => await AltAsync.Do(() =>
         {
-            Character character = JsonConvert.DeserializeObject<Character>((string)args[0]);
+            CharacterForListDto character = JsonConvert.DeserializeObject<CharacterForListDto>((string)args[0]);
             player.SetData("account-data", character.Account);
             player.SetData("character-data", character);
 
@@ -40,6 +41,7 @@ namespace LSG.GM.Core.Login
             {
                 player.SetModelAsync(0x9C9EFFD8);
             }
+            player.EmitAsync("character:wearClothes", character.CharacterLook);
 
         });
 
