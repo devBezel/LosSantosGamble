@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Economy\" />
-    <Folder Include="Entities\Core\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
 

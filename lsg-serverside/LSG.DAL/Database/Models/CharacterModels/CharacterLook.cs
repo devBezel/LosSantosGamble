@@ -10,19 +10,19 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public int Id { get; set; }
         [ForeignKey("CharacterId")]
         public int CharacterId { get; set; }
-        public byte? FatherFaceId { get; set; }
-        public byte? MotherFaceId { get; set; }
-        public byte? SkinColour { get; set; }
+        public int? FatherFaceId { get; set; }
+        public int? MotherFaceId { get; set; }
+        public int? SkinColour { get; set; }
         public float? ShapeMix { get; set; }
-        public byte? EarsColor { get; set; }
-        public byte? BlemishesId { get; set; }
+        public int? EarsColor { get; set; }
+        public int? BlemishesId { get; set; }
         public float? BlemishesOpacity { get; set; }
-        public byte? AgeingId { get; set; }
+        public int? AgeingId { get; set; }
         public float? AgeingOpacity { get; set; }
-        public byte? BlushId { get; set; }
+        public int? BlushId { get; set; }
         public float? BlushOpacity { get; set; }
-        public byte? BlushColor { get; set; }
-        public byte? BeardId { get; set; }
+        public int? BlushColor { get; set; }
+        public int? BeardId { get; set; }
         public float? BeardOpacity { get; set; }
         public float? BeardColor { get; set; }
 
@@ -49,36 +49,36 @@ namespace LSG.DAL.Database.Models.CharacterModels
 
 
 
-        public byte? EyebrowsId { get; set; }
-        public byte? SecondEyebrowsColor { get; set; }
+        public int? EyebrowsId { get; set; }
+        public int? SecondEyebrowsColor { get; set; }
         public float EyeBrowsOpacity { get; set; }
-        public byte? FirstEyebrowsColor { get; set; }
-        public byte? LipstickId { get; set; }
-        public byte? FirstLipstickColor { get; set; }
+        public int? FirstEyebrowsColor { get; set; }
+        public int? LipstickId { get; set; }
+        public int? FirstLipstickColor { get; set; }
         public float? LipstickOpacity { get; set; }
-        public byte? SecondLipstickColor { get; set; }
+        public int? SecondLipstickColor { get; set; }
         public float? MakeupId { get; set; }
-        public byte? FirstMakeupColor { get; set; }
+        public int? FirstMakeupColor { get; set; }
         public float? MakeupOpacity { get; set; }
-        public byte? SecondMakeupColor { get; set; }
-        public byte? GlassesId { get; set; }
-        public byte? GlassesTexture { get; set; }
-        public byte? HairId { get; set; }
-        public byte? HairTexture { get; set; }
-        public byte? HairColor { get; set; }
-        public byte? HairColorTwo { get; set; }
-        public byte? HatId { get; set; }
-        public byte? HatTexture { get; set; }
-        public byte? TopId { get; set; }
-        public byte? TopTexture { get; set; }
-        public byte? TorsoId { get; set; }
-        public byte? TorsoTexture { get; set; }
-        public byte? UndershirtId { get; set; }
-        public byte? UndershirtTexture { get; set; }
-        public byte? LegsId { get; set; }
-        public byte? LegsTexture { get; set; }
-        public byte? ShoesId { get; set; }
-        public byte? ShoesTexture { get; set; }
+        public int? SecondMakeupColor { get; set; }
+        public int? GlassesId { get; set; }
+        public int? GlassesTexture { get; set; }
+        public int? HairId { get; set; }
+        public int? HairTexture { get; set; }
+        public int? HairColor { get; set; }
+        public int? HairColorTwo { get; set; }
+        public int? HatId { get; set; }
+        public int? HatTexture { get; set; }
+        public int? TopId { get; set; }
+        public int? TopTexture { get; set; }
+        public int? TorsoId { get; set; }
+        public int? TorsoTexture { get; set; }
+        public int? UndershirtId { get; set; }
+        public int? UndershirtTexture { get; set; }
+        public int? LegsId { get; set; }
+        public int? LegsTexture { get; set; }
+        public int? ShoesId { get; set; }
+        public int? ShoesTexture { get; set; }
 
     }
 }

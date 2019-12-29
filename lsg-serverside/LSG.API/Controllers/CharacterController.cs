@@ -43,7 +43,7 @@ namespace LSG.API.Controllers
             if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
 
-            IEnumerable<CharacterDescriptionForScriptDto> characterDescriptions = await _service.GetCharacterDescriptions(id);
+            IEnumerable<CharacterDescriptionForScriptDto> characterDescriptions = await _service.GetCharacterDescriptions(characterId);
 
             return Ok(characterDescriptions);
         }
