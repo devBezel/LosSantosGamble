@@ -18,6 +18,7 @@ namespace LSG.BLL.Mappers
         {
             //Konto
             CreateMap<Account, AccountForCharacterDto>();
+            CreateMap<AccountPremium, AccountPremiumDto>();
 
             // Postacie
             CreateMap<Character, CharacterForListDto>();
@@ -34,6 +35,7 @@ namespace LSG.BLL.Mappers
 
             //Wygląd postaci
             CreateMap<CharacterLook, CharacterLookDto>();
+            CreateMap<CharacterLookDto, CharacterLook>().ForMember(x => x.Character, opt => opt.Ignore());
 
         }
     }

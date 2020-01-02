@@ -8,8 +8,8 @@ namespace LSG.DAL.Database.Models.CharacterModels
     public class CharacterLook
     {
         public int Id { get; set; }
-        [ForeignKey("CharacterId")]
         public int CharacterId { get; set; }
+        public Character Character { get; set; }
         public int? FatherFaceId { get; set; }
         public int? MotherFaceId { get; set; }
         public int? SkinColour { get; set; }

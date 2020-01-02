@@ -35,6 +35,25 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Accounts");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.AccountModels.AccountPremium", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccountId");
+
+                    b.Property<DateTime>("BoughtTime");
+
+                    b.Property<DateTime>("EndTime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId")
+                        .IsUnique();
+
+                    b.ToTable("AccountPremiums");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.Character", b =>
                 {
                     b.Property<int>("Id")
@@ -110,23 +129,23 @@ namespace LSG.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte?>("AgeingId");
+                    b.Property<int?>("AgeingId");
 
                     b.Property<float?>("AgeingOpacity");
 
                     b.Property<float?>("BeardColor");
 
-                    b.Property<byte?>("BeardId");
+                    b.Property<int?>("BeardId");
 
                     b.Property<float?>("BeardOpacity");
 
-                    b.Property<byte?>("BlemishesId");
+                    b.Property<int?>("BlemishesId");
 
                     b.Property<float?>("BlemishesOpacity");
 
-                    b.Property<byte?>("BlushColor");
+                    b.Property<int?>("BlushColor");
 
-                    b.Property<byte?>("BlushId");
+                    b.Property<int?>("BlushId");
 
                     b.Property<float?>("BlushOpacity");
 
@@ -144,7 +163,7 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float?>("ChimpHole");
 
-                    b.Property<byte?>("EarsColor");
+                    b.Property<int?>("EarsColor");
 
                     b.Property<float?>("EyeBrownForward");
 
@@ -152,45 +171,45 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float>("EyeBrowsOpacity");
 
-                    b.Property<byte?>("EyebrowsId");
+                    b.Property<int?>("EyebrowsId");
 
                     b.Property<float?>("EyesOpenning");
 
-                    b.Property<byte?>("FatherFaceId");
+                    b.Property<int?>("FatherFaceId");
 
-                    b.Property<byte?>("FirstEyebrowsColor");
+                    b.Property<int?>("FirstEyebrowsColor");
 
-                    b.Property<byte?>("FirstLipstickColor");
+                    b.Property<int?>("FirstLipstickColor");
 
-                    b.Property<byte?>("FirstMakeupColor");
+                    b.Property<int?>("FirstMakeupColor");
 
-                    b.Property<byte?>("GlassesId");
+                    b.Property<int?>("GlassesId");
 
-                    b.Property<byte?>("GlassesTexture");
+                    b.Property<int?>("GlassesTexture");
 
-                    b.Property<byte?>("HairColor");
+                    b.Property<int?>("HairColor");
 
-                    b.Property<byte?>("HairColorTwo");
+                    b.Property<int?>("HairColorTwo");
 
-                    b.Property<byte?>("HairId");
+                    b.Property<int?>("HairId");
 
-                    b.Property<byte?>("HairTexture");
+                    b.Property<int?>("HairTexture");
 
-                    b.Property<byte?>("HatId");
+                    b.Property<int?>("HatId");
 
-                    b.Property<byte?>("HatTexture");
+                    b.Property<int?>("HatTexture");
 
                     b.Property<float?>("JawBoneBackLenght");
 
                     b.Property<float?>("JawBoneWidth");
 
-                    b.Property<byte?>("LegsId");
+                    b.Property<int?>("LegsId");
 
-                    b.Property<byte?>("LegsTexture");
+                    b.Property<int?>("LegsTexture");
 
                     b.Property<float?>("LipsThickness");
 
-                    b.Property<byte?>("LipstickId");
+                    b.Property<int?>("LipstickId");
 
                     b.Property<float?>("LipstickOpacity");
 
@@ -198,7 +217,7 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float?>("MakeupOpacity");
 
-                    b.Property<byte?>("MotherFaceId");
+                    b.Property<int?>("MotherFaceId");
 
                     b.Property<float?>("NeckThikness");
 
@@ -214,35 +233,36 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float?>("NoseWidth");
 
-                    b.Property<byte?>("SecondEyebrowsColor");
+                    b.Property<int?>("SecondEyebrowsColor");
 
-                    b.Property<byte?>("SecondLipstickColor");
+                    b.Property<int?>("SecondLipstickColor");
 
-                    b.Property<byte?>("SecondMakeupColor");
+                    b.Property<int?>("SecondMakeupColor");
 
                     b.Property<float?>("ShapeMix");
 
-                    b.Property<byte?>("ShoesId");
+                    b.Property<int?>("ShoesId");
 
-                    b.Property<byte?>("ShoesTexture");
+                    b.Property<int?>("ShoesTexture");
 
-                    b.Property<byte?>("SkinColour");
+                    b.Property<int?>("SkinColour");
 
-                    b.Property<byte?>("TopId");
+                    b.Property<int?>("TopId");
 
-                    b.Property<byte?>("TopTexture");
+                    b.Property<int?>("TopTexture");
 
-                    b.Property<byte?>("TorsoId");
+                    b.Property<int?>("TorsoId");
 
-                    b.Property<byte?>("TorsoTexture");
+                    b.Property<int?>("TorsoTexture");
 
-                    b.Property<byte?>("UndershirtId");
+                    b.Property<int?>("UndershirtId");
 
-                    b.Property<byte?>("UndershirtTexture");
+                    b.Property<int?>("UndershirtTexture");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CharacterId");
+                    b.HasIndex("CharacterId")
+                        .IsUnique();
 
                     b.ToTable("CharacterLooks");
                 });
@@ -281,6 +301,14 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Vehicles");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.AccountModels.AccountPremium", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Account")
+                        .WithOne("AccountPremium")
+                        .HasForeignKey("LSG.DAL.Database.Models.AccountModels.AccountPremium", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.Character", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Account")
@@ -300,8 +328,8 @@ namespace LSG.DAL.Migrations
             modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.CharacterLook", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
-                        .WithMany()
-                        .HasForeignKey("CharacterId")
+                        .WithOne("CharacterLook")
+                        .HasForeignKey("LSG.DAL.Database.Models.CharacterModels.CharacterLook", "CharacterId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

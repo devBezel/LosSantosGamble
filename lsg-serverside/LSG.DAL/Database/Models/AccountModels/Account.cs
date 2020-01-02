@@ -12,5 +12,6 @@ namespace LSG.DAL.Database.Models.AccountModels
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public int Rank { get; set; }
+        public virtual AccountPremium AccountPremium { get; set; }
     }
 }

@@ -12,10 +12,16 @@ using LSG.DAL.Repositories;
 using AltV.Net.Data;
 using LSG.DAL.Database.Models.CharacterModels;
 using LSG.BLL.Dto.Character;
+using AltV.Net;
+using LSG.GM.Entities.Core;
+using LSG.DAL.UnitOfWork;
+using LSG.GM.Extensions;
+using AltV.Net.Resources.Chat.Api;
+using LSG.GM.Utilities;
 
 namespace LSG.GM.Core.Login
 {
-    public class LoginScript 
+    public class LoginScript : IScript
     {
         public LoginScript()
         {
@@ -25,10 +31,12 @@ namespace LSG.GM.Core.Login
             });
 
             AltAsync.OnClient("login:characterDetail", SetCharacterSettings);
+            AltAsync.Log("Działa");
         }
 
         private async Task SetCharacterSettings(IPlayer player, object[] args) => await AltAsync.Do(() =>
         {
+            
             CharacterForListDto character = JsonConvert.DeserializeObject<CharacterForListDto>((string)args[0]);
             player.SetData("account-data", character.Account);
             player.SetData("character-data", character);
@@ -41,14 +49,26 @@ namespace LSG.GM.Core.Login
             {
                 player.SetModelAsync(0x9C9EFFD8);
             }
+
+            if (player.HasPremium())
+                player.SetSyncedMetaDataAsync("account-premium", true);
+
+            player.SendChatMessage("Dziękujemy za wspieranie naszego projektu! Do końca twojego premium pozostało " + 
+                Calculation.CalculateTheNumberOfDays(character.Account.AccountPremium.BoughtTime, character.Account.AccountPremium.EndTime) + " Dni");
+            
             player.EmitAsync("character:wearClothes", character.CharacterLook);
-
         });
-
         private async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(() =>
         {
             player.EmitAsync("other:first-connect");
         });
+
+        [Command("test")]
+        public void TestCMD(IPlayer player)
+        {
+            Alt.Log("dziala");
+            player.SendSuccessNotify("Witaj na serwerze ", "Baw się dobrze i nie łam regulaminu!");
+        }
 
     }
 }

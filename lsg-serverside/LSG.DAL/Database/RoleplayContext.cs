@@ -18,5 +18,6 @@ namespace LSG.DAL.Database
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<CharacterDescription> CharacterDescriptions { get; set; }
         public DbSet<CharacterLook> CharacterLooks { get; set; }
+        public DbSet<AccountPremium> AccountPremiums { get; set; }
     }
 }
