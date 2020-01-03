@@ -19,8 +19,6 @@ namespace LSG.GM
     {
         public override void OnStart()
         {            
-            new LoginScript();
-            new DescriptionScript();
         }
 
         public override void OnStop()
