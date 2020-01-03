@@ -22,13 +22,19 @@ namespace LSG.DAL.Repositories
 
         public async Task<Account> Login(string username, string password)
         {
-            var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Username == username);
+            var account = await _context.Accounts.Include(p => p.AccountPremium).FirstOrDefaultAsync(x => x.Username == username);
             Console.WriteLine($"authrep: {account.Username}");
             if (account == null)
                 return null;
 
             if (!VerifyPasswordHash(password, account.PasswordHash, account.PasswordSalt))
                 return null;
+
+            if (((account.AccountPremium != null) && (account.AccountPremium.EndTime <= DateTime.Now)))
+            {
+                _context.AccountPremiums.Remove(account.AccountPremium);
+                await _context.SaveChangesAsync();
+            }
 
             return account;
         }
