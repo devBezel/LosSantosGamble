@@ -31,21 +31,22 @@ namespace LSG.GM.Core.Login
             });
 
             AltAsync.OnClient("login:characterDetail", SetCharacterSettings);
-            AltAsync.Log("Działa");
         }
 
         private async Task SetCharacterSettings(IPlayer player, object[] args) => await AltAsync.Do(() =>
         {
             
             CharacterForListDto character = JsonConvert.DeserializeObject<CharacterForListDto>((string)args[0]);
-            player.SetData("account-data", character.Account);
-            player.SetMetaDataAsync("account-data", character.Account);
-            player.SetData("character-data", character);
+            player.SetData("account:data", character.Account);
+            player.SetData("character:data", character);
+            player.SetData("account:id", Calculation.GenerateFreeIdentifier());
 
             player.Spawn(new Position(character.PosX, character.PosY, character.PosZ));
             player.SetHealthAsync((ushort)character.Health);
             player.SetModelAsync(0x705E61F2);
             player.SetNameAsync(character.Name);
+            player.SendAccountDataToClient();
+            player.SendCharacterDataToClient();
 
             if(character.Gender)
             {
@@ -53,10 +54,8 @@ namespace LSG.GM.Core.Login
             }
 
             if (player.HasPremium())
-                player.SetSyncedMetaDataAsync("account-premium", true);
-
-            player.SendChatMessage("Dziękujemy za wspieranie naszego projektu " + character.Account.Username + "! Do końca twojego {D1BA0f} premium {ffffff} pozostało " + 
-                Calculation.CalculateTheNumberOfDays(character.Account.AccountPremium.EndTime, character.Account.AccountPremium.BoughtTime) + " dni");
+                player.SendChatMessage("Dziękujemy za wspieranie naszego projektu " + character.Account.Username + "! Do końca twojego {D1BA0f} premium {ffffff} pozostało " +
+                        Calculation.CalculateTheNumberOfDays(character.Account.AccountPremium.EndTime, character.Account.AccountPremium.BoughtTime) + " dni");
 
             player.EmitAsync("character:wearClothes", character.CharacterLook);
         });
@@ -64,12 +63,14 @@ namespace LSG.GM.Core.Login
         {
             player.EmitAsync("other:first-connect");
         });
-
         [Command("test")]
-        public void TestCMD(IPlayer player)
+        public void TestCMD(IPlayer player, int rank)
         {
-            Alt.Log("dziala");
-            player.SendSuccessNotify("Witaj na serwerze ", "Baw się dobrze i nie łam regulaminu!");
+            Alt.Log(rank.ToString());
+            if (player.HasRank(rank))
+                player.SendChatMessage("Posiadasz rangę");
+            else
+                player.SendChatMessage("Nie posiadasz rangi");
         }
 
     }
