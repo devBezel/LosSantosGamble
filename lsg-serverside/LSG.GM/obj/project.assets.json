@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.0": {
-      "AltV.Net/1.21.0-beta": {
+      "AltV.Net/1.22.4-beta": {
         "type": "package",
         "compile": {
           "lib/netcoreapp3.0/AltV.Net.dll": {}
@@ -2592,7 +2592,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.0",
         "dependencies": {
-          "AltV.Net": "1.21.0-beta",
+          "AltV.Net": "1.22.4-beta",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "6.0.0",
           "LSG.DAL": "1.0.0"
         },
@@ -2607,6 +2607,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.0",
         "dependencies": {
+          "AltV.Net": "1.22.4-beta",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "4.0.1",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "2.2.0",
           "Microsoft.EntityFrameworkCore": "2.2.4",
@@ -2624,14 +2625,14 @@
     }
   },
   "libraries": {
-    "AltV.Net/1.21.0-beta": {
-      "sha512": "6LilSR5Kh8NCgNcXw2TcpHSTzf71DJJtXaE7nYLu1PSz0E7DD5specZ1+Ga/HLmRp8FW9H4eOh1e+pxxk8a0Ug==",
+    "AltV.Net/1.22.4-beta": {
+      "sha512": "nlJ0IAioOfBbWjrv1aN8dX97DIqo0UZNfaW5ZfOgNYtY5tkapEcpctZ6cbtSAgt9ZdqYw7AD5Qgl1aP0ikFMVw==",
       "type": "package",
-      "path": "altv.net/1.21.0-beta",
+      "path": "altv.net/1.22.4-beta",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "altv.net.1.21.0-beta.nupkg.sha512",
+        "altv.net.1.22.4-beta.nupkg.sha512",
         "altv.net.nuspec",
         "icon.png",
         "lib/netcoreapp3.0/AltV.Net.dll",
@@ -8322,7 +8323,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.0": [
-      "AltV.Net >= 1.21.0-beta",
+      "AltV.Net >= 1.22.4-beta",
       "AltV.Net.Async >= 1.20.2-beta",
       "AltV.Net.ColShape >= 1.6.1-dev-preview",
       "AltV.Net.Mock >= 1.17.2-alpha",
@@ -8382,7 +8383,7 @@
         "dependencies": {
           "AltV.Net": {
             "target": "Package",
-            "version": "[1.21.0-beta, )"
+            "version": "[1.22.4-beta, )"
           },
           "AltV.Net.Async": {
             "target": "Package",

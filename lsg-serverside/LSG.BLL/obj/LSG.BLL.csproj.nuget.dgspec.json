@@ -14,7 +14,7 @@
         "outputPath": "B:\\Projekty\\LSGamble-Serverside\\lsg-serverside\\LSG.BLL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\Dawid\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -47,7 +47,7 @@
           "dependencies": {
             "AltV.Net": {
               "target": "Package",
-              "version": "[1.21.0-beta, )"
+              "version": "[1.22.4-beta, )"
             },
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
@@ -69,7 +69,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\3.0.100-preview9-014004\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -83,7 +83,7 @@
         "outputPath": "B:\\Projekty\\LSGamble-Serverside\\lsg-serverside\\LSG.DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\Dawid\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -110,6 +110,10 @@
       "frameworks": {
         "netcoreapp3.0": {
           "dependencies": {
+            "AltV.Net": {
+              "target": "Package",
+              "version": "[1.22.4-beta, )"
+            },
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[4.0.1, )"
@@ -156,7 +160,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\3.0.100-preview9-014004\\RuntimeIdentifierGraph.json"
         }
       }
     }

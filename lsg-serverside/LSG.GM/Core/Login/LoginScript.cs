@@ -36,7 +36,7 @@ namespace LSG.GM.Core.Login
         private async Task SetCharacterSettings(IPlayer player, object[] args) => await AltAsync.Do(() =>
         {
             
-            CharacterForListDto character = JsonConvert.DeserializeObject<CharacterForListDto>((string)args[0]);
+            Character character = JsonConvert.DeserializeObject<Character>((string)args[0]);
             player.SetData("account:data", character.Account);
             player.SetData("character:data", character);
             player.SetData("account:id", Calculation.GenerateFreeIdentifier());

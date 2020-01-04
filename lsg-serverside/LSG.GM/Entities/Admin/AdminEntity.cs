@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Elements.Entities;
+using LSG.GM.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,10 +14,14 @@ namespace LSG.GM.Entities.Admin
             {
                 player.SetData("admin:duty", false);
                 player.Emit("admin:setDuty", false);
+
+                player.SendSuccessNotify("Wykonano pomyślnie!", "Zszedłeś ze służby admina poprawnie!");
                 return;
             }
             player.SetData("admin:duty", true);
             player.Emit("admin:setDuty", true);
+
+            player.SendSuccessNotify("Wykonano pomyślnie!", "Wszedłeś na służbę admina poprawnie!");
         }
 
         public static bool OnAdminDuty(this IPlayer player)

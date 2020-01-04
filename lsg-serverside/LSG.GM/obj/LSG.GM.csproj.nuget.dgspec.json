@@ -47,7 +47,7 @@
           "dependencies": {
             "AltV.Net": {
               "target": "Package",
-              "version": "[1.21.0-beta, )"
+              "version": "[1.22.4-beta, )"
             },
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
@@ -110,6 +110,10 @@
       "frameworks": {
         "netcoreapp3.0": {
           "dependencies": {
+            "AltV.Net": {
+              "target": "Package",
+              "version": "[1.22.4-beta, )"
+            },
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[4.0.1, )"
@@ -206,7 +210,7 @@
           "dependencies": {
             "AltV.Net": {
               "target": "Package",
-              "version": "[1.21.0-beta, )"
+              "version": "[1.22.4-beta, )"
             },
             "AltV.Net.Async": {
               "target": "Package",
