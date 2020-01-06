@@ -37,9 +37,8 @@ namespace LSG.GM.Core.Login
         {
             
             Character character = JsonConvert.DeserializeObject<Character>((string)args[0]);
-            player.SetData("account:data", character.Account);
-            player.SetData("character:data", character);
-            player.SetData("account:id", Calculation.GenerateFreeIdentifier());
+            LoginEntity.SetPlayerDataToServer(player, character);
+
 
             player.Spawn(new Position(character.PosX, character.PosY, character.PosZ));
             player.SetHealthAsync((ushort)character.Health);
@@ -63,15 +62,7 @@ namespace LSG.GM.Core.Login
         {
             player.EmitAsync("other:first-connect");
         });
-        [Command("test")]
-        public void TestCMD(IPlayer player, int rank)
-        {
-            Alt.Log(rank.ToString());
-            if (player.HasRank(rank))
-                player.SendChatMessage("Posiadasz rangę");
-            else
-                player.SendChatMessage("Nie posiadasz rangi");
-        }
+
 
     }
 }

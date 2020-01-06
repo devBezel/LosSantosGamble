@@ -241,5 +241,16 @@ B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\obj\Debug\netcoreapp3.0\L
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\obj\Debug\netcoreapp3.0\LSG.API.dll
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\obj\Debug\netcoreapp3.0\LSG.API.pdb
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\AltV.Net.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\Microsoft.Extensions.DependencyInjection.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Configuration.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Configuration.Abstractions.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Configuration.Binder.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Logging.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Logging.Abstractions.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Options.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Primitives.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\System.ComponentModel.Annotations.dll
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\System.Runtime.CompilerServices.Unsafe.dll
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\System.Security.Cryptography.Pkcs.dll
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.API\bin\Debug\netcoreapp3.0\runtimes\win\lib\netcoreapp2.1\System.Security.Cryptography.Pkcs.dll

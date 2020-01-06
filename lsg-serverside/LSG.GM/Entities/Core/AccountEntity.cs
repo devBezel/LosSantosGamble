@@ -5,8 +5,10 @@ using LSG.DAL.Database;
 using LSG.DAL.Database.Models.AccountModels;
 using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.UnitOfWork;
+using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LSG.GM.Entities.Core
@@ -49,18 +51,19 @@ namespace LSG.GM.Entities.Core
         {
             player.GetData("account:data", out Account account);
             player.GetData("account:id", out int id);
-            player.Emit("account:sendDataAccount", account, id);
-        }
 
-        public static void SendCharacterDataToClient(this IPlayer player)
-        {
-            player.GetData("character:data", out Character character);
-            player.Emit("character:sendDataCharacter", character);
+
+            AccountForCharacterDto accountDto = Singleton.AutoMapper().Map<AccountForCharacterDto>(account);
+            player.Emit("account:sendDataAccount", accountDto, id);
         }
 
         public static void UpdateAccountData(this IPlayer player, Account account)
         {
             player.SetData("account:data", account);
+
+            Singleton.GetDatabaseInstance().Update(account);
+            Singleton.GetDatabaseInstance().SaveChanges();
+            //TODO: zrobić zapis do bazy
             player.SendAccountDataToClient();
         }
     }

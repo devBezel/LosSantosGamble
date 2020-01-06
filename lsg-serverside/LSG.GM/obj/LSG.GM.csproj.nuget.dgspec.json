@@ -136,6 +136,10 @@
               "target": "Package",
               "version": "[2.2.4, )"
             },
+            "Microsoft.Extensions.Logging": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
               "version": "[2.2.0, )"
@@ -231,6 +235,10 @@
             "AltV.Net.Resources.Chat.Api": {
               "target": "Package",
               "version": "[1.2.0-dev-preview, )"
+            },
+            "Microsoft.Extensions.Logging": {
+              "target": "Package",
+              "version": "[3.1.0, )"
             }
           },
           "imports": [

@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AltV.Net.Data;
 using System.Linq;
+using LSG.GM.Economy.Money;
+using LSG.GM.Utilities;
 
 namespace LSG.GM.Core.Admin
 {
@@ -51,7 +53,7 @@ namespace LSG.GM.Core.Admin
         });
 
         [Command("tp")]
-        public async Task TeleportToPlayerCMD(IPlayer sender, int id) => await AltAsync.Do(async () =>
+        public async Task TeleportToPlayerCMD(IPlayer sender, int id) => await AltAsync.Do(() =>
         {
             if (!sender.HasRank((int)EAdmin.Supporter))
                 return;
@@ -68,5 +70,33 @@ namespace LSG.GM.Core.Admin
 
             sender.SendSuccessNotify(null, $"Przeteleportowałeś się do ID: {id}");
         });
+
+        [Command("addmoney")]
+        public async Task AddCharacterMoneyCMD(IPlayer sender, int amount, int id) => await AltAsync.Do(() =>
+        {
+            if (!sender.HasRank((int)EAdmin.Administrator))
+                return;
+
+            if (!sender.OnAdminDuty())
+            {
+                sender.SendErrorNotify("Wystąpił bląd!", "Aby użyć tej komendy musisz wejść na służbę administratora");
+                return;
+            }
+
+            IPlayer getter = PlayerExtenstion.GetPlayerById(id);
+
+            getter.AddMoney(amount);
+
+            sender.SendSuccessNotify(null, $"Nadałeś graczowi ID: {id} {amount}$");
+            getter.SendSuccessNotify(null, $"Otrzymałeś od administratora {sender.GetAccountEntity().Username} {amount}$");
+        });
+
+        [Command("testmoney")]
+        public void TestMoneyCMD(IPlayer player)
+        {
+            player.SendSuccessNotify(null, $"Twoja ilość gotówki: {player.GetCharacterEntity().Money}");
+
+            player.SendChatMessage($"{Singleton.GetDatabaseInstance().Accounts.SingleOrDefault(x => x.Id == player.GetAccountEntity().Id).PasswordHash}");
+        }
     }
 }

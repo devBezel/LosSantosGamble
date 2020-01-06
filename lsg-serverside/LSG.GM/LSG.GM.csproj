@@ -17,15 +17,12 @@
     <PackageReference Include="AltV.Net.Mock" Version="1.17.2-alpha" />
     <PackageReference Include="AltV.Net.NetworkingEntity" Version="1.7.0-dev-preview" />
     <PackageReference Include="AltV.Net.Resources.Chat.Api" Version="1.2.0-dev-preview" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LSG.BLL\LSG.BLL.csproj" />
     <ProjectReference Include="..\LSG.DAL\LSG.DAL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Economy\" />
   </ItemGroup>
 
 </Project>

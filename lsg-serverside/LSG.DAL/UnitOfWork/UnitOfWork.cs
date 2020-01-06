@@ -16,9 +16,11 @@ namespace LSG.DAL.UnitOfWork
         {
             _context = context;
             CharacterRepository = new CharacterRepository(_context);
+            VehicleRepository = new VehicleRepository(_context);
         }
 
         public ICharacterRepository CharacterRepository { get; set; }
+        public IVehicleRepository VehicleRepository { get; set; }
 
         public void Dispose()
         {
