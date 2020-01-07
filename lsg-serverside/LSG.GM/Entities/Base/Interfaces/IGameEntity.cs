@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace LSG.GM.Entities.Base.Interfaces
+{
+    public interface IGameEntity
+    {
+        void Spawn();
+
+        void Dispose();
+    }
+}

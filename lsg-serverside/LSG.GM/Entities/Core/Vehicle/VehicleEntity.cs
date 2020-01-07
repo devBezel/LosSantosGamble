@@ -6,19 +6,23 @@ using LSG.DAL.Database;
 using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Repositories;
 using LSG.DAL.UnitOfWork;
+using LSG.GM.Entities.Base;
+using LSG.GM.Entities.Base.Interfaces;
 using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using VehicleDb = LSG.DAL.Database.Models.VehicleModels.Vehicle;
+using Newtonsoft.Json;
 
 namespace LSG.GM.Entities.Core.Vehicle
 {
-    public class VehicleEntity
+    public class VehicleEntity : GameEntity
     {
         public IVehicle GameVehicle { get; set; }
         public VehicleDb DbModel { get; set; }
+        private bool _nonDbVehicle;
 
         public VehicleEntity(VehicleDb model)
         {
@@ -60,8 +64,60 @@ namespace LSG.GM.Entities.Core.Vehicle
 
         }
 
+        public void ChangeSpawnPosition()
+        {
+            DbModel.PosX = GameVehicle.Position.X;
+            DbModel.PosY = GameVehicle.Position.Y;
+            DbModel.PosZ = GameVehicle.Position.Z;
+            DbModel.RotPitch = GameVehicle.Rotation.Pitch;
+            DbModel.RotRoll = GameVehicle.Rotation.Roll;
+            DbModel.RotYaw = GameVehicle.Rotation.Yaw;
 
+            
+            if (_nonDbVehicle) return;
 
-        private bool _nonDbVehicle;
+            Save();
+        }
+
+        public void Save()
+        {
+            DbModel.Health = GameVehicle.EngineHealth;
+            DbModel.PosX = GameVehicle.Position.X;
+            DbModel.PosY = GameVehicle.Position.Y;
+            DbModel.PosZ = GameVehicle.Position.Z;
+            DbModel.RotPitch = GameVehicle.Rotation.Pitch;
+            DbModel.RotRoll = GameVehicle.Rotation.Roll;
+            DbModel.RotYaw = GameVehicle.Rotation.Yaw;
+
+            DbModel.R = GameVehicle.PrimaryColorRgb.R;
+            DbModel.G = GameVehicle.PrimaryColorRgb.G;
+            DbModel.B = GameVehicle.PrimaryColorRgb.B;
+
+            if (_nonDbVehicle) return;
+
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+            using (UnitOfWork unitOfWork = new UnitOfWork(ctx))
+            {
+                unitOfWork.VehicleRepository.Update(DbModel);
+            }
+        }
+
+        public override void Dispose()
+        {
+            if (!_nonDbVehicle) Save();
+
+            GameVehicle.Remove();
+        }
+
+        public override void Spawn()
+        {
+            GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(0, 0, 0));
+
+            GameVehicle.SetData("vehicle:data", this);
+            GameVehicle.SetData("vehicle:id", DbModel.Id);
+
+            Save();
+        }
+
     }
 }

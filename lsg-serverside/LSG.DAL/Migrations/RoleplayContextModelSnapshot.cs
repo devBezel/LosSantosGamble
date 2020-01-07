@@ -129,135 +129,135 @@ namespace LSG.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AgeingId");
+                    b.Property<int>("AgeingId");
 
-                    b.Property<float?>("AgeingOpacity");
+                    b.Property<float>("AgeingOpacity");
 
-                    b.Property<float?>("BeardColor");
+                    b.Property<float>("BeardColor");
 
-                    b.Property<int?>("BeardId");
+                    b.Property<int>("BeardId");
 
-                    b.Property<float?>("BeardOpacity");
+                    b.Property<float>("BeardOpacity");
 
-                    b.Property<int?>("BlemishesId");
+                    b.Property<int>("BlemishesId");
 
-                    b.Property<float?>("BlemishesOpacity");
+                    b.Property<float>("BlemishesOpacity");
 
-                    b.Property<int?>("BlushColor");
+                    b.Property<int>("BlushColor");
 
-                    b.Property<int?>("BlushId");
+                    b.Property<int>("BlushId");
 
-                    b.Property<float?>("BlushOpacity");
+                    b.Property<float>("BlushOpacity");
 
                     b.Property<int>("CharacterId");
 
-                    b.Property<float?>("CheeksBoneWidth");
+                    b.Property<float>("CheeksBoneWidth");
 
-                    b.Property<float?>("CheeksWidth");
+                    b.Property<float>("CheeksWidth");
 
-                    b.Property<float?>("ChimpBoneLenght");
+                    b.Property<float>("ChimpBoneLenght");
 
-                    b.Property<float?>("ChimpBoneLowering");
+                    b.Property<float>("ChimpBoneLowering");
 
-                    b.Property<float?>("ChimpBoneWidth");
+                    b.Property<float>("ChimpBoneWidth");
 
-                    b.Property<float?>("ChimpHole");
+                    b.Property<float>("ChimpHole");
 
-                    b.Property<int?>("EarsColor");
+                    b.Property<int>("EarsColor");
 
-                    b.Property<float?>("EyeBrownForward");
+                    b.Property<float>("EyeBrownForward");
 
-                    b.Property<float?>("EyeBrownHigh");
+                    b.Property<float>("EyeBrownHigh");
 
                     b.Property<float>("EyeBrowsOpacity");
 
-                    b.Property<int?>("EyebrowsId");
+                    b.Property<int>("EyebrowsId");
 
-                    b.Property<float?>("EyesOpenning");
+                    b.Property<float>("EyesOpenning");
 
-                    b.Property<int?>("FatherFaceId");
+                    b.Property<int>("FatherFaceId");
 
-                    b.Property<int?>("FirstEyebrowsColor");
+                    b.Property<int>("FirstEyebrowsColor");
 
-                    b.Property<int?>("FirstLipstickColor");
+                    b.Property<int>("FirstLipstickColor");
 
-                    b.Property<int?>("FirstMakeupColor");
+                    b.Property<int>("FirstMakeupColor");
 
-                    b.Property<int?>("GlassesId");
+                    b.Property<int>("GlassesId");
 
-                    b.Property<int?>("GlassesTexture");
+                    b.Property<int>("GlassesTexture");
 
-                    b.Property<int?>("HairColor");
+                    b.Property<int>("HairColor");
 
-                    b.Property<int?>("HairColorTwo");
+                    b.Property<int>("HairColorTwo");
 
-                    b.Property<int?>("HairId");
+                    b.Property<int>("HairId");
 
-                    b.Property<int?>("HairTexture");
+                    b.Property<int>("HairTexture");
 
-                    b.Property<int?>("HatId");
+                    b.Property<int>("HatId");
 
-                    b.Property<int?>("HatTexture");
+                    b.Property<int>("HatTexture");
 
-                    b.Property<float?>("JawBoneBackLenght");
+                    b.Property<float>("JawBoneBackLenght");
 
-                    b.Property<float?>("JawBoneWidth");
+                    b.Property<float>("JawBoneWidth");
 
-                    b.Property<int?>("LegsId");
+                    b.Property<int>("LegsId");
 
-                    b.Property<int?>("LegsTexture");
+                    b.Property<int>("LegsTexture");
 
-                    b.Property<float?>("LipsThickness");
+                    b.Property<float>("LipsThickness");
 
-                    b.Property<int?>("LipstickId");
+                    b.Property<int>("LipstickId");
 
-                    b.Property<float?>("LipstickOpacity");
+                    b.Property<float>("LipstickOpacity");
 
-                    b.Property<float?>("MakeupId");
+                    b.Property<float>("MakeupId");
 
-                    b.Property<float?>("MakeupOpacity");
+                    b.Property<float>("MakeupOpacity");
 
-                    b.Property<int?>("MotherFaceId");
+                    b.Property<int>("MotherFaceId");
 
-                    b.Property<float?>("NeckThikness");
+                    b.Property<float>("NeckThikness");
 
-                    b.Property<float?>("NoseBoneHigh");
+                    b.Property<float>("NoseBoneHigh");
 
-                    b.Property<float?>("NoseBoneTwist");
+                    b.Property<float>("NoseBoneTwist");
 
-                    b.Property<float?>("NosePeakHight");
+                    b.Property<float>("NosePeakHight");
 
-                    b.Property<float?>("NosePeakLenght");
+                    b.Property<float>("NosePeakLenght");
 
-                    b.Property<float?>("NosePeakLowering");
+                    b.Property<float>("NosePeakLowering");
 
-                    b.Property<float?>("NoseWidth");
+                    b.Property<float>("NoseWidth");
 
-                    b.Property<int?>("SecondEyebrowsColor");
+                    b.Property<int>("SecondEyebrowsColor");
 
-                    b.Property<int?>("SecondLipstickColor");
+                    b.Property<int>("SecondLipstickColor");
 
-                    b.Property<int?>("SecondMakeupColor");
+                    b.Property<int>("SecondMakeupColor");
 
-                    b.Property<float?>("ShapeMix");
+                    b.Property<float>("ShapeMix");
 
-                    b.Property<int?>("ShoesId");
+                    b.Property<int>("ShoesId");
 
-                    b.Property<int?>("ShoesTexture");
+                    b.Property<int>("ShoesTexture");
 
-                    b.Property<int?>("SkinColour");
+                    b.Property<int>("SkinColour");
 
-                    b.Property<int?>("TopId");
+                    b.Property<int>("TopId");
 
-                    b.Property<int?>("TopTexture");
+                    b.Property<int>("TopTexture");
 
-                    b.Property<int?>("TorsoId");
+                    b.Property<int>("TorsoId");
 
-                    b.Property<int?>("TorsoTexture");
+                    b.Property<int>("TorsoTexture");
 
-                    b.Property<int?>("UndershirtId");
+                    b.Property<int>("UndershirtId");
 
-                    b.Property<int?>("UndershirtTexture");
+                    b.Property<int>("UndershirtTexture");
 
                     b.HasKey("Id");
 
@@ -290,7 +290,11 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int>("R");
 
-                    b.Property<float>("Rot");
+                    b.Property<float>("RotPitch");
+
+                    b.Property<float>("RotRoll");
+
+                    b.Property<float>("RotYaw");
 
                     b.Property<bool>("State");
 

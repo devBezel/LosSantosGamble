@@ -15,7 +15,9 @@ namespace LSG.DAL.Database.Models.VehicleModels
         public float PosX { get; set; }
         public float PosY { get; set; }
         public float PosZ { get; set; }
-        public float Rot { get; set; }
+        public float RotRoll { get; set; }
+        public float RotPitch { get; set; }
+        public float RotYaw { get; set; }
         public int R { get; set; }
         public int G { get; set; }
         public int B { get; set; }

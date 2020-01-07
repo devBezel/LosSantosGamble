@@ -19,7 +19,7 @@ namespace LSG.GM.Utilities
             if(Database == null)
             {
                 Database = new RoleplayContextFactory().Create();
-                Alt.Log("Tworze nowy obiekt");
+                Alt.Log($"[MYSQL] Poprawnie stworzono polączenie z bazą danych");
             }
 
             return Database;
