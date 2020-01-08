@@ -22,6 +22,7 @@ namespace LSG.GM.Core.Login
             player.SetData("character:data", characterDatabase);
 
             player.SetData("account:id", Calculation.GenerateFreeIdentifier());
+            player.SetData("character:spawnedVehicleLength", 0);
         }
     }
 }

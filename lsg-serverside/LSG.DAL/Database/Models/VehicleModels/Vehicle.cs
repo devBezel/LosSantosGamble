@@ -23,6 +23,7 @@ namespace LSG.DAL.Database.Models.VehicleModels
         public int B { get; set; }
         public bool State { get; set; }
         public int Health { get; set; }
+        //public int Dimension { get; set; }
 
     }
 }

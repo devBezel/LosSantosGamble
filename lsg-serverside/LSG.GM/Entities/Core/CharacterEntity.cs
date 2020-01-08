@@ -21,6 +21,7 @@ namespace LSG.GM.Entities.Core
             return character;
         }
 
+
         public static void SendCharacterDataToClient(this IPlayer player)
         {
             player.GetData("character:data", out Character character);

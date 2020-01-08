@@ -15,6 +15,8 @@ using System.Drawing;
 using System.Text;
 using VehicleDb = LSG.DAL.Database.Models.VehicleModels.Vehicle;
 using Newtonsoft.Json;
+using System.Linq;
+using LSG.GM.Entities.Admin;
 
 namespace LSG.GM.Entities.Core.Vehicle
 {
@@ -102,22 +104,30 @@ namespace LSG.GM.Entities.Core.Vehicle
             }
         }
 
+        public int GetIncrementID()
+        {
+            GameVehicle.GetData("vehicle:incrementId", out int result);
+
+            return result;
+        }
+
         public override void Dispose()
         {
             if (!_nonDbVehicle) Save();
 
             GameVehicle.Remove();
         }
-
-        public override void Spawn()
+        
+        public override void Spawn(IPlayer player)
         {
+            IEnumerable<IVehicle> veh = Alt.GetAllVehicles().Where(v => v.GetData("vehicle:data", out VehicleEntity vehicleData) && vehicleData.DbModel.Owner.Id == player.GetCharacterEntity().Id);
             GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(0, 0, 0));
-
+            
             GameVehicle.SetData("vehicle:data", this);
             GameVehicle.SetData("vehicle:id", DbModel.Id);
+            GameVehicle.SetData("vehicle:incrementId", veh.Count() + 1);
 
             Save();
         }
-
     }
 }

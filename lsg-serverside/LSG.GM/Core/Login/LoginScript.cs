@@ -54,7 +54,7 @@ namespace LSG.GM.Core.Login
 
             if (player.HasPremium())
                 player.SendChatMessage("Dziękujemy za wspieranie naszego projektu " + character.Account.Username + "! Do końca twojego {D1BA0f} premium {ffffff} pozostało " +
-                        Calculation.CalculateTheNumberOfDays(character.Account.AccountPremium.EndTime, character.Account.AccountPremium.BoughtTime) + " dni");
+                        Calculation.CalculateTheNumberOfDays(character.Account.AccountPremium.EndTime, DateTime.Now) + " dni");
 
             player.EmitAsync("character:wearClothes", character.CharacterLook);
         });
