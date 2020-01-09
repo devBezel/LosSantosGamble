@@ -15,8 +15,8 @@ namespace LSG.GM.Entities
 
         public static VehicleEntity GetSpawnedVehicleById(int id)
         {
-            IVehicle veh =  Alt.GetAllVehicles().SingleOrDefault(v => v.GetData("vehicle:id", out int vehicleId) && vehicleId == id);
-            if(veh != null)
+            IVehicle veh = Alt.GetAllVehicles().SingleOrDefault(v => v.GetData("vehicle:id", out int vehicleId) && vehicleId == id);
+            if (veh != null)
             {
                 if (veh.GetData("vehicle:data", out VehicleEntity vehicleData))
                 {
@@ -25,12 +25,19 @@ namespace LSG.GM.Entities
             }
             return null;
         }
-         
+
         public static VehicleDb GetVehicleDatabaseById(int id)
         {
             VehicleDb vehicle = Singleton.GetDatabaseInstance().Vehicles.SingleOrDefault(v => v.Id == id);
 
-            return vehicle; 
+            return vehicle;
+        }
+
+        public static List<VehicleDb> GetCharacterVehicleDatabaseList(int id)
+        {
+            List<VehicleDb> vehicles = Singleton.GetDatabaseInstance().Vehicles.Where(v => v.Owner.Id == id).ToList();
+
+            return vehicles;
         }
         // Tworzenie blipów, grup itp
     }

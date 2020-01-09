@@ -22,7 +22,7 @@ namespace LSG.GM.Entities.Core
 
             return account;
         }
-        
+
         public static bool HasRank(this IPlayer player, int rank)
         {
             player.GetData("account:data", out Account account);
@@ -68,3 +68,4 @@ namespace LSG.GM.Entities.Core
         }
     }
 }
+
