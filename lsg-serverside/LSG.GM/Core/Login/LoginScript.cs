@@ -18,6 +18,8 @@ using LSG.DAL.UnitOfWork;
 using LSG.GM.Extensions;
 using AltV.Net.Resources.Chat.Api;
 using LSG.GM.Utilities;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace LSG.GM.Core.Login
 {
@@ -36,27 +38,16 @@ namespace LSG.GM.Core.Login
         private async Task SetCharacterSettings(IPlayer player, object[] args) => await AltAsync.Do(() =>
         {
             
-            Character character = JsonConvert.DeserializeObject<Character>((string)args[0]);
-            LoginEntity.SetPlayerDataToServer(player, character);
+            Character characterClient = JsonConvert.DeserializeObject<Character>((string)args[0]);
+            Character characterDatabase = Singleton.GetDatabaseInstance().Characters
+            .Include(l => l.CharacterLook)
+            .Include(a => a.Account)
+            .ThenInclude(p => p.AccountPremium)
+            .FirstOrDefault(c => c.Id == characterClient.Id);
 
 
-            player.Spawn(new Position(character.PosX, character.PosY, character.PosZ));
-            player.SetHealthAsync((ushort)character.Health);
-            player.SetModelAsync(0x705E61F2);
-            player.SetNameAsync(character.Name);
-            player.SendAccountDataToClient();
-            player.SendCharacterDataToClient();
-
-            if(character.Gender)
-            {
-                player.SetModelAsync(0x9C9EFFD8);
-            }
-
-            if (player.HasPremium())
-                player.SendChatMessage("Dziękujemy za wspieranie naszego projektu " + character.Account.Username + "! Do końca twojego {D1BA0f} premium {ffffff} pozostało " +
-                        Calculation.CalculateTheNumberOfDays(character.Account.AccountPremium.EndTime, DateTime.Now) + " dni");
-
-            player.EmitAsync("character:wearClothes", character.CharacterLook);
+            AccountEntity accountEntity = new AccountEntity(characterDatabase.Account, player);
+            accountEntity.Login(characterDatabase);
         });
         private async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(() =>
         {

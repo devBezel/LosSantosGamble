@@ -3,7 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
 using LSG.BLL.Dto.Vehicle;
-using LSG.GM.Entities.Admin;
+//using LSG.GM.Entities.Admin;
 using LSG.GM.Extensions;
 using LSG.GM.Utilities;
 using Newtonsoft.Json;
@@ -41,7 +41,7 @@ namespace LSG.GM.Entities.Core.Vehicle
 
 
 
-            if (vehicle.GetIncrementID() >= 3 && !player.HasPremium() || !player.OnAdminDuty())
+            if (vehicle.GetIncrementID() >= 3 && !player.GetAccountEntity().HasPremium || !player.GetAccountEntity().OnAdminDuty)
             {
                 player.SendErrorNotify(null, $"Aby zrespić więcej niż 3 pojazdy musisz posiadać premium");
                 vehicle.Dispose();
@@ -54,7 +54,7 @@ namespace LSG.GM.Entities.Core.Vehicle
         [Command("v")]
         public async Task OpenVehicleCEFWindowCMD(IPlayer player) => await AltAsync.Do(() =>
         {
-            player.EmitAsync("vehicle:openWindow", EntityHelper.GetCharacterVehicleDatabaseList(player.GetCharacterEntity().Id));
+            player.EmitAsync("vehicle:openWindow", EntityHelper.GetCharacterVehicleDatabaseList(player.GetAccountEntity().characterEntity.DbModel.Id));
         });
 
         public async Task SpawnOwnVehicle(IPlayer player, object[] args) => await AltAsync.Do(() =>
@@ -79,7 +79,7 @@ namespace LSG.GM.Entities.Core.Vehicle
 
 
 
-            if (vehicle.GetIncrementID() >= 3 && !player.HasPremium() || !player.OnAdminDuty())
+            if (vehicle.GetIncrementID() >= 3 && !player.GetAccountEntity().HasPremium || !player.GetAccountEntity().OnAdminDuty)
             {
                 player.SendErrorNotify(null, $"Aby zrespić więcej niż 3 pojazdy musisz posiadać premium");
                 vehicle.Dispose();

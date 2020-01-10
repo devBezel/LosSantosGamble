@@ -1,70 +1,132 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Async;
+using AltV.Net.Data;
+using AltV.Net.Elements.Entities;
+using AltV.Net.Resources.Chat.Api;
 using LSG.BLL.Dto.Account;
 using LSG.BLL.Dto.Character;
 using LSG.DAL.Database;
 using LSG.DAL.Database.Models.AccountModels;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Repositories;
 using LSG.DAL.UnitOfWork;
+using LSG.GM.Extensions;
 using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LSG.GM.Entities.Core
 {
-    public static class AccountEntity
+    public class AccountEntity : IDisposable
     {
+        public Account DbModel { get; set; }
+        public CharacterEntity characterEntity;
+        public IPlayer Player { get; set; }
 
-        public static Account GetAccountEntity(this IPlayer player)
+        public AccountEntity(Account dbModel, IPlayer player)
         {
-            player.GetData("account:data", out Account account);
-
-            return account;
+            DbModel = dbModel;
+            Player = player;
         }
 
-        public static bool HasRank(this IPlayer player, int rank)
+        public async void Login(Character character)
         {
-            player.GetData("account:data", out Account account);
+            Player.SetData("account:data", this);
+            Player.SetData("account:id", Calculation.GenerateFreeIdentifier());
+            SendAccountDataToClient();
 
-            return account.Rank >= rank ? true : false;
+            characterEntity = new CharacterEntity(this, character);
+            EntityHelper.Add(this);
+
+            AltAsync.Log($"{DbModel.Rank}");
+            await characterEntity.Spawn();
         }
 
-        public static bool HasPremium(this IPlayer player)
+        public int ServerID
         {
-            player.GetData("account:data", out Account account);
-
-            if (((account.AccountPremium == null) || (account.AccountPremium.EndTime <= DateTime.Now)))
+            get
             {
-                player.Emit("account:hasPremium", false);
-                player.SetData("account:premium", false);
+                Player.GetData("account:id", out int serverId);
+                return serverId;
+            }
+        }
 
-                return false;
+        public bool HasPremium
+        {
+            get
+            {
+                if (DbModel.AccountPremium == null || (DbModel.AccountPremium.EndTime <= DateTime.Now))
+                {
+                    Player.Emit("account:hasPremium", false);
+
+                    return false;
+                }
+
+                Player.Emit("account:hasPremium", true);
+                return true;
+
+            }
+        }
+
+        public bool OnAdminDuty
+        {
+            get
+            {
+                Player.GetData("admin:duty", out bool onDuty);
+
+                if (!onDuty)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        public void ChangeAdminDutyState()
+        {
+            if (OnAdminDuty)
+            {
+                Player.SetData("admin:duty", false);
+                Player.Emit("admin:setDuty", false);
+
+                Player.SendSuccessNotify("Wykonano pomyślnie!", "Zszedłeś ze służby admina poprawnie!");
+                return;
             }
 
-            player.Emit("account:hasPremium", true);
-            player.SetData("account:premium", true);
-            return true;
+            Player.SetData("admin:duty", true);
+            Player.Emit("admin:setDuty", true);
+
+            Player.SendSuccessNotify("Wykonano pomyślnie!", "Wszedłeś na służbę admina poprawnie!");
         }
 
-        public static void SendAccountDataToClient(this IPlayer player)
+
+        public bool HasRank(int rank)
         {
-            player.GetData("account:data", out Account account);
-            player.GetData("account:id", out int id);
-
-
-            AccountForCharacterDto accountDto = Singleton.AutoMapper().Map<AccountForCharacterDto>(account);
-            player.Emit("account:sendDataAccount", accountDto, id);
+            return DbModel.Rank >= rank ? true : false;
         }
 
-        public static void UpdateAccountData(this IPlayer player, Account account)
+        public void SendAccountDataToClient()
         {
-            player.SetData("account:data", account);
+            AccountForCharacterDto accountDto = Singleton.AutoMapper().Map<AccountForCharacterDto>(DbModel);
+            Player.Emit("account:sendDataAccount", accountDto, ServerID);
+        }
 
-            Singleton.GetDatabaseInstance().Update(account);
-            Singleton.GetDatabaseInstance().SaveChanges();
-            //TODO: zrobić zapis do bazy
-            player.SendAccountDataToClient();
+        public void Save()
+        {
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+            using(UnitOfWork unitOfWork = new UnitOfWork(ctx))
+            {
+                unitOfWork.AccountRepository.Update(DbModel);
+            }
+        }
+
+        public void Dispose()
+        {
+            EntityHelper.Remove(this);
+            Save();
         }
     }
 }

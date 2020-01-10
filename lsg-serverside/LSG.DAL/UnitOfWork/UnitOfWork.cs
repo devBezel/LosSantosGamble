@@ -15,12 +15,14 @@ namespace LSG.DAL.UnitOfWork
         public UnitOfWork(RoleplayContext context)
         {
             _context = context;
+            AccountRepository = new AccountRepository(_context);
             CharacterRepository = new CharacterRepository(_context);
             VehicleRepository = new VehicleRepository(_context);
         }
-
+        public IAccountRepository AccountRepository { get; set; }
         public ICharacterRepository CharacterRepository { get; set; }
         public IVehicleRepository VehicleRepository { get; set; }
+
 
         public void Dispose()
         {

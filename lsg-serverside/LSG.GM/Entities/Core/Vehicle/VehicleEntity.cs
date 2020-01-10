@@ -16,7 +16,8 @@ using System.Text;
 using VehicleDb = LSG.DAL.Database.Models.VehicleModels.Vehicle;
 using Newtonsoft.Json;
 using System.Linq;
-using LSG.GM.Entities.Admin;
+//using LSG.GM.Entities.Admin;
+using LSG.GM.Extensions;
 
 namespace LSG.GM.Entities.Core.Vehicle
 {
@@ -120,7 +121,7 @@ namespace LSG.GM.Entities.Core.Vehicle
         
         public override void Spawn(IPlayer player)
         {
-            IEnumerable<IVehicle> veh = Alt.GetAllVehicles().Where(v => v.GetData("vehicle:data", out VehicleEntity vehicleData) && vehicleData.DbModel.Owner.Id == player.GetCharacterEntity().Id);
+            IEnumerable<IVehicle> veh = Alt.GetAllVehicles().Where(v => v.GetData("vehicle:data", out VehicleEntity vehicleData) && vehicleData.DbModel.Owner.Id == player.GetAccountEntity().characterEntity.DbModel.Id);
             GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(0, 0, 0));
             
             GameVehicle.SetData("vehicle:data", this);
@@ -129,5 +130,6 @@ namespace LSG.GM.Entities.Core.Vehicle
 
             Save();
         }
+
     }
 }

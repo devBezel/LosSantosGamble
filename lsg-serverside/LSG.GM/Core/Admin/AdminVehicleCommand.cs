@@ -19,7 +19,7 @@ namespace LSG.GM.Core.Admin
         [Command("createveh")]
         public void CreateVehicleCMD(IPlayer player)
         {
-            VehicleEntity vehicle = VehicleEntity.Create(player.Position, AltV.Net.Enums.VehicleModel.Infernus, "test", 1, new Color(), new Color(), player.GetCharacterEntity());
+            VehicleEntity vehicle = VehicleEntity.Create(player.Position, AltV.Net.Enums.VehicleModel.Infernus, "test", 1, new Color(), new Color(), player.GetAccountEntity().characterEntity.DbModel);
             vehicle.Spawn(player);
         }
 

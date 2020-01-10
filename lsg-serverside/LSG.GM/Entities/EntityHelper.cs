@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Vehicle;
 using LSG.GM.Utilities;
 using System;
@@ -12,6 +13,32 @@ namespace LSG.GM.Entities
 {
     public static class EntityHelper
     {
+
+        private static readonly List<AccountEntity> Accounts = new List<AccountEntity>();
+
+        public static void Add(AccountEntity account)
+        {
+            if (Accounts.Any(acc => acc.DbModel.Id == account.DbModel.Id))
+            {
+                //var accountActually = Accounts.FirstOrDefault(a => a.DbModel.Id == account.DbModel.Id);
+                //accountActually = account;
+
+                Alt.Log("Nastąpiło podowojenie użytkowników");
+                return;
+            }
+
+            if (Accounts.Any(acc => acc == null))
+                Accounts[Accounts.IndexOf(Accounts.First(acc => acc == null))] = account;
+            else
+                Accounts.Add(account);
+        }
+
+        public static void Remove(AccountEntity accountEntity)
+        {
+            Accounts.Remove(accountEntity);
+
+        }
+
 
         public static VehicleEntity GetSpawnedVehicleById(int id)
         {

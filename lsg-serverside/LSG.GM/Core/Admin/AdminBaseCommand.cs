@@ -3,7 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using AltV.Net.Resources.Chat.Api;
-using LSG.GM.Entities.Admin;
+//using LSG.GM.Entities.Admin;
 using LSG.GM.Entities.Core;
 using LSG.GM.Enums;
 using LSG.GM.Extensions;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AltV.Net.Data;
 using System.Linq;
-using LSG.GM.Economy.Money;
+//using LSG.GM.Economy.Money;
 using LSG.GM.Utilities;
 
 namespace LSG.GM.Core.Admin
@@ -23,19 +23,19 @@ namespace LSG.GM.Core.Admin
         [Command("aduty")]
         public void StartAdminDutyCMD(IPlayer player)
         {
-            if (!player.HasRank((int)EAdmin.Supporter))
+            if (!player.GetAccountEntity().HasRank((int)EAdmin.Supporter))
                 return;
 
-            player.ChangeAdminDutyState();
+            player.GetAccountEntity().ChangeAdminDutyState();
         }
 
         [Command("tveh")]
         public async Task SpawnTemporaryVehicleCMD(IPlayer sender, VehicleModel model) => await AltAsync.Do(async () =>
         {
-            if (!sender.HasRank((int)EAdmin.Supporter))
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Supporter))
                 return;
 
-            if (!sender.OnAdminDuty())
+            if (!sender.GetAccountEntity().OnAdminDuty)
             {
                 sender.SendErrorNotify("Wystąpił bląd!", "Aby użyć tej komendy musisz wejść na służbę administratora");
                 return;
@@ -48,17 +48,17 @@ namespace LSG.GM.Core.Admin
             IVehicle veh = await vehicle.ConfigureAwait(false);
 
             sender.SetData("admin:vehicle", veh);
-            await veh.SetNumberplateTextAsync("ADMIN: " + sender.GetAccountEntity().Id);
+            await veh.SetNumberplateTextAsync("ADMIN: " + sender.GetAccountEntity().DbModel.Id);
             sender.SendSuccessNotify(null, $"Zrespiłeś {model}");
         });
 
         [Command("tp")]
         public async Task TeleportToPlayerCMD(IPlayer sender, int id) => await AltAsync.Do(() =>
         {
-            if (!sender.HasRank((int)EAdmin.Supporter))
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Supporter))
                 return;
 
-            if (!sender.OnAdminDuty())
+            if (!sender.GetAccountEntity().OnAdminDuty)
             {
                 sender.SendErrorNotify("Wystąpił bląd!", "Aby użyć tej komendy musisz wejść na służbę administratora");
                 return;
@@ -74,29 +74,29 @@ namespace LSG.GM.Core.Admin
         [Command("addmoney")]
         public async Task AddCharacterMoneyCMD(IPlayer sender, int amount, int id) => await AltAsync.Do(() =>
         {
-            if (!sender.HasRank((int)EAdmin.Administrator))
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Administrator))
                 return;
 
-            if (!sender.OnAdminDuty())
+            if (!sender.GetAccountEntity().OnAdminDuty)
             {
                 sender.SendErrorNotify("Wystąpił bląd!", "Aby użyć tej komendy musisz wejść na służbę administratora");
                 return;
             }
 
             IPlayer getter = PlayerExtenstion.GetPlayerById(id);
-
-            getter.AddMoney(amount);
+            getter.GetAccountEntity().characterEntity.AddMoney(amount);
+            //getter.AddMoney(amount);
 
             sender.SendSuccessNotify(null, $"Nadałeś graczowi ID: {id} {amount}$");
-            getter.SendSuccessNotify(null, $"Otrzymałeś od administratora {sender.GetAccountEntity().Username} {amount}$");
+            getter.SendSuccessNotify(null, $"Otrzymałeś od administratora {sender.GetAccountEntity().DbModel.Username} {amount}$");
         });
 
         [Command("testmoney")]
         public void TestMoneyCMD(IPlayer player)
         {
-            player.SendSuccessNotify(null, $"Twoja ilość gotówki: {player.GetCharacterEntity().Money}");
+            player.SendSuccessNotify(null, $"Twoja ilość gotówki: {player.GetAccountEntity().characterEntity.DbModel.Money}");
 
-            player.SendChatMessage($"{Singleton.GetDatabaseInstance().Accounts.SingleOrDefault(x => x.Id == player.GetAccountEntity().Id).PasswordHash}");
+            player.SendChatMessage($"{Singleton.GetDatabaseInstance().Accounts.SingleOrDefault(x => x.Id == player.GetAccountEntity().DbModel.Id).PasswordHash}");
         }
     }
 }

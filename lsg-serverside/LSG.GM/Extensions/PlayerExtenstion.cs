@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using LSG.GM.Entities.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,13 @@ namespace LSG.GM.Extensions
 {
     public static class PlayerExtenstion
     {
+        public static AccountEntity GetAccountEntity(this IPlayer player)
+        {
+            player.GetData("account:data", out AccountEntity account);
+
+            return account;
+        }
+
         public static IPlayer GetPlayerById(int id)
         {
            IPlayer plr =  Alt.GetAllPlayers().SingleOrDefault(p => p.GetData("account:id", out int plrId) && plrId == id);
