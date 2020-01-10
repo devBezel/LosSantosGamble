@@ -20,7 +20,22 @@ namespace LSG.GM.Entities.Core.Vehicle
         public VehicleScript()
         {
             Alt.OnClient("vehicle:spawnVehicle", SpawnOwnVehicle);
+            Task.Run(() =>
+            {
+                AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
+            });
         }
+
+        private async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
+        {
+            VehicleEntity vehicleEntity = vehicle.GetVehicleEntity();
+            if (seat == 1)
+            {
+                if (vehicleEntity == null) return;
+
+                vehicleEntity.Save();
+            }
+        });
 
         [Command("v")]
         public async Task OpenVehicleCEFWindowCMD(IPlayer player) => await AltAsync.Do(() =>
@@ -35,6 +50,12 @@ namespace LSG.GM.Entities.Core.Vehicle
             VehicleEntity spawnedVehicle = EntityHelper.GetSpawnedVehicleById(vehicleId);
             if (spawnedVehicle != null)
             {
+                if(player.Vehicle == spawnedVehicle.GameVehicle)
+                {
+                    player.SendErrorNotify(null, $"Aby odpspawnić pojazd musisz z niego wyjść");
+                    return;
+                }
+
                 spawnedVehicle.Dispose();
 
                 player.SendSuccessNotify(null, $"Twój pojazd o ID {spawnedVehicle.DbModel.Id} został odspawniony");
@@ -45,8 +66,6 @@ namespace LSG.GM.Entities.Core.Vehicle
             VehicleEntity vehicle = new VehicleEntity(EntityHelper.GetVehicleDatabaseById(vehicleId));
             vehicle.Spawn(player);
 
-            Alt.Log(vehicle.IncrementID.ToString() + " IncrementID");
-            Alt.Log(player.GetAccountEntity().HasPremium + " HasPremium");
 
             if (vehicle.IncrementID > 3 && !player.GetAccountEntity().HasPremium)
             {
