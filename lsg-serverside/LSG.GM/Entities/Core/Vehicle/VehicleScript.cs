@@ -19,36 +19,7 @@ namespace LSG.GM.Entities.Core.Vehicle
     {
         public VehicleScript()
         {
-            AltAsync.OnClient("vehicle:spawnVehicle", SpawnOwnVehicle);
-        }
-
-        [Command("vc")]
-        public void SpawnOwnVehicleWithoutCefCMD(IPlayer player, int id)
-        {
-            VehicleEntity spawnedVehicle = EntityHelper.GetSpawnedVehicleById(id);
-
-            if (spawnedVehicle != null)
-            {
-                spawnedVehicle.Dispose();
-
-                player.SendSuccessNotify(null, $"Twój pojazd o ID {spawnedVehicle.DbModel.Id} został odspawniony");
-
-                return;
-            }
-
-            VehicleEntity vehicle = new VehicleEntity(EntityHelper.GetVehicleDatabaseById(id));
-            vehicle.Spawn(player);
-
-
-
-            if (vehicle.GetIncrementID() >= 3 && !player.GetAccountEntity().HasPremium || !player.GetAccountEntity().OnAdminDuty)
-            {
-                player.SendErrorNotify(null, $"Aby zrespić więcej niż 3 pojazdy musisz posiadać premium");
-                vehicle.Dispose();
-                return;
-            }
-
-            player.SendSuccessNotify(null, $"Twój pojazd o ID {vehicle.DbModel.Id} został zespawniony");
+            Alt.OnClient("vehicle:spawnVehicle", SpawnOwnVehicle);
         }
 
         [Command("v")]
@@ -57,14 +28,11 @@ namespace LSG.GM.Entities.Core.Vehicle
             player.EmitAsync("vehicle:openWindow", EntityHelper.GetCharacterVehicleDatabaseList(player.GetAccountEntity().characterEntity.DbModel.Id));
         });
 
-        public async Task SpawnOwnVehicle(IPlayer player, object[] args) => await AltAsync.Do(() =>
+        public void SpawnOwnVehicle(IPlayer player, object[] args)
         {
-            VehicleDb vehicleModel = JsonConvert.DeserializeObject<VehicleDb>((string)args[0]);
-
-            Alt.Log(vehicleModel.Id.ToString());
-            VehicleEntity spawnedVehicle = EntityHelper.GetSpawnedVehicleById(vehicleModel.Id);
-
-            Alt.Log(spawnedVehicle.GameVehicle.HealthData);
+            int vehicleId = (int)(long)args[0];
+   
+            VehicleEntity spawnedVehicle = EntityHelper.GetSpawnedVehicleById(vehicleId);
             if (spawnedVehicle != null)
             {
                 spawnedVehicle.Dispose();
@@ -74,13 +42,16 @@ namespace LSG.GM.Entities.Core.Vehicle
                 return;
             }
 
-            VehicleEntity vehicle = new VehicleEntity(EntityHelper.GetVehicleDatabaseById(vehicleModel.Id));
+            VehicleEntity vehicle = new VehicleEntity(EntityHelper.GetVehicleDatabaseById(vehicleId));
             vehicle.Spawn(player);
 
+            Alt.Log(vehicle.IncrementID.ToString() + " IncrementID");
+            Alt.Log(player.GetAccountEntity().HasPremium + " HasPremium");
 
-
-            if (vehicle.GetIncrementID() >= 3 && !player.GetAccountEntity().HasPremium || !player.GetAccountEntity().OnAdminDuty)
+            if (vehicle.IncrementID > 3 && !player.GetAccountEntity().HasPremium)
             {
+                if (player.GetAccountEntity().OnAdminDuty) return;
+
                 player.SendErrorNotify(null, $"Aby zrespić więcej niż 3 pojazdy musisz posiadać premium");
                 vehicle.Dispose();
                 return;
@@ -88,6 +59,6 @@ namespace LSG.GM.Entities.Core.Vehicle
 
             player.SendSuccessNotify(null, $"Twój pojazd o ID {vehicle.DbModel.Id} został zespawniony");
 
-        });
+        }
     }
 }

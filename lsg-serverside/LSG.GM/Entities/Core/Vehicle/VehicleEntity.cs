@@ -105,11 +105,14 @@ namespace LSG.GM.Entities.Core.Vehicle
             }
         }
 
-        public int GetIncrementID()
+        public int IncrementID
         {
-            GameVehicle.GetData("vehicle:incrementId", out int result);
+            get
+            {
+                GameVehicle.GetData("vehicle:incrementId", out int result);
 
-            return result;
+                return result;
+            }
         }
 
         public override void Dispose()
@@ -123,7 +126,9 @@ namespace LSG.GM.Entities.Core.Vehicle
         {
             IEnumerable<IVehicle> veh = Alt.GetAllVehicles().Where(v => v.GetData("vehicle:data", out VehicleEntity vehicleData) && vehicleData.DbModel.Owner.Id == player.GetAccountEntity().characterEntity.DbModel.Id);
             GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(0, 0, 0));
-            
+
+            Alt.Log($"{veh.Count()} ilosc pojazdow gracza");
+            Alt.Log("z Spawn()" + DbModel.Id.ToString());
             GameVehicle.SetData("vehicle:data", this);
             GameVehicle.SetData("vehicle:id", DbModel.Id);
             GameVehicle.SetData("vehicle:incrementId", veh.Count() + 1);

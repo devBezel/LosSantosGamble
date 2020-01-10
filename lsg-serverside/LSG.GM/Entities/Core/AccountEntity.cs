@@ -126,6 +126,7 @@ namespace LSG.GM.Entities.Core
         public void Dispose()
         {
             EntityHelper.Remove(this);
+            characterEntity.Save();
             Save();
         }
     }

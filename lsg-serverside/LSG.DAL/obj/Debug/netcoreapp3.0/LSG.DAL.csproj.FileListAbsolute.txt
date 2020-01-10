@@ -17,8 +17,8 @@ B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.DAL\bin\Debug\netcoreapp3.0\L
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.DAL\bin\Debug\netcoreapp3.0\LSG.DAL.dll
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.DAL\bin\Debug\netcoreapp3.0\LSG.DAL.pdb
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.DAL\obj\Debug\netcoreapp3.0\LSG.DAL.csprojAssemblyReference.cache
+B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.DAL\obj\Debug\netcoreapp3.0\LSG.DAL.csproj.CoreCompileInputs.cache
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.DAL\obj\Debug\netcoreapp3.0\LSG.DAL.AssemblyInfoInputs.cache
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.DAL\obj\Debug\netcoreapp3.0\LSG.DAL.AssemblyInfo.cs
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.DAL\obj\Debug\netcoreapp3.0\LSG.DAL.dll
 B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.DAL\obj\Debug\netcoreapp3.0\LSG.DAL.pdb
-B:\Projekty\LSGamble-Serverside\lsg-serverside\LSG.DAL\obj\Debug\netcoreapp3.0\LSG.DAL.csproj.CoreCompileInputs.cache
