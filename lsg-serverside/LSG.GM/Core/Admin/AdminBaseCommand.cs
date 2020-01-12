@@ -15,6 +15,8 @@ using AltV.Net.Data;
 using System.Linq;
 //using LSG.GM.Economy.Money;
 using LSG.GM.Utilities;
+using LSG.DAL.Database.Models.BankModels;
+using LSG.GM.Entities.Common.Atm;
 
 namespace LSG.GM.Core.Admin
 {

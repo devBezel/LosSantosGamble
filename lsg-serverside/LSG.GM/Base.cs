@@ -5,6 +5,7 @@ using AltV.Net.Resources.Chat.Api;
 using LSG.BLL.Services;
 using LSG.BLL.Services.Interfaces;
 using LSG.DAL.Database;
+using LSG.DAL.Database.Models.BankModels;
 using LSG.DAL.Repositories;
 using LSG.DAL.Repositories.IRepository;
 using LSG.DAL.UnitOfWork;

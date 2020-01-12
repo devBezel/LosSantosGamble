@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using LSG.GM.Entities.Common.Atm;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Vehicle;
 using LSG.GM.Utilities;
@@ -15,6 +16,8 @@ namespace LSG.GM.Entities
     {
 
         private static readonly List<AccountEntity> Accounts = new List<AccountEntity>();
+
+        private static readonly List<AtmEntity> Atms = new List<AtmEntity>();
 
         public static void Add(AccountEntity account)
         {
@@ -37,6 +40,12 @@ namespace LSG.GM.Entities
         {
             Accounts.Remove(accountEntity);
 
+        }
+
+        public static void Add(AtmEntity atmEntity)
+        {
+            if (Atms.Any(a => a.DbModel.Id == atmEntity.DbModel.Id)) return;
+            Atms.Add(atmEntity);
         }
 
 

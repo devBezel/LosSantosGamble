@@ -68,13 +68,11 @@ namespace LSG.GM.Entities.Core
         public void AddMoney(int amount)
         {
             DbModel.Money += amount;
-
         }
 
         public void RemoveMoney(int amount)
         {
             DbModel.Money -= amount;
-
         }
 
         public bool HasEnoughMoney(int amount)

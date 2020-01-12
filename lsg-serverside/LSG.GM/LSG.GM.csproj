@@ -25,4 +25,8 @@
     <ProjectReference Include="..\LSG.DAL\LSG.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Economy\Bank\" />
+  </ItemGroup>
+
 </Project>

@@ -84,6 +84,7 @@ namespace LSG.GM.Entities.Core.Vehicle
 
         public void Save()
         {
+            Alt.Log("Zapisuje");
             DbModel.Health = GameVehicle.EngineHealth;
             DbModel.PosX = GameVehicle.Position.X;
             DbModel.PosY = GameVehicle.Position.Y;
@@ -91,6 +92,8 @@ namespace LSG.GM.Entities.Core.Vehicle
             DbModel.RotPitch = GameVehicle.Rotation.Pitch;
             DbModel.RotRoll = GameVehicle.Rotation.Roll;
             DbModel.RotYaw = GameVehicle.Rotation.Yaw;
+
+            Alt.Log($"{GameVehicle.Rotation.Pitch}  {GameVehicle.Rotation.Roll} {GameVehicle.Rotation.Yaw} ");
 
             DbModel.R = GameVehicle.PrimaryColorRgb.R;
             DbModel.G = GameVehicle.PrimaryColorRgb.G;
@@ -125,15 +128,17 @@ namespace LSG.GM.Entities.Core.Vehicle
         public override void Spawn(IPlayer player)
         {
             IEnumerable<IVehicle> veh = Alt.GetAllVehicles().Where(v => v.GetData("vehicle:data", out VehicleEntity vehicleData) && vehicleData.DbModel.Owner.Id == player.GetAccountEntity().characterEntity.DbModel.Id);
-            GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(0, 0, 0));
+            GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(DbModel.RotPitch, DbModel.RotPitch, DbModel.RotYaw));
 
-            Alt.Log($"{veh.Count()} ilosc pojazdow gracza");
-            Alt.Log("z Spawn()" + DbModel.Id.ToString());
+            GameVehicle.PrimaryColorRgb = new Rgba((byte)DbModel.R, (byte)DbModel.G, (byte)DbModel.B, 1);
+            GameVehicle.SetWheels(1, 2);
+            GameVehicle.NumberplateText = $"LS {DbModel.Id}";
+
             GameVehicle.SetData("vehicle:data", this);
             GameVehicle.SetData("vehicle:id", DbModel.Id);
             GameVehicle.SetData("vehicle:incrementId", veh.Count() + 1);
 
-            Save();
+            //Save();
         }
 
     }
