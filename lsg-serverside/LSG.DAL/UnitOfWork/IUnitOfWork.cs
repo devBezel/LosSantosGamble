@@ -11,5 +11,7 @@ namespace LSG.DAL.UnitOfWork
         IAccountRepository AccountRepository { get; set; }
         ICharacterRepository CharacterRepository { get; set; }
         IVehicleRepository VehicleRepository { get; set; }
+        IAtmRepository AtmRepository { get; set; }
+        IBusRepository BusRepository { get; set; }
     }
 }

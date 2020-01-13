@@ -3,8 +3,10 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using LSG.DAL.Database;
 using LSG.DAL.Database.Models.BankModels;
+using LSG.DAL.Database.Models.BusModels;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Entities.Common.Atm;
+using LSG.GM.Entities.Common.Bus;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Vehicle;
 using LSG.GM.Helpers;
@@ -24,6 +26,7 @@ namespace LSG.GM.Entities
         private static readonly List<AccountEntity> Accounts = new List<AccountEntity>();
 
         private static readonly List<AtmEntity> Atms = new List<AtmEntity>();
+        private static readonly List<BusEntity> BusStops = new List<BusEntity>();
 
         public static void Add(AccountEntity account)
         {
@@ -53,6 +56,8 @@ namespace LSG.GM.Entities
             if (Atms.Any(a => a.DbModel.Id == atmEntity.DbModel.Id)) return;
             Atms.Add(atmEntity);
         }
+
+        public static void Add(BusEntity busEntity) => BusStops.Add(busEntity);
 
 
         public static VehicleEntity GetSpawnedVehicleById(int id)

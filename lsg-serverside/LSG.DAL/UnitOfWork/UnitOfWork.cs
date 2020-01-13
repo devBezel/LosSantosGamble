@@ -19,11 +19,13 @@ namespace LSG.DAL.UnitOfWork
             CharacterRepository = new CharacterRepository(_context);
             VehicleRepository = new VehicleRepository(_context);
             AtmRepository = new AtmRepository(_context);
+            BusRepository = new BusRepository(_context);
         }
         public IAccountRepository AccountRepository { get; set; }
         public ICharacterRepository CharacterRepository { get; set; }
         public IVehicleRepository VehicleRepository { get; set; }
         public IAtmRepository AtmRepository { get; set; }
+        public IBusRepository BusRepository { get; set; }
 
 
         public void Dispose()

@@ -76,6 +76,56 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Atms");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.BusModels.BusStop", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedTime");
+
+                    b.Property<int>("CreatorId");
+
+                    b.Property<float>("PosX");
+
+                    b.Property<float>("PosY");
+
+                    b.Property<float>("PosZ");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("BusStops");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BusModels.BusStopStation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BusStopId");
+
+                    b.Property<DateTime>("CreatedTime");
+
+                    b.Property<int>("CreatorId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<float>("PosX");
+
+                    b.Property<float>("PosY");
+
+                    b.Property<float>("PosZ");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusStopId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("BusStopStations");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.Character", b =>
                 {
                     b.Property<int>("Id")
@@ -337,6 +387,27 @@ namespace LSG.DAL.Migrations
 
             modelBuilder.Entity("LSG.DAL.Database.Models.BankModels.Atm", b =>
                 {
+                    b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BusModels.BusStop", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BusModels.BusStopStation", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.BusModels.BusStop", "BusStop")
+                        .WithMany("BusStopStations")
+                        .HasForeignKey("BusStopId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId")
