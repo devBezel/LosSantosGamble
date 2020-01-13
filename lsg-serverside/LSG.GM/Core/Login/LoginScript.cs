@@ -30,9 +30,8 @@ namespace LSG.GM.Core.Login
             Task.Run(() =>
             {
                 AltAsync.OnPlayerConnect += OnPlayerConnect;
+                AltAsync.OnClient("login:characterDetail", SetCharacterSettings);
             });
-
-            AltAsync.OnClient("login:characterDetail", SetCharacterSettings);
         }
 
         private async Task SetCharacterSettings(IPlayer player, object[] args) => await AltAsync.Do(() =>

@@ -2,11 +2,16 @@
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using LSG.DAL.Database;
+using LSG.DAL.UnitOfWork;
 using LSG.GM.Enums;
 using LSG.GM.Helpers;
+using LSG.GM.Helpers.Models;
+using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using AtmModel = LSG.DAL.Database.Models.BankModels.Atm;
 
 namespace LSG.GM.Entities.Common.Atm
@@ -15,17 +20,22 @@ namespace LSG.GM.Entities.Common.Atm
     {
         public AtmModel DbModel { get; set; }
         public IColShape ColShape { get; set; }
+        public MarkerModel MarkerModel { get; set; }
+        public BlipModel BlipModel { get; set; }
 
         public AtmEntity(AtmModel model)
         {
             DbModel = model;
         }
 
-        public void Spawn()
+        public async Task Spawn(bool respawnNew = false) => await AltAsync.Do(async () =>
         {
+            if (respawnNew)
+                Save(true);
+
             ColShape = Alt.CreateColShapeCylinder(new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), 1f, 2f);
-            
-            MarkerModel markerModel = new MarkerModel()
+
+            MarkerModel = new MarkerModel()
             {
                 Type = 27,
                 PosX = DbModel.PosX,
@@ -54,12 +64,38 @@ namespace LSG.GM.Entities.Common.Atm
                 UniqueID = $"MARKER{DbModel.Id}"
             };
 
-            MarkerHelper.CreateMarker(markerModel);
-            BlipHelper.CreateGlobalBlip(DbModel.PosX, DbModel.PosY, DbModel.PosZ + 1, 277, 25, EBlipSize.Medium, "ATM", 1.0f, $"ATM{DbModel.Id}");
+            BlipModel = new BlipModel()
+            {
+                PosX = DbModel.PosX,
+                PosY = DbModel.PosY,
+                PosZ = DbModel.PosZ + 1,
+                Blip = 277,
+                Color = 25,
+                Size = EBlipSize.Medium,
+                Name = "ATM",
+                ShortRange = 1.0f,
+                UniqueID = $"ATM{DbModel.Id}"
+            };
+
+            await MarkerHelper.CreateGlobalMarker(MarkerModel);
+            await BlipHelper.CreateGlobalBlip(BlipModel);
 
             ColShape.SetData("atm:data", this);
 
             EntityHelper.Add(this);
+        });
+
+        public void Save(bool newAtm = false)
+        {
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+
+            using(UnitOfWork unitOfWork = new UnitOfWork(ctx))
+            {
+                if (!newAtm)
+                    unitOfWork.AtmRepository.Update(DbModel);
+                else
+                    unitOfWork.AtmRepository.Add(DbModel);
+            }
         }
 
 

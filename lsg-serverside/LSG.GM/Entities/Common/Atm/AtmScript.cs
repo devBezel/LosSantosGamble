@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
+using LSG.GM.Economy.Bank;
 using LSG.GM.Entities.Core;
 using LSG.GM.Extensions;
 using System;
@@ -20,7 +21,10 @@ namespace LSG.GM.Entities.Common.Atm
             Task.Run(() =>
             {
                 AltAsync.OnColShape += OnColshape;
-            }); 
+            });
+
+            Alt.OnClient("atm:deposit", AtmDepositMoney);
+            Alt.OnClient("atm:withdraw", AtmWithdrawMoney);
         }
 
         private async Task OnColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
@@ -38,24 +42,33 @@ namespace LSG.GM.Entities.Common.Atm
 
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
 
+            if(!characterEntity.DbModel.BankStatus)
+            {
+                player.SendErrorNotify("Los Santos Bank", "Nie masz konta w banku, aby je założyć udaj się do najbliżej placówki");
+                return;
+            }
+
+
+
             player.SendSuccessNotify(null, $"Witaj w ATM {characterEntity.DbModel.Name}");
+            player.Emit("atm:information", characterEntity.DbModel.Name, characterEntity.DbModel.Surname, characterEntity.DbModel.Money, characterEntity.DbModel.Bank);
         });
 
-        [Command("atm")]
-        public void CreateAtmEntity(IPlayer player)
+        public void AtmDepositMoney(IPlayer player, object[] args)
         {
-            CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
-            AtmModel atm = new AtmModel()
-            {
-                PosX = characterEntity.DbModel.PosX,
-                PosY = characterEntity.DbModel.PosY,
-                PosZ = characterEntity.DbModel.PosZ - 0.9f,
-                CreatorId = player.GetAccountEntity().DbModel.Id
-            };
+            int amount = (int)(long)args[0];
 
-            AtmEntity atmEntity = new AtmEntity(atm);
-            atmEntity.Spawn();
-
+            BankHelper.DepositToBank(player, amount);
+            player.SendSuccessNotify("Bank Los Santos", $"Przyjęto twoją wpłatę {amount}$ poprawnie");
         }
+
+        public void AtmWithdrawMoney(IPlayer player, object[] args)
+        {
+            int amount = (int)(long)args[0];
+
+            BankHelper.WithdrawFromBank(player, amount);
+            player.SendSuccessNotify("Bank Los Santos", $"Wypłacono {amount}$ z bankomatu");
+        }
+
     }
 }

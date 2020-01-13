@@ -1,13 +1,19 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using LSG.DAL.Database;
+using LSG.DAL.Database.Models.BankModels;
+using LSG.DAL.UnitOfWork;
 using LSG.GM.Entities.Common.Atm;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Vehicle;
+using LSG.GM.Helpers;
 using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using VehicleDb = LSG.DAL.Database.Models.VehicleModels.Vehicle;
 
 namespace LSG.GM.Entities
@@ -75,6 +81,29 @@ namespace LSG.GM.Entities
 
             return vehicles;
         }
-        // Tworzenie blipów, grup itp
+        // Tworzenie blipów, markerów itp (wszystko co jest lokalnie dla gracza gdy wchodzi na serwer)
+        public static async Task LoadClientEntity(IPlayer player) => await AltAsync.Do(async () =>
+        {
+            foreach (AtmEntity atm in Atms)
+            {
+                await player.CreateBlip(atm.BlipModel);
+                await player.CreateMarker(atm.MarkerModel);
+            }
+        });
+
+        public static async Task LoadServerEntity() => await AltAsync.Do(async () =>
+        {
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+
+            using(UnitOfWork unit = new UnitOfWork(ctx))
+            {
+                foreach (Atm atm in await unit.AtmRepository.GetAll())
+                {
+                    AtmEntity atmEntity = new AtmEntity(atm);
+                    await atmEntity.Spawn();
+                }
+            }
+        });
+
     }
 }

@@ -17,6 +17,8 @@ using System.Linq;
 using LSG.GM.Utilities;
 using LSG.DAL.Database.Models.BankModels;
 using LSG.GM.Entities.Common.Atm;
+using AtmModel = LSG.DAL.Database.Models.BankModels.Atm;
+
 
 namespace LSG.GM.Core.Admin
 {
@@ -91,6 +93,32 @@ namespace LSG.GM.Core.Admin
 
             sender.SendSuccessNotify(null, $"Nadałeś graczowi ID: {id} {amount}$");
             getter.SendSuccessNotify(null, $"Otrzymałeś od administratora {sender.GetAccountEntity().DbModel.Username} {amount}$");
+        });
+
+        [Command("createatm")]
+        public async Task CreateAtmEntity(IPlayer sender) => await AltAsync.Do(async () =>
+        {
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Developer))
+                return;
+
+            if (!sender.GetAccountEntity().OnAdminDuty)
+            {
+                sender.SendErrorNotify("Wystąpił bląd!", "Aby użyć tej komendy musisz wejść na służbę administratora");
+                return;
+            }
+
+            CharacterEntity characterEntity = sender.GetAccountEntity().characterEntity;
+            AtmModel atm = new AtmModel()
+            {
+                PosX = sender.Position.X,
+                PosY = sender.Position.Y,
+                PosZ = sender.Position.Z - 0.9f,
+                CreatorId = sender.GetAccountEntity().DbModel.Id
+            };
+
+            AtmEntity atmEntity = new AtmEntity(atm);
+            await atmEntity.Spawn(true);
+
         });
 
         [Command("testmoney")]

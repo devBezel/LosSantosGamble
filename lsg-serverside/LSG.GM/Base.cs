@@ -11,6 +11,7 @@ using LSG.DAL.Repositories.IRepository;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Core.Description;
 using LSG.GM.Core.Login;
+using LSG.GM.Entities;
 using LSG.GM.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +25,17 @@ namespace LSG.GM
         public override void OnStart()
         {
             Alt.OnPlayerDisconnect += OnPlayerDisconnect;
+            Task.Run(async () =>
+            {
+                AltAsync.OnPlayerConnect += OnPlayerConnect;
+                await EntityHelper.LoadServerEntity();
+            });
         }
+
+        private async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(async () =>
+        {
+            await EntityHelper.LoadClientEntity(player);
+        });
 
         private void OnPlayerDisconnect(IPlayer player, string reason)
         {
