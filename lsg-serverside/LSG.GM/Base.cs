@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.ColShape;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
 using LSG.BLL.Services;
@@ -29,6 +30,11 @@ namespace LSG.GM
             {
                 AltAsync.OnPlayerConnect += OnPlayerConnect;
                 await EntityHelper.LoadServerEntity();
+            });
+
+            AltColShape.Configure(options =>
+            {
+                options.AreaSize = 100;
             });
         }
 

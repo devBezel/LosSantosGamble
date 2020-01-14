@@ -105,6 +105,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int>("BusStopId");
 
+                    b.Property<int>("Cost");
+
                     b.Property<DateTime>("CreatedTime");
 
                     b.Property<int>("CreatorId");
@@ -116,6 +118,8 @@ namespace LSG.DAL.Migrations
                     b.Property<float>("PosY");
 
                     b.Property<float>("PosZ");
+
+                    b.Property<float>("Time");
 
                     b.HasKey("Id");
 

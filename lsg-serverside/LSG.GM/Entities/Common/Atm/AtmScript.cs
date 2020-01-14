@@ -4,6 +4,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
 using LSG.GM.Economy.Bank;
 using LSG.GM.Entities.Core;
+using LSG.GM.Enums;
 using LSG.GM.Extensions;
 using System;
 using System.Collections.Generic;
@@ -33,12 +34,14 @@ namespace LSG.GM.Entities.Common.Atm
 
             if (colShape == null || !colShape.Exists) return;
             if (targetEntity.Type != BaseObjectType.Player) return;
-
-            IPlayer player = targetEntity as IPlayer;
-
-            if (player.IsInVehicle) return;
+            Alt.Log("Banki");
 
             AtmEntity atmEntity = colShape.GetAtmEntity();
+
+            if (atmEntity == null || atmEntity.ColShape != colShape) return;
+
+            IPlayer player = targetEntity as IPlayer;
+            if (player.IsInVehicle) return;
 
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
 
@@ -52,6 +55,32 @@ namespace LSG.GM.Entities.Common.Atm
 
             player.SendSuccessNotify(null, $"Witaj w ATM {characterEntity.DbModel.Name}");
             player.Emit("atm:information", characterEntity.DbModel.Name, characterEntity.DbModel.Surname, characterEntity.DbModel.Money, characterEntity.DbModel.Bank);
+        });
+
+        [Command("createatm")]
+        public async Task CreateAtmEntity(IPlayer sender) => await AltAsync.Do(async () =>
+        {
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Developer))
+                return;
+
+            if (!sender.GetAccountEntity().OnAdminDuty)
+            {
+                sender.SendErrorNotify("Wystąpił bląd!", "Aby użyć tej komendy musisz wejść na służbę administratora");
+                return;
+            }
+
+            CharacterEntity characterEntity = sender.GetAccountEntity().characterEntity;
+            AtmModel atm = new AtmModel()
+            {
+                PosX = sender.Position.X,
+                PosY = sender.Position.Y,
+                PosZ = sender.Position.Z - 0.9f,
+                CreatorId = sender.GetAccountEntity().DbModel.Id
+            };
+
+            AtmEntity atmEntity = new AtmEntity(atm);
+            await atmEntity.Spawn(true);
+
         });
 
         public void AtmDepositMoney(IPlayer player, object[] args)

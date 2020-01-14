@@ -94,6 +94,12 @@ namespace LSG.GM.Entities
                 await player.CreateBlip(atm.BlipModel);
                 await player.CreateMarker(atm.MarkerModel);
             }
+
+            foreach (BusEntity bus in BusStops)
+            {
+                await player.CreateBlip(bus.BlipModel);
+                await player.CreateMarker(bus.MarkerModel);
+            }
         });
 
         public static async Task LoadServerEntity() => await AltAsync.Do(async () =>
@@ -106,6 +112,12 @@ namespace LSG.GM.Entities
                 {
                     AtmEntity atmEntity = new AtmEntity(atm);
                     await atmEntity.Spawn();
+                }
+
+                foreach (BusStop busStop in await unit.BusRepository.GetAll())
+                {
+                    BusEntity busEntity = new BusEntity(busStop);
+                    await busEntity.Spawn();
                 }
             }
         });

@@ -26,12 +26,12 @@ namespace LSG.GM.Extensions
 
         public static void SendSuccessNotify(this IPlayer player, string title = "Wykonano pomyślnie!", string message = "")
         {
-            player.Emit("notify-server:success", title, message);
+            player.Emit("notify:success", title, message);
         }
 
         public static void SendErrorNotify(this IPlayer player, string title = "Wystąpił bląd!", string message = "")
         {
-            player.Emit("notify-server:error", title, message);
+            player.Emit("notify:error", title, message);
         }
     }
 }

@@ -91,6 +91,7 @@ namespace LSG.GM.Entities.Common.Bus
             await BlipHelper.CreateGlobalBlip(BlipModel);
 
             ColShape.SetData("bus:data", this);
+            
             EntityHelper.Add(this);
         });
     }
