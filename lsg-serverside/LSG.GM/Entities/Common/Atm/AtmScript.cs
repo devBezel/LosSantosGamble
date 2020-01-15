@@ -58,7 +58,7 @@ namespace LSG.GM.Entities.Common.Atm
         });
 
         [Command("createatm")]
-        public async Task CreateAtmEntity(IPlayer sender) => await AltAsync.Do(async () =>
+        public async Task CreateAtmCMD(IPlayer sender) => await AltAsync.Do(async () =>
         {
             if (!sender.GetAccountEntity().HasRank((int)EAdmin.Developer))
                 return;

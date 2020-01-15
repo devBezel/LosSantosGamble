@@ -41,8 +41,11 @@ namespace LSG.GM.Entities.Common.Bus
             }
         });
 
-        public async Task Spawn() => await AltAsync.Do(async () =>
+        public async Task Spawn(bool newBusStop = false) => await AltAsync.Do(async () =>
         {
+            if (newBusStop)
+                Save(true);
+
             ColShape = Alt.CreateColShapeCylinder(new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), 1f, 2f);
 
             MarkerModel = new MarkerModel()
@@ -94,5 +97,18 @@ namespace LSG.GM.Entities.Common.Bus
             
             EntityHelper.Add(this);
         });
+        
+        public void Save(bool newBusStop = false)
+        {
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+
+            using(UnitOfWork unitOfWork = new UnitOfWork(ctx))
+            {
+                if (!newBusStop)
+                    unitOfWork.BusRepository.Add(DbModel);
+                else
+                    unitOfWork.BusRepository.Update(DbModel);
+            }
+        }
     }
 }

@@ -2,6 +2,8 @@
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Resources.Chat.Api;
+using LSG.DAL.Database.Models.BusModels;
 using LSG.GM.Entities.Core;
 using LSG.GM.Extensions;
 using System;
@@ -63,8 +65,45 @@ namespace LSG.GM.Entities.Common.Bus
             }
 
             characterEntity.RemoveMoney(cost);
+            player.SendSuccessNotify(null, $"Zapłaciłeś {cost}$ za bilet");
             player.EmitAsync("bus:moneyRemovedStartTimer", time, posX, posY, posZ);
 
+        });
+
+        [Command("createbusstop")]
+        public async Task CreateBusStopCMD(IPlayer player) => await AltAsync.Do(async () =>
+        {
+            BusStop busStop = new BusStop()
+            {
+                PosX = player.Position.X,
+                PosY = player.Position.Y,
+                PosZ = player.Position.Z,
+                CreatorId = player.GetAccountEntity().DbModel.Id
+            };
+
+            BusEntity busEntity = new BusEntity(busStop);
+            await busEntity.Spawn(true);
+        });
+
+        [Command("createbusstaion")]
+        public async Task CreateBusStationCMD(IPlayer player, string name, int busStopId, int cost, float time) => await AltAsync.Do(async () =>
+        {
+            BusStopStation busStopStation = new BusStopStation()
+            {
+                BusStopId = busStopId,
+                Name = name,
+                PosX = player.Position.X,
+                PosY = player.Position.Y,
+                PosZ = player.Position.Z,
+                CreatorId = player.GetAccountEntity().DbModel.Id,
+                Cost = cost,
+                Time = time
+            };
+
+            BusEntity bus = EntityHelper.GetById(busStopId);
+            if (bus == null) return;
+
+            await bus.CreateStation(busStopStation);
         });
     }
 }

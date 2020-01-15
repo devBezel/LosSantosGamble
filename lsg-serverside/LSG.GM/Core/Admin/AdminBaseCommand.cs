@@ -69,6 +69,11 @@ namespace LSG.GM.Core.Admin
             }
 
             IPlayer getter = PlayerExtenstion.GetPlayerById(id);
+            if (getter == null)
+            {
+                sender.SendErrorNotify(null, $"Gracz o ID {id} nie jest w grze");
+                return;
+            }
 
             sender.Position = getter.Position;
 
@@ -88,6 +93,10 @@ namespace LSG.GM.Core.Admin
             }
 
             IPlayer getter = PlayerExtenstion.GetPlayerById(id);
+            if (getter == null)
+            {
+                sender.SendErrorNotify(null, $"Gracz o ID {id} nie jest w grze");
+            }
             getter.GetAccountEntity().characterEntity.AddMoney(amount);
             //getter.AddMoney(amount);
 

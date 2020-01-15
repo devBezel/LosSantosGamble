@@ -59,6 +59,13 @@ namespace LSG.GM.Entities
 
         public static void Add(BusEntity busEntity) => BusStops.Add(busEntity);
 
+        public static BusEntity GetById(int id)
+        {
+            BusEntity bus = BusStops.SingleOrDefault(x => x.DbModel.Id == id);
+
+            return bus;
+        }
+
 
         public static VehicleEntity GetSpawnedVehicleById(int id)
         {

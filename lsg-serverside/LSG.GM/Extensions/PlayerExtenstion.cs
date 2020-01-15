@@ -20,7 +20,7 @@ namespace LSG.GM.Extensions
         public static IPlayer GetPlayerById(int id)
         {
            IPlayer plr =  Alt.GetAllPlayers().SingleOrDefault(p => p.GetData("account:id", out int plrId) && plrId == id);
-
+           
            return plr;
         }
 

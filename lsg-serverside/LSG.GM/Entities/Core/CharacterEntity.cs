@@ -21,6 +21,7 @@ namespace LSG.GM.Entities.Core
     {
         public AccountEntity AccountEntity { get; private set; }
         public Character DbModel { get; set; }
+        public bool HasBw { get; set; } = false;
 
         public CharacterEntity(AccountEntity accountEntity, Character dbModel)
         {
@@ -79,5 +80,6 @@ namespace LSG.GM.Entities.Core
         {
             return (DbModel.Money >= amount) ? true : false;
         }
+
     }
 }
