@@ -32,10 +32,6 @@ namespace LSG.GM
                 await EntityHelper.LoadServerEntity();
             });
 
-            AltColShape.Configure(options =>
-            {
-                options.AreaSize = 100;
-            });
         }
 
         private async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(async () =>
@@ -45,6 +41,7 @@ namespace LSG.GM
 
         private void OnPlayerDisconnect(IPlayer player, string reason)
         {
+            if (player == null) return;
             player.GetAccountEntity().Dispose();
         }
 

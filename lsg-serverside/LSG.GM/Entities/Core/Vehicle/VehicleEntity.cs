@@ -133,10 +133,13 @@ namespace LSG.GM.Entities.Core.Vehicle
             GameVehicle.PrimaryColorRgb = new Rgba((byte)DbModel.R, (byte)DbModel.G, (byte)DbModel.B, 1);
             GameVehicle.SetWheels(1, 2);
             GameVehicle.NumberplateText = $"LS {DbModel.Id}";
+            GameVehicle.EngineOn = false;
+            GameVehicle.ManualEngineControl = true;
 
             GameVehicle.SetData("vehicle:data", this);
             GameVehicle.SetData("vehicle:id", DbModel.Id);
             GameVehicle.SetData("vehicle:incrementId", veh.Count() + 1);
+            GameVehicle.SetSyncedMetaData("vehicle:syncedData", DbModel);
 
             //Save();
         }
