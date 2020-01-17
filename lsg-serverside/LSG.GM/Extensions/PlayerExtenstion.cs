@@ -33,5 +33,10 @@ namespace LSG.GM.Extensions
         {
             player.Emit("notify:error", title, message);
         }
+
+        public static void SendWarningNotify(this IPlayer player, string title = "Wystąpił bląd!", string message = "")
+        {
+            player.Emit("notify:warning", title, message);
+        }
     }
 }
