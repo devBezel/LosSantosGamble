@@ -6,6 +6,7 @@ using AltV.Net.Resources.Chat.Api;
 using LSG.DAL.Database.Models.BusModels;
 using LSG.GM.Constant;
 using LSG.GM.Entities.Core;
+using LSG.GM.Enums;
 using LSG.GM.Extensions;
 using System;
 using System.Collections.Generic;
@@ -66,20 +67,30 @@ namespace LSG.GM.Entities.Common.Bus
             }
 
             characterEntity.RemoveMoney(cost);
-            player.SendNativeNotify(null, NotificationNativeType.Bus, 1, "Kierowca autobusu", "~g~ Transakcja", $"Zapłaciłeś {cost} za bilet");
+            player.SendNativeNotify(null, NotificationNativeType.Bus, 1, "Kierowca autobusu", "~g~ Transakcja", $"Zapłaciłeś {cost}$ za bilet");
             player.EmitAsync("bus:moneyRemovedStartTimer", time, posX, posY, posZ);
 
         });
 
         [Command("createbusstop")]
-        public async Task CreateBusStopCMD(IPlayer player) => await AltAsync.Do(async () =>
+        public async Task CreateBusStopCMD(IPlayer sender) => await AltAsync.Do(async () =>
         {
+
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Supporter))
+                return;
+
+            if (!sender.GetAccountEntity().OnAdminDuty)
+            {
+                sender.SendErrorNotify("Wystąpił bląd!", "Aby użyć tej komendy musisz wejść na służbę administratora");
+                return;
+            }
+
             BusStop busStop = new BusStop()
             {
-                PosX = player.Position.X,
-                PosY = player.Position.Y,
-                PosZ = player.Position.Z,
-                CreatorId = player.GetAccountEntity().DbModel.Id
+                PosX = sender.Position.X,
+                PosY = sender.Position.Y,
+                PosZ = sender.Position.Z,
+                CreatorId = sender.GetAccountEntity().DbModel.Id
             };
 
             BusEntity busEntity = new BusEntity(busStop);
@@ -87,16 +98,25 @@ namespace LSG.GM.Entities.Common.Bus
         });
 
         [Command("createbusstaion")]
-        public async Task CreateBusStationCMD(IPlayer player, string name, int busStopId, int cost, float time) => await AltAsync.Do(async () =>
+        public async Task CreateBusStationCMD(IPlayer sender, string name, int busStopId, int cost, float time) => await AltAsync.Do(async () =>
         {
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Supporter))
+                return;
+
+            if (!sender.GetAccountEntity().OnAdminDuty)
+            {
+                sender.SendErrorNotify("Wystąpił bląd!", "Aby użyć tej komendy musisz wejść na służbę administratora");
+                return;
+            }
+
             BusStopStation busStopStation = new BusStopStation()
             {
                 BusStopId = busStopId,
                 Name = name,
-                PosX = player.Position.X,
-                PosY = player.Position.Y,
-                PosZ = player.Position.Z,
-                CreatorId = player.GetAccountEntity().DbModel.Id,
+                PosX = sender.Position.X,
+                PosY = sender.Position.Y,
+                PosZ = sender.Position.Z,
+                CreatorId = sender.GetAccountEntity().DbModel.Id,
                 Cost = cost,
                 Time = time
             };

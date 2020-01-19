@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
+using LSG.GM.Constant;
 using LSG.GM.Economy.Bank;
 using LSG.GM.Entities.Core;
 using LSG.GM.Enums;
@@ -47,20 +48,18 @@ namespace LSG.GM.Entities.Common.Atm
 
             if(!characterEntity.DbModel.BankStatus)
             {
-                player.SendErrorNotify("Los Santos Bank", "Nie masz konta w banku, aby je założyć udaj się do najbliżej placówki");
+                player.SendNativeNotify(null, NotificationNativeType.Bank, 1, "Nie masz konta w banku", "~g~ Bank Los Santos", $"Aby je założyć udaj się do najbliżej placówki");
                 return;
             }
 
 
-
-            player.SendSuccessNotify(null, $"Witaj w ATM {characterEntity.DbModel.Name}");
             player.Emit("atm:information", characterEntity.DbModel.Name, characterEntity.DbModel.Surname, characterEntity.DbModel.Money, characterEntity.DbModel.Bank);
         });
 
         [Command("createatm")]
         public async Task CreateAtmCMD(IPlayer sender) => await AltAsync.Do(async () =>
         {
-            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Developer))
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Supporter))
                 return;
 
             if (!sender.GetAccountEntity().OnAdminDuty)
@@ -88,7 +87,7 @@ namespace LSG.GM.Entities.Common.Atm
             int amount = (int)(long)args[0];
 
             BankHelper.DepositToBank(player, amount);
-            player.SendSuccessNotify("Bank Los Santos", $"Przyjęto twoją wpłatę {amount}$ poprawnie");
+            player.SendNativeNotify(null, NotificationNativeType.Bank, 1, "Przyjęto wpłatę", "~g~ Bank Los Santos", $"Twoja wpłata {amount}$ została przyjęta poprawnie");
         }
 
         public void AtmWithdrawMoney(IPlayer player, object[] args)
@@ -96,7 +95,7 @@ namespace LSG.GM.Entities.Common.Atm
             int amount = (int)(long)args[0];
 
             BankHelper.WithdrawFromBank(player, amount);
-            player.SendSuccessNotify("Bank Los Santos", $"Wypłacono {amount}$ z bankomatu");
+            player.SendNativeNotify(null, NotificationNativeType.Bank, 1, "Przyjęto wypłatę", "~g~ Bank Los Santos", $"Twoja wypłata {amount}$ została przyjęta poprawnie");
         }
 
     }

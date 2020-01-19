@@ -46,6 +46,9 @@ namespace LSG.GM.Entities.Core
                 AccountEntity.Player.SendChatMessage("Dziękujemy za wspieranie naszego projektu " + AccountEntity.DbModel.Username + "! Do końca twojego {D1BA0f} premium {ffffff} pozostało " +
                         Calculation.CalculateTheNumberOfDays(AccountEntity.DbModel.AccountPremium.EndTime, DateTime.Now) + " dni");
 
+            if (DbModel.CharacterLook == null)
+                AccountEntity.Player.Dimension = AccountEntity.DbModel.Id;
+
             AccountEntity.Player.EmitAsync("character:wearClothes", DbModel.CharacterLook);
         });
 

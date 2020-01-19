@@ -26,7 +26,14 @@ namespace LSG.GM.Entities.Core.Vehicle
             });
 
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
+            AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
+            AltAsync.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
         }
+
+        private async Task OnPlayerChangeVehicleSeat(IVehicle vehicle, IPlayer player, byte oldSeat, byte newSeat) => await AltAsync.Do(() =>
+        {
+            player.EmitAsync("player:changeVehicleSeat", oldSeat, newSeat);
+        });
 
         private async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
         {
@@ -42,6 +49,8 @@ namespace LSG.GM.Entities.Core.Vehicle
 
                 vehicleEntity.Save();
             }
+
+            player.EmitAsync("player:leaveVehicle", seat);
         });
 
         [Command("v")]

@@ -32,7 +32,7 @@ namespace LSG.GM.Entities.Core.Vehicle
             DbModel = model;
         }
 
-        public static VehicleEntity Create(Position position, VehicleModel model, string numberPlate, int numberPlateStyle, Color color, Color sedondaryColor, Character character)
+        public static VehicleEntity Create(Position position, VehicleModel model, Color color, Color sedondaryColor, Character character)
         {
             VehicleDb vehicle = new VehicleDb()
             {

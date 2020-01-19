@@ -81,7 +81,7 @@ namespace LSG.GM.Core.Admin
         });
 
         [Command("addmoney")]
-        public async Task AddCharacterMoneyCMD(IPlayer sender, int amount, int id) => await AltAsync.Do(() =>
+        public async Task AddCharacterMoneyCMD(IPlayer sender, int id, int amount) => await AltAsync.Do(() =>
         {
             if (!sender.GetAccountEntity().HasRank((int)EAdmin.Administrator))
                 return;
@@ -101,15 +101,25 @@ namespace LSG.GM.Core.Admin
             //getter.AddMoney(amount);
 
             sender.SendSuccessNotify(null, $"Nadałeś graczowi ID: {id} {amount}$");
+
+            if (sender.GetAccountEntity().DbModel.Id == getter.GetAccountEntity().DbModel.Id) return;
             getter.SendSuccessNotify(null, $"Otrzymałeś od administratora {sender.GetAccountEntity().DbModel.Username} {amount}$");
         });
 
-        [Command("testmoney")]
-        public void TestMoneyCMD(IPlayer player)
-        {
-            player.SendSuccessNotify(null, $"Twoja ilość gotówki: {player.GetAccountEntity().characterEntity.DbModel.Money}");
 
-            player.SendChatMessage($"{Singleton.GetDatabaseInstance().Accounts.SingleOrDefault(x => x.Id == player.GetAccountEntity().DbModel.Id).PasswordHash}");
-        }
+        [Command("tweapon")]
+        public async Task CreateTemporaryWeaponCMD(IPlayer sender, WeaponModel model) => await AltAsync.Do(() =>
+        {
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Supporter))
+                return;
+
+            if (!sender.GetAccountEntity().OnAdminDuty)
+            {
+                sender.SendErrorNotify("Wystąpił bląd!", "Aby użyć tej komendy musisz wejść na służbę administratora");
+                return;
+            }
+
+            sender.GiveWeaponAsync((uint)model, 200, false);
+        });
     }
 }

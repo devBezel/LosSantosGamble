@@ -32,6 +32,8 @@ namespace LSG.GM.Core.Login
                 AltAsync.OnPlayerConnect += OnPlayerConnect;
                 AltAsync.OnClient("login:characterDetail", SetCharacterSettings);
             });
+
+            Alt.OnClient("login:successWearChangeWorld", ChangeCharacterWorld);
         }
 
         private async Task SetCharacterSettings(IPlayer player, object[] args) => await AltAsync.Do(() =>
@@ -48,6 +50,14 @@ namespace LSG.GM.Core.Login
             AccountEntity accountEntity = new AccountEntity(characterDatabase.Account, player);
             accountEntity.Login(characterDatabase);
         });
+
+        private void ChangeCharacterWorld(IPlayer player, object[] args)
+        {
+            // Ustawianie domyślnego świata po wyborze postaci
+            Alt.Log("Zmieniam świat");
+            player.Dimension = 0;
+        }
+
         private async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(() =>
         {
             player.EmitAsync("other:first-connect");

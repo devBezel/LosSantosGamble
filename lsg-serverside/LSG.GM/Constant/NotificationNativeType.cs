@@ -10,6 +10,6 @@ namespace LSG.GM.Constant
         public static string LockSystem = "CHAR_CARSITE3";
         public static string Error = "CHAR_BLOCKED";
         public static string Bank = "CHAR_BANK_FLEECA";
-        public static string Bus = "WEB_ROCKFORD_CAPTAIN67";
+        public static string Bus = "CHAR_CHENGSR";
     }
 }
