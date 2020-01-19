@@ -38,5 +38,10 @@ namespace LSG.GM.Extensions
         {
             player.Emit("notify:warning", title, message);
         }
+
+        public static void SendNativeNotify(this IPlayer player, int? backgroundColor, string notifyImage, int iconType, string title, string subtitle,string  message, int durationMult = 1)
+        {
+            player.Emit("notify:native", backgroundColor, notifyImage, iconType, title, subtitle, message, durationMult);
+        }
     }
 }

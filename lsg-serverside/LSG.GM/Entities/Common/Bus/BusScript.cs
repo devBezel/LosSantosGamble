@@ -4,6 +4,7 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
 using LSG.DAL.Database.Models.BusModels;
+using LSG.GM.Constant;
 using LSG.GM.Entities.Core;
 using LSG.GM.Extensions;
 using System;
@@ -60,12 +61,12 @@ namespace LSG.GM.Entities.Common.Bus
 
             if (!characterEntity.HasEnoughMoney(cost))
             {
-                player.SendErrorNotify("", "Nie masz wystarczająco pieniędzy");
+                player.SendNativeNotify(null, NotificationNativeType.Bus, 1, "Kierowca autobusu", "~g~ Transakcja", $"Dałeś mi za mało gotówki, wypłać pieniądze i czekaj na następny autobus");
                 return;
             }
 
             characterEntity.RemoveMoney(cost);
-            player.SendSuccessNotify(null, $"Zapłaciłeś {cost}$ za bilet");
+            player.SendNativeNotify(null, NotificationNativeType.Bus, 1, "Kierowca autobusu", "~g~ Transakcja", $"Zapłaciłeś {cost} za bilet");
             player.EmitAsync("bus:moneyRemovedStartTimer", time, posX, posY, posZ);
 
         });
