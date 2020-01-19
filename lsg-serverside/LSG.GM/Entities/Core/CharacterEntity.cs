@@ -35,7 +35,7 @@ namespace LSG.GM.Entities.Core
             AccountEntity.Player.SetHealthAsync((ushort)DbModel.Health);
             AccountEntity.Player.SetModelAsync(0x705E61F2);
             AccountEntity.Player.SetNameAsync(DbModel.Name);
-            SendCharacterDataToClient();
+            SetCharacterDataToClient();
 
             if (DbModel.Gender)
             {
@@ -60,13 +60,13 @@ namespace LSG.GM.Entities.Core
             {
                 unitOfWork.CharacterRepository.Update(DbModel);
             }
-            SendCharacterDataToClient();
+            SetCharacterDataToClient();
         }
 
-        public void SendCharacterDataToClient()
+        public void SetCharacterDataToClient()
         {
             CharacterForListDto characterDto = Singleton.AutoMapper().Map<CharacterForListDto>(DbModel);
-            AccountEntity.Player.Emit("character:sendDataCharacter", characterDto);
+            AccountEntity.Player.SetSyncedMetaData("character:dataCharacter", characterDto);
         }
 
         public void AddMoney(int amount)

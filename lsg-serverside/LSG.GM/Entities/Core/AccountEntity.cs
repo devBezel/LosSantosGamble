@@ -35,7 +35,7 @@ namespace LSG.GM.Entities.Core
         {
             Player.SetData("account:data", this);
             Player.SetData("account:id", Calculation.GenerateFreeIdentifier());
-            SendAccountDataToClient();
+            SetAccountDataToClient();
 
             characterEntity = new CharacterEntity(this, character);
             EntityHelper.Add(this);
@@ -59,12 +59,12 @@ namespace LSG.GM.Entities.Core
             {
                 if (DbModel.AccountPremium == null || (DbModel.AccountPremium.EndTime <= DateTime.Now))
                 {
-                    Player.Emit("account:hasPremium", false);
+                    Player.SetSyncedMetaData("account:hasPremium", false);
 
                     return false;
                 }
 
-                Player.Emit("account:hasPremium", true);
+                Player.SetSyncedMetaData("account:hasPremium", true);
                 return true;
 
             }
@@ -90,14 +90,14 @@ namespace LSG.GM.Entities.Core
             if (OnAdminDuty)
             {
                 Player.SetData("admin:duty", false);
-                Player.Emit("admin:setDuty", false);
+                Player.SetSyncedMetaData("admin:setDuty", false);
 
                 Player.SendSuccessNotify("Wykonano pomyślnie!", "Zszedłeś ze służby admina poprawnie!");
                 return;
             }
 
             Player.SetData("admin:duty", true);
-            Player.Emit("admin:setDuty", true);
+            Player.SetSyncedMetaData("admin:setDuty", true);
 
             Player.SendSuccessNotify("Wykonano pomyślnie!", "Wszedłeś na służbę admina poprawnie!");
         }
@@ -108,10 +108,11 @@ namespace LSG.GM.Entities.Core
             return DbModel.Rank >= rank ? true : false;
         }
 
-        public void SendAccountDataToClient()
+        public void SetAccountDataToClient()
         {
             AccountForCharacterDto accountDto = Singleton.AutoMapper().Map<AccountForCharacterDto>(DbModel);
-            Player.Emit("account:sendDataAccount", accountDto, ServerID);
+            Player.SetSyncedMetaData("account:id", ServerID);
+            Player.SetSyncedMetaData("account:dataAccount", accountDto);
         }
 
         public void Save()

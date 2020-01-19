@@ -30,8 +30,8 @@ namespace LSG.GM.Utilities
                     return ids;
                 }
             }
-            Alt.Log($"[SERVER] Nadano graczowi ID: {ids - 1}");
-            return ids - 1;
+            Alt.Log($"[SERVER] Nadano graczowi ID: {ids}");
+            return ids;
         }
     }
 }
