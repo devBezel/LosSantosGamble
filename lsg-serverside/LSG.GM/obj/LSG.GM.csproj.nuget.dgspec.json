@@ -47,7 +47,7 @@
           "dependencies": {
             "AltV.Net": {
               "target": "Package",
-              "version": "[1.22.4-beta, )"
+              "version": "[1.26.0-beta, )"
             },
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
@@ -112,7 +112,7 @@
           "dependencies": {
             "AltV.Net": {
               "target": "Package",
-              "version": "[1.22.4-beta, )"
+              "version": "[1.26.0-beta, )"
             },
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
@@ -214,15 +214,15 @@
           "dependencies": {
             "AltV.Net": {
               "target": "Package",
-              "version": "[1.22.4-beta, )"
+              "version": "[1.26.0-beta, )"
             },
             "AltV.Net.Async": {
               "target": "Package",
-              "version": "[1.20.2-beta, )"
+              "version": "[1.26.0-beta, )"
             },
             "AltV.Net.ColShape": {
               "target": "Package",
-              "version": "[1.6.1-dev-preview, )"
+              "version": "[1.7.0-dev-preview, )"
             },
             "AltV.Net.Mock": {
               "target": "Package",
@@ -230,11 +230,11 @@
             },
             "AltV.Net.NetworkingEntity": {
               "target": "Package",
-              "version": "[1.7.0-dev-preview, )"
+              "version": "[1.9.0-dev-preview, )"
             },
             "AltV.Net.Resources.Chat.Api": {
               "target": "Package",
-              "version": "[1.2.0-dev-preview, )"
+              "version": "[1.3.0-dev-preview, )"
             },
             "Microsoft.Extensions.Logging": {
               "target": "Package",

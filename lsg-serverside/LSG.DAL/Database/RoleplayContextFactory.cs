@@ -11,8 +11,9 @@ namespace LSG.DAL.Database
         public RoleplayContext Create() => this.CreateDbContext(new[] { "" });
 
         private readonly string _connectionString;
-
-        public RoleplayContextFactory() : this("Server=51.38.142.78;Database=lsg;User=algorytm;Password=f7ufcuEXMcNpmaDwgAPuxpUt; convert zero datetime=True") { }
+        //Server=51.38.142.78;Database=lsg;User=algorytm;Password=f7ufcuEXMcNpmaDwgAPuxpUt; convert zero datetime=True
+        //Server=localhost;Database=lsg;User=root;Password=; convert zero datetime=True
+        public RoleplayContextFactory() : this("Server=localhost;Database=lsg;User=root;Password=; convert zero datetime=True") { }
 
         public RoleplayContextFactory(string connectionString)
         {

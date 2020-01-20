@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.0": {
-      "AltV.Net/1.22.4-beta": {
+      "AltV.Net/1.26.0-beta": {
         "type": "package",
         "compile": {
           "lib/netcoreapp3.0/AltV.Net.dll": {}
@@ -11,10 +11,10 @@
           "lib/netcoreapp3.0/AltV.Net.dll": {}
         }
       },
-      "AltV.Net.Async/1.20.2-beta": {
+      "AltV.Net.Async/1.26.0-beta": {
         "type": "package",
         "dependencies": {
-          "AltV.Net": "1.20.2-beta",
+          "AltV.Net": "1.26.0-beta",
           "System.Threading.Channels": "4.6.0"
         },
         "compile": {
@@ -24,10 +24,10 @@
           "lib/netcoreapp3.0/AltV.Net.Async.dll": {}
         }
       },
-      "AltV.Net.ColShape/1.6.1-dev-preview": {
+      "AltV.Net.ColShape/1.7.0-dev-preview": {
         "type": "package",
         "dependencies": {
-          "AltV.Net": "1.20.1-beta"
+          "AltV.Net": "1.26.0-beta"
         },
         "compile": {
           "lib/netcoreapp3.0/AltV.Net.ColShape.dll": {}
@@ -48,10 +48,10 @@
           "lib/netcoreapp3.0/AltV.Net.Mock.dll": {}
         }
       },
-      "AltV.Net.NetworkingEntity/1.7.0-dev-preview": {
+      "AltV.Net.NetworkingEntity/1.9.0-dev-preview": {
         "type": "package",
         "dependencies": {
-          "AltV.Net": "1.20.0-beta",
+          "AltV.Net": "1.25.4-beta",
           "Google.Protobuf": "3.9.2",
           "Grpc": "2.23.0",
           "System.Threading.Channels": "4.6.0",
@@ -64,10 +64,10 @@
           "lib/netcoreapp3.0/AltV.Net.NetworkingEntity.dll": {}
         }
       },
-      "AltV.Net.Resources.Chat.Api/1.2.0-dev-preview": {
+      "AltV.Net.Resources.Chat.Api/1.3.0-dev-preview": {
         "type": "package",
         "dependencies": {
-          "AltV.Net": "1.20.0-beta"
+          "AltV.Net": "1.26.0-beta"
         },
         "compile": {
           "lib/netcoreapp3.0/AltV.Net.Resources.Chat.Api.dll": {}
@@ -2605,7 +2605,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.0",
         "dependencies": {
-          "AltV.Net": "1.22.4-beta",
+          "AltV.Net": "1.26.0-beta",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "6.0.0",
           "LSG.DAL": "1.0.0"
         },
@@ -2620,7 +2620,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.0",
         "dependencies": {
-          "AltV.Net": "1.22.4-beta",
+          "AltV.Net": "1.26.0-beta",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "4.0.1",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "2.2.0",
           "Microsoft.EntityFrameworkCore": "2.2.4",
@@ -2639,42 +2639,42 @@
     }
   },
   "libraries": {
-    "AltV.Net/1.22.4-beta": {
-      "sha512": "nlJ0IAioOfBbWjrv1aN8dX97DIqo0UZNfaW5ZfOgNYtY5tkapEcpctZ6cbtSAgt9ZdqYw7AD5Qgl1aP0ikFMVw==",
+    "AltV.Net/1.26.0-beta": {
+      "sha512": "/eafaQ7zw1WpRUQDgAnJeV6kAjqaZ7g95lZJhbQG1NftmxcHMqkuOySjBAIltQkxg6D2tJHAwdnfYz34VifcoA==",
       "type": "package",
-      "path": "altv.net/1.22.4-beta",
+      "path": "altv.net/1.26.0-beta",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "altv.net.1.22.4-beta.nupkg.sha512",
+        "altv.net.1.26.0-beta.nupkg.sha512",
         "altv.net.nuspec",
         "icon.png",
         "lib/netcoreapp3.0/AltV.Net.dll",
         "license.txt"
       ]
     },
-    "AltV.Net.Async/1.20.2-beta": {
-      "sha512": "Y1j/pwJlSbQNrcdBL/gF0RMkmTJ4qHdduvZgcG3IQGDpnFXzU645azstze5sH4kaCZqiv0qnsIBP+6LZyGVAaA==",
+    "AltV.Net.Async/1.26.0-beta": {
+      "sha512": "PaqqXCHBtp3N/y4AZZI46wHB2BlRkg1RYED0yjuzVPI/wH7UCbHQpPL3aVJwR4hBR/axgQEEhhE+jKfrsv3zhg==",
       "type": "package",
-      "path": "altv.net.async/1.20.2-beta",
+      "path": "altv.net.async/1.26.0-beta",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "altv.net.async.1.20.2-beta.nupkg.sha512",
+        "altv.net.async.1.26.0-beta.nupkg.sha512",
         "altv.net.async.nuspec",
         "icon.png",
         "lib/netcoreapp3.0/AltV.Net.Async.dll",
         "license.txt"
       ]
     },
-    "AltV.Net.ColShape/1.6.1-dev-preview": {
-      "sha512": "IOQ2IXggJN69E/v1X6HSw0CECD+cHIxekFBwFuSXnTmqi6iC0ce3JQamWVJ6P2EeIAzJibSSabXKWyVPVdtJbg==",
+    "AltV.Net.ColShape/1.7.0-dev-preview": {
+      "sha512": "Ab8S7FcRL20DqQOROgZOK6mi79e3g44aLuaDIl4dxaL0DyOrYaiQuRfrRLeUMKVp3b2y6o31GScFq2pK1wxPFw==",
       "type": "package",
-      "path": "altv.net.colshape/1.6.1-dev-preview",
+      "path": "altv.net.colshape/1.7.0-dev-preview",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "altv.net.colshape.1.6.1-dev-preview.nupkg.sha512",
+        "altv.net.colshape.1.7.0-dev-preview.nupkg.sha512",
         "altv.net.colshape.nuspec",
         "lib/netcoreapp3.0/AltV.Net.ColShape.dll",
         "license.txt"
@@ -2693,28 +2693,28 @@
         "license.txt"
       ]
     },
-    "AltV.Net.NetworkingEntity/1.7.0-dev-preview": {
-      "sha512": "C/AoVQ0+R/ujVBQBHEfdetfYRI7P/MqggXAPb86N2s9QF9uVogYBbK0WCc8tgtt0874EGEmWrOwe+JN6WIsYtQ==",
+    "AltV.Net.NetworkingEntity/1.9.0-dev-preview": {
+      "sha512": "jsYZ5b9wzN9aGSHe1lZ5cQT4ZFrbdOwV8KqcXBPvTVfAJP0/0cA2hWUIAxl9ZVmJmRQ/PrkmRy/Wg+rrmBRMeg==",
       "type": "package",
-      "path": "altv.net.networkingentity/1.7.0-dev-preview",
+      "path": "altv.net.networkingentity/1.9.0-dev-preview",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "altv.net.networkingentity.1.7.0-dev-preview.nupkg.sha512",
+        "altv.net.networkingentity.1.9.0-dev-preview.nupkg.sha512",
         "altv.net.networkingentity.nuspec",
         "icon.png",
         "lib/netcoreapp3.0/AltV.Net.NetworkingEntity.dll",
         "license.txt"
       ]
     },
-    "AltV.Net.Resources.Chat.Api/1.2.0-dev-preview": {
-      "sha512": "cfFS+Xj7Vxjqszd7SgdELx2LI4p5vjDgCxol1z/IfoWYIQAWVVoIJsAwLSqcRU+Z4wmyAi82vpWAAuhW6hQvMw==",
+    "AltV.Net.Resources.Chat.Api/1.3.0-dev-preview": {
+      "sha512": "hz8g+eg/s9Wf6bESVJJ9/ii3XEYMhoW3zF7QfbyFSXRHAIY/PCCqKcC6AkJuFmySwvAVs1WgOLOxShrPJ9dzVQ==",
       "type": "package",
-      "path": "altv.net.resources.chat.api/1.2.0-dev-preview",
+      "path": "altv.net.resources.chat.api/1.3.0-dev-preview",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "altv.net.resources.chat.api.1.2.0-dev-preview.nupkg.sha512",
+        "altv.net.resources.chat.api.1.3.0-dev-preview.nupkg.sha512",
         "altv.net.resources.chat.api.nuspec",
         "icon.png",
         "lib/netcoreapp3.0/AltV.Net.Resources.Chat.Api.dll",
@@ -8379,12 +8379,12 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.0": [
-      "AltV.Net >= 1.22.4-beta",
-      "AltV.Net.Async >= 1.20.2-beta",
-      "AltV.Net.ColShape >= 1.6.1-dev-preview",
+      "AltV.Net >= 1.26.0-beta",
+      "AltV.Net.Async >= 1.26.0-beta",
+      "AltV.Net.ColShape >= 1.7.0-dev-preview",
       "AltV.Net.Mock >= 1.17.2-alpha",
-      "AltV.Net.NetworkingEntity >= 1.7.0-dev-preview",
-      "AltV.Net.Resources.Chat.Api >= 1.2.0-dev-preview",
+      "AltV.Net.NetworkingEntity >= 1.9.0-dev-preview",
+      "AltV.Net.Resources.Chat.Api >= 1.3.0-dev-preview",
       "LSG.BLL >= 1.0.0",
       "LSG.DAL >= 1.0.0",
       "Microsoft.Extensions.Logging >= 3.1.0"
@@ -8440,15 +8440,15 @@
         "dependencies": {
           "AltV.Net": {
             "target": "Package",
-            "version": "[1.22.4-beta, )"
+            "version": "[1.26.0-beta, )"
           },
           "AltV.Net.Async": {
             "target": "Package",
-            "version": "[1.20.2-beta, )"
+            "version": "[1.26.0-beta, )"
           },
           "AltV.Net.ColShape": {
             "target": "Package",
-            "version": "[1.6.1-dev-preview, )"
+            "version": "[1.7.0-dev-preview, )"
           },
           "AltV.Net.Mock": {
             "target": "Package",
@@ -8456,11 +8456,11 @@
           },
           "AltV.Net.NetworkingEntity": {
             "target": "Package",
-            "version": "[1.7.0-dev-preview, )"
+            "version": "[1.9.0-dev-preview, )"
           },
           "AltV.Net.Resources.Chat.Api": {
             "target": "Package",
-            "version": "[1.2.0-dev-preview, )"
+            "version": "[1.3.0-dev-preview, )"
           },
           "Microsoft.Extensions.Logging": {
             "target": "Package",

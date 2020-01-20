@@ -43,7 +43,7 @@
           "dependencies": {
             "AltV.Net": {
               "target": "Package",
-              "version": "[1.22.4-beta, )"
+              "version": "[1.26.0-beta, )"
             },
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",

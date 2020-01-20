@@ -27,13 +27,13 @@ namespace LSG.GM.Entities.Core.Vehicle
 
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
-            AltAsync.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
+            Alt.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
         }
 
-        private async Task OnPlayerChangeVehicleSeat(IVehicle vehicle, IPlayer player, byte oldSeat, byte newSeat) => await AltAsync.Do(() =>
+        private void OnPlayerChangeVehicleSeat(IVehicle vehicle, IPlayer player, byte oldSeat, byte newSeat)
         {
-            player.EmitAsync("player:changeVehicleSeat", oldSeat, newSeat);
-        });
+            player.Emit("player:changeVehicleSeat", (int)oldSeat, (int)newSeat);
+        }
 
         private async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
         {
