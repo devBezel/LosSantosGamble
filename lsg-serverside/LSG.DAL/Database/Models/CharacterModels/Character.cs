@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using AltV.Net;
 using LSG.DAL.Database.Models.AccountModels;
+using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.VehicleModels;
 using Newtonsoft.Json;
 
@@ -35,7 +36,9 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public float Armor { get; set; }
         public IEnumerable<Vehicle> Vehicles { get; set; }
         public IEnumerable<CharacterDescription> CharacterDescriptions { get; set; }
+        public IEnumerable<CharacterItem> CharacterItems { get; set; }
         public CharacterLook CharacterLook { get; set; }
+
 
         public void OnWrite(IMValueWriter writer)
         {

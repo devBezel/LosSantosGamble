@@ -6,7 +6,9 @@ using AltV.Net.Resources.Chat.Api;
 using LSG.BLL.Dto.Character;
 using LSG.DAL.Database;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.UnitOfWork;
+using LSG.GM.Entities.Core.Item;
 using LSG.GM.Extensions;
 using LSG.GM.Utilities;
 using System;
@@ -21,6 +23,7 @@ namespace LSG.GM.Entities.Core
     {
         public AccountEntity AccountEntity { get; private set; }
         public Character DbModel { get; set; }
+        internal List<ItemEntity> ItemInUse = new List<ItemEntity>();
         public bool HasBw { get; set; } = false;
 
         public CharacterEntity(AccountEntity accountEntity, Character dbModel)

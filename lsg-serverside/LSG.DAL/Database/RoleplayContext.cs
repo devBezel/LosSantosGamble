@@ -3,6 +3,7 @@ using LSG.DAL.Database.Models.AccountModels;
 using LSG.DAL.Database.Models.BankModels;
 using LSG.DAL.Database.Models.BusModels;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.VehicleModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -27,6 +28,7 @@ namespace LSG.DAL.Database
         public DbSet<Atm> Atms { get; set; }
         public DbSet<BusStop> BusStops { get; set; }
         public DbSet<BusStopStation> BusStopStations { get; set; }
+        public DbSet<CharacterItem> CharacterItems { get; set; }
 
     }
 }

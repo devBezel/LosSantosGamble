@@ -343,6 +343,40 @@ namespace LSG.DAL.Migrations
                     b.ToTable("CharacterLooks");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.CharacterItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("CharacterId");
+
+                    b.Property<int?>("CreatorId");
+
+                    b.Property<int?>("FirstParameter");
+
+                    b.Property<int?>("FourthParameter");
+
+                    b.Property<int>("ItemEntityType");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("SecondParameter");
+
+                    b.Property<int?>("ThirdParameter");
+
+                    b.Property<int?>("VehicleId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("CharacterItems");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
                 {
                     b.Property<int>("Id")
@@ -440,6 +474,21 @@ namespace LSG.DAL.Migrations
                         .WithOne("CharacterLook")
                         .HasForeignKey("LSG.DAL.Database.Models.CharacterModels.CharacterLook", "CharacterId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.CharacterItem", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
+                        .WithMany("CharacterItems")
+                        .HasForeignKey("CharacterId");
+
+                    b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
+                    b.HasOne("LSG.DAL.Database.Models.VehicleModels.Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId");
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
