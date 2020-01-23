@@ -6,9 +6,9 @@ using static LSG.GM.Entities.Base.Interfaces.IEntityFactory;
 
 namespace LSG.GM.Entities.Core.Item
 {
-    public class ItemEntityFactory : IEntityFactory<ItemEntity, CharacterItem>
+    public class ItemEntityFactory : IEntityFactory<ItemEntity, ItemModel>
     {
-        public ItemEntity Create(CharacterItem item)
+        public ItemEntity Create(ItemModel item)
         {
             switch (item.ItemEntityType)
             {

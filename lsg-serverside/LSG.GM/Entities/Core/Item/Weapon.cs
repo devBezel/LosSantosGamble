@@ -1,52 +1,52 @@
 ﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.GM.Constant;
 using LSG.GM.Extensions;
+using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LSG.GM.Entities.Core.Item
 {
-    public class Weapon : ItemEntity
+    internal class Weapon : ItemEntity
     {
         public WeaponModel WeaponHash => (WeaponModel)DbModel.FirstParameter.Value;
         public double Ammo => DbModel.SecondParameter.Value;
 
-        public Weapon(CharacterItem item) : base (item)
+        public Weapon(ItemModel item) : base (item)
         {
 
         }
 
         public override void UseItem(CharacterEntity sender)
-        {
-            Alt.Log("Wykonuje isę przy uzyciu broni 0");
+        {            
             if (Ammo <= 0)
             {
                 sender.AccountEntity.Player.SendNativeNotify(null, NotificationNativeType.Error, 0, "Ta broń nie posiada amunicji", "Broń", "Załaduj magazynek, aby móc użyć tej broni", 1);
                 return;
             }
 
-            if(sender.ItemInUse.Any(item => ReferenceEquals(item, this)))
-            {
-                Alt.Log("Wykonuje isę przy uzyciu broni 1");
-                DbModel.SecondParameter = sender.AccountEntity.Player.GetCurrentWeaponTintIndex();
+            if (sender.ItemsInUse.Any(item => ReferenceEquals(item, this)))
+            {                
+                //TODO: Dokończyć amunicje
+                DbModel.SecondParameter = 100;
                 Save();
 
-                sender.AccountEntity.Player.RemoveWeapon((uint)WeaponHash);
-                sender.ItemInUse.Remove(this);
-
-            } else
+                sender.AccountEntity.Player.RemoveAllWeapons();
+                sender.ItemsInUse.Remove(this);
+                sender.AccountEntity.Player.Emit("item:weaponHide", (uint)WeaponHash);
+            }
+            else
             {
-                Alt.Log("Wykonuje isę przy uzyciu broni 3");
-                Alt.Log("WeaponHASH: " + (uint)WeaponHash);
-                Alt.Log("Imie i nazwisko: " + sender.DbModel.Name + " " + sender.DbModel.Surname);
+                sender.ItemsInUse.Add(this);
                 sender.AccountEntity.Player.GiveWeapon((uint)WeaponHash, (int)Ammo, true);
-                sender.ItemInUse.Add(this);
-
-                //Zrobić zapis jeśli wyjdzie (czyli pobrać aktualne wartości broni i updatować do dbmodelu postaci (listy itemów))
+                sender.AccountEntity.Player.Emit("item:weaponTakeOut", (uint)WeaponHash);
+                
             }
         }
     }

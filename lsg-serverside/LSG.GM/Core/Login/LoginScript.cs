@@ -42,12 +42,12 @@ namespace LSG.GM.Core.Login
             Character characterClient = JsonConvert.DeserializeObject<Character>((string)args[0]);
             Character characterDatabase = Singleton.GetDatabaseInstance().Characters
             .Include(l => l.CharacterLook)
-            .Include(i => i.CharacterItems)
+            .Include(i => i.Items)
             .Include(a => a.Account)
             .ThenInclude(p => p.AccountPremium)
             .FirstOrDefault(c => c.Id == characterClient.Id);
 
-            Alt.Log("ilosc rzeczy z ekwipunku " + characterDatabase.CharacterItems.Count().ToString());
+            Alt.Log("ilosc rzeczy z ekwipunku " + characterDatabase.Items.Count().ToString());
             AccountEntity accountEntity = new AccountEntity(characterDatabase.Account, player);
             accountEntity.Login(characterDatabase);
         });

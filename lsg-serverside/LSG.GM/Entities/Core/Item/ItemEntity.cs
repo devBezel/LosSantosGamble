@@ -1,28 +1,30 @@
-﻿using LSG.DAL.Database.Models.ItemModels;
+﻿using AltV.Net;
+using LSG.DAL.Database.Models.ItemModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LSG.GM.Entities.Core.Item
 {
-    public class ItemEntity
+    public abstract class ItemEntity
     {
         public int Id => DbModel.Id;
         public string Name => DbModel.Name;
 
-        protected CharacterItem DbModel { get; }
-        protected ItemEntity(CharacterItem item)
+        protected ItemModel DbModel { get; }
+        protected ItemEntity(ItemModel item)
         {
             DbModel = item;
         }
 
         public virtual void UseItem(CharacterEntity characterEntity)
         {
-            //na logi
+            Alt.Log($"[ITEM] {characterEntity.DbModel.Name} {characterEntity.DbModel.Surname} użył item ID: {Id} nazwa: {Name}");
         }
 
         protected virtual void Save()
         {
+            Alt.Log("Zapisuje item");
             // Zrobić zapis
         }
 

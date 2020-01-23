@@ -23,8 +23,19 @@ namespace LSG.GM.Entities.Core
     {
         public AccountEntity AccountEntity { get; private set; }
         public Character DbModel { get; set; }
-        internal List<ItemEntity> ItemInUse = new List<ItemEntity>();
+        internal List<ItemEntity> ItemsInUse { get; set; } = new List<ItemEntity>();
         public bool HasBw { get; set; } = false;
+
+
+        //For natives
+        public int CurrentAmmo
+        {
+            get
+            {
+                AccountEntity.Player.GetData("item:weapon-ammo", out int ammo);
+                return ammo;
+            }
+        }
 
         public CharacterEntity(AccountEntity accountEntity, Character dbModel)
         {

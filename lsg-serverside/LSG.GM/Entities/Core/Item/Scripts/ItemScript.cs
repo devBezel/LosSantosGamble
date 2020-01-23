@@ -1,6 +1,7 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
+using LSG.GM.Constant;
 using LSG.GM.Extensions;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,15 @@ namespace LSG.GM.Entities.Core.Item.Scripts
         {
             CharacterEntity characterEntity = sender.GetAccountEntity().characterEntity;
 
-            ItemEntity itemEntity = ItemFactory.Create(characterEntity.DbModel.CharacterItems.FirstOrDefault(x => x.Id == index));
-            Alt.Log("ilość rzeczy w ekwipunku: " + characterEntity.DbModel.CharacterItems.Count().ToString());
+            ItemEntity itemInUse = characterEntity.ItemsInUse.FirstOrDefault(x => x.Id == index);
+
+            if(itemInUse != null)
+            {
+                itemInUse.UseItem(characterEntity);
+                return;
+            }
+
+            ItemEntity itemEntity = ItemFactory.Create(characterEntity.DbModel.Items.FirstOrDefault(x => x.Id == index));
             itemEntity.UseItem(characterEntity);
         }
     }

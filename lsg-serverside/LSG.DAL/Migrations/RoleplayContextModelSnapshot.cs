@@ -343,7 +343,7 @@ namespace LSG.DAL.Migrations
                     b.ToTable("CharacterLooks");
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.CharacterItem", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.ItemModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -352,17 +352,17 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int?>("CreatorId");
 
-                    b.Property<int?>("FirstParameter");
+                    b.Property<double?>("FirstParameter");
 
-                    b.Property<int?>("FourthParameter");
+                    b.Property<double?>("FourthParameter");
 
                     b.Property<int>("ItemEntityType");
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("SecondParameter");
+                    b.Property<double?>("SecondParameter");
 
-                    b.Property<int?>("ThirdParameter");
+                    b.Property<double?>("ThirdParameter");
 
                     b.Property<int?>("VehicleId");
 
@@ -374,7 +374,7 @@ namespace LSG.DAL.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("CharacterItems");
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
@@ -476,10 +476,10 @@ namespace LSG.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.CharacterItem", b =>
+            modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.ItemModel", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
-                        .WithMany("CharacterItems")
+                        .WithMany("Items")
                         .HasForeignKey("CharacterId");
 
                     b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
