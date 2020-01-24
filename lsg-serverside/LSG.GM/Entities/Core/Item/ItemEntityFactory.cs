@@ -13,6 +13,8 @@ namespace LSG.GM.Entities.Core.Item
             switch (item.ItemEntityType)
             {
                 case DAL.Enums.ItemEntityType.Weapon: return new Weapon(item);
+                case DAL.Enums.ItemEntityType.WeaponHolster: return new WeaponHolster(item);
+                case DAL.Enums.ItemEntityType.Mask: return new Mask(item);
                 //case DAL.Enums.ItemEntityType.WeaponClip:
                 //case DAL.Enums.ItemEntityType.Food:
                 default:

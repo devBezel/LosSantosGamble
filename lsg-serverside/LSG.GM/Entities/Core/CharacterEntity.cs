@@ -7,6 +7,7 @@ using LSG.BLL.Dto.Character;
 using LSG.DAL.Database;
 using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Database.Models.ItemModels;
+using LSG.DAL.Enums;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Entities.Core.Item;
 using LSG.GM.Extensions;
@@ -27,15 +28,8 @@ namespace LSG.GM.Entities.Core
         public bool HasBw { get; set; } = false;
 
 
-        //For natives
-        public int CurrentAmmo
-        {
-            get
-            {
-                AccountEntity.Player.GetData("item:weapon-ammo", out int ammo);
-                return ammo;
-            }
-        }
+        public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
+
 
         public CharacterEntity(AccountEntity accountEntity, Character dbModel)
         {
@@ -49,6 +43,9 @@ namespace LSG.GM.Entities.Core
             AccountEntity.Player.SetHealthAsync((ushort)DbModel.Health);
             AccountEntity.Player.SetModelAsync(0x705E61F2);
             AccountEntity.Player.SetNameAsync(DbModel.Name);
+            UpdateName(FormatName);
+
+
             SetCharacterDataToClient();
 
             if (DbModel.Gender)
@@ -66,6 +63,7 @@ namespace LSG.GM.Entities.Core
             AccountEntity.Player.EmitAsync("character:wearClothes", DbModel.CharacterLook);
         });
 
+
         public void Save()
         {
 
@@ -75,6 +73,11 @@ namespace LSG.GM.Entities.Core
                 unitOfWork.CharacterRepository.Update(DbModel);
             }
             SetCharacterDataToClient();
+        }
+
+        public void UpdateName(string newName)
+        {
+            AccountEntity.Player.SetSyncedMetaData("character:name", newName);
         }
 
         public void SetCharacterDataToClient()
@@ -96,6 +99,14 @@ namespace LSG.GM.Entities.Core
         public bool HasEnoughMoney(int amount)
         {
             return (DbModel.Money >= amount) ? true : false;
+        }
+
+        public bool HasActiveItem(ItemEntityType itemType)
+        {
+            if (!ItemsInUse.Any(item => item.ItemEntityType == itemType))
+                return false;
+            else
+                return true;
         }
 
     }

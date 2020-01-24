@@ -35,17 +35,20 @@ namespace LSG.GM.Entities.Core.Item
             {                
                 //TODO: Dokończyć amunicje
                 DbModel.SecondParameter = 100;
+                DbModel.ItemInUse = false;
                 Save();
 
                 sender.AccountEntity.Player.RemoveAllWeapons();
                 sender.ItemsInUse.Remove(this);
-                sender.AccountEntity.Player.Emit("item:weaponHide", (uint)WeaponHash);
+                sender.AccountEntity.Player.Emit("item:weaponHide", (uint)WeaponHash, sender.HasActiveItem(DAL.Enums.ItemEntityType.WeaponHolster));
             }
             else
             {
+                DbModel.ItemInUse = true;
                 sender.ItemsInUse.Add(this);
                 sender.AccountEntity.Player.GiveWeapon((uint)WeaponHash, (int)Ammo, true);
-                sender.AccountEntity.Player.Emit("item:weaponTakeOut", (uint)WeaponHash);
+
+                sender.AccountEntity.Player.Emit("item:weaponTakeOut", (uint)WeaponHash, sender.HasActiveItem(DAL.Enums.ItemEntityType.WeaponHolster));
                 
             }
         }

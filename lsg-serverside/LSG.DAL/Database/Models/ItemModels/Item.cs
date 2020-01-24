@@ -28,6 +28,7 @@ namespace LSG.DAL.Database.Models.ItemModels
         public Character Character { get; set; }
         public int? VehicleId { get; set; } 
         public Vehicle Vehicle { get; set; }
+        public bool ItemInUse { get; set; }
 
 
         public void OnWrite(IMValueWriter writer)
@@ -37,32 +38,57 @@ namespace LSG.DAL.Database.Models.ItemModels
             writer.Name("id");
             writer.Value(Id);
 
-            writer.Name("creatorId");
-            writer.Value(CreatorId.Value);
+            if(CreatorId.HasValue)
+            {
+                writer.Name("creatorId");
+                writer.Value(CreatorId.Value);
+            }
 
             writer.Name("name");
             writer.Value(Name);
 
-            writer.Name("firstParameter");
-            writer.Value(FirstParameter.Value);
+            if(FirstParameter.HasValue)
+            {
+                writer.Name("firstParameter");
+                writer.Value(FirstParameter.Value);
+            }
 
-            writer.Name("secondParameter");
-            writer.Value(SecondParameter.Value);
+            if(SecondParameter.HasValue)
+            {
+                writer.Name("secondParameter");
+                writer.Value(SecondParameter.Value);
+            }
 
-            writer.Name("thirdParameter");
-            writer.Value(ThirdParameter.Value);
+            if(ThirdParameter.HasValue)
+            {
+                writer.Name("thirdParameter");
+                writer.Value(ThirdParameter.Value);
+            }
 
-            writer.Name("fourthParameter");
-            writer.Value(FourthParameter.Value);
+            if(FourthParameter.HasValue)
+            {
+                writer.Name("fourthParameter");
+                writer.Value(FourthParameter.Value);
+            }
+           
 
             writer.Name("itemEntityType");
             writer.Value((int)ItemEntityType);
+            if(CharacterId.HasValue)
+            {
+                writer.Name("characterId");
+                writer.Value(CharacterId.Value);
+            }
 
-            writer.Name("characterId");
-            writer.Value(CharacterId.Value);
+            if(VehicleId.HasValue)
+            {
+                writer.Name("vehicleId");
+                writer.Value(VehicleId.Value);
+            }
 
-            writer.Name("vehicleId");
-            writer.Value(VehicleId.Value);
+            writer.Name("itemInUse");
+            writer.Value(ItemInUse);
+
 
             writer.EndObject();
 

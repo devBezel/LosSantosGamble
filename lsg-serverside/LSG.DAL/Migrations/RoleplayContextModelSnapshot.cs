@@ -358,6 +358,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int>("ItemEntityType");
 
+                    b.Property<bool>("ItemInUse");
+
                     b.Property<string>("Name");
 
                     b.Property<double?>("SecondParameter");

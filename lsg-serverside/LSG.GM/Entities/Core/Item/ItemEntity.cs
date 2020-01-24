@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using LSG.DAL.Database.Models.ItemModels;
+using LSG.DAL.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,7 @@ namespace LSG.GM.Entities.Core.Item
     {
         public int Id => DbModel.Id;
         public string Name => DbModel.Name;
+        public ItemEntityType ItemEntityType => DbModel.ItemEntityType;
 
         protected ItemModel DbModel { get; }
         protected ItemEntity(ItemModel item)

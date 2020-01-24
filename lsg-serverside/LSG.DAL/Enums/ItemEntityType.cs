@@ -7,7 +7,9 @@ namespace LSG.DAL.Enums
     public enum ItemEntityType
     {
         Weapon,
+        WeaponHolster,
         WeaponClip,
-        Food
+        Food,
+        Mask
     }
 }
