@@ -10,6 +10,7 @@ namespace LSG.DAL.Enums
         WeaponHolster,
         WeaponClip,
         Food,
-        Mask
+        Mask,
+        Clothes
     }
 }
