@@ -36,7 +36,7 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public float Armor { get; set; }
         public IEnumerable<Vehicle> Vehicles { get; set; }
         public IEnumerable<CharacterDescription> CharacterDescriptions { get; set; }
-        public IEnumerable<ItemModel> Items { get; set; }
+        public List<ItemModel> Items { get; set; }
         public CharacterLook CharacterLook { get; set; }
 
 

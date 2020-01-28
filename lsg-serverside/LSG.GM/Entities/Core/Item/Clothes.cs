@@ -1,4 +1,8 @@
-﻿using LSG.DAL.Database.Models.ItemModels;
+﻿using AltV.Net;
+using LSG.DAL.Database.Models.ItemModels;
+using LSG.DAL.Enums;
+using LSG.GM.Constant;
+using LSG.GM.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +23,7 @@ namespace LSG.GM.Entities.Core.Item
 
         public override void UseItem(CharacterEntity sender)
         {
+    
             if(sender.ItemsInUse.Any(item => ReferenceEquals(item, this)))
             {
                 sender.ItemsInUse.Remove(this);
@@ -28,6 +33,15 @@ namespace LSG.GM.Entities.Core.Item
                 sender.AccountEntity.Player.Emit("item:takeOffClothes", ComponentId);
             } else
             {
+                Alt.Log("componentID: " + ComponentId);
+                // Zapobiega to niewidzialnej klatce piersiowej, jak się zrobi eup z kaburą to raczej będzie to już niepotrzebne
+                if(ComponentId == (int)ClothesType.Undershirt && sender.ItemsInUse.Any(item => item.ItemEntityType == ItemEntityType.WeaponHolster))
+                {
+                    sender.AccountEntity.Player.SendNativeNotify(null, NotificationNativeType.Error, 1, "Masz założoną kaburę", "~g~ Ekwipunek", "Nie możesz założyć podkoszulka podczas gdy nosisz na sobie kaburę, zdejmij kaburę");
+                    return;
+                }
+                    
+
                 sender.ItemsInUse.Add(this);
                 DbModel.ItemInUse = true;
 

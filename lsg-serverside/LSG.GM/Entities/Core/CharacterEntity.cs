@@ -10,6 +10,7 @@ using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Entities.Core.Item;
+using LSG.GM.Entities.Core.Item.Scripts;
 using LSG.GM.Extensions;
 using LSG.GM.Utilities;
 using System;
@@ -59,6 +60,14 @@ namespace LSG.GM.Entities.Core
 
             if (DbModel.CharacterLook == null)
                 AccountEntity.Player.Dimension = AccountEntity.DbModel.Id;
+
+
+            List<ItemModel> activeItems = DbModel.Items.Where(item => item.ItemInUse).ToList();
+            foreach (ItemModel item in activeItems)
+            {
+                ItemEntity itemEntity = InventoryScript.ItemFactory.Create(item);
+                itemEntity.UseItem(this);
+            }
 
             AccountEntity.Player.EmitAsync("character:wearClothes", DbModel.CharacterLook);
         });

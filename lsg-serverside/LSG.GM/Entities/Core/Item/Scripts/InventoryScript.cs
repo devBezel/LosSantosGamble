@@ -12,7 +12,7 @@ namespace LSG.GM.Entities.Core.Item.Scripts
 {
     public class InventoryScript : IScript
     {
-        ItemEntityFactory ItemFactory { get; } = new ItemEntityFactory();
+        public static ItemEntityFactory ItemFactory { get; } = new ItemEntityFactory();
 
 
         public InventoryScript()

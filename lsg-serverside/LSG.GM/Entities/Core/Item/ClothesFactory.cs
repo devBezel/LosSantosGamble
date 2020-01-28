@@ -1,4 +1,5 @@
 ﻿using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,27 +12,27 @@ namespace LSG.GM.Entities.Core.Item
         {
             switch (componentID)
             {
-                case 0:
+                case (int)ClothesType.Hat:
                     sender.DbModel.CharacterLook.HatId = drawableId;
                     sender.DbModel.CharacterLook.HatTexture = textureId;
                     break;
-                case 1:
+                case (int)ClothesType.Glasses:
                     sender.DbModel.CharacterLook.GlassesId = drawableId;
                     sender.DbModel.CharacterLook.GlassesTexture = textureId;
                     break;
-                case 4:
+                case (int)ClothesType.Legs:
                     sender.DbModel.CharacterLook.LegsId = drawableId;
                     sender.DbModel.CharacterLook.LegsTexture = textureId;
                     break;
-                case 6:
+                case (int)ClothesType.Shoes:
                     sender.DbModel.CharacterLook.ShoesId = drawableId;
                     sender.DbModel.CharacterLook.ShoesTexture = textureId;
                     break;
-                case 8:
+                case (int)ClothesType.Undershirt:
                     sender.DbModel.CharacterLook.UndershirtId = drawableId;
                     sender.DbModel.CharacterLook.UndershirtTexture = drawableId;
                     break;
-                case 11:
+                case (int)ClothesType.Top:
                     sender.DbModel.CharacterLook.TopId = drawableId;
                     sender.DbModel.CharacterLook.TopTexture = textureId;
                     break;

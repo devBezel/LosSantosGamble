@@ -19,6 +19,16 @@ namespace LSG.GM.Entities.Core.Item
             DbModel = item;
         }
 
+        public virtual void Create(CharacterEntity characterEntity)
+        {
+            if(characterEntity != null)
+            {
+                characterEntity.DbModel.Items.Add(DbModel);
+            }
+
+            // Zrobić zapis do bazy danych tego itemu
+        }
+
         public virtual void UseItem(CharacterEntity characterEntity)
         {
             Alt.Log($"[ITEM] {characterEntity.DbModel.Name} {characterEntity.DbModel.Surname} użył item ID: {Id} nazwa: {Name}");
