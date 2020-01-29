@@ -3,11 +3,13 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using LSG.DAL.Database;
 using LSG.DAL.Database.Models.BankModels;
+using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.BusModels;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Entities.Common.Atm;
 using LSG.GM.Entities.Common.Bus;
 using LSG.GM.Entities.Core;
+using LSG.GM.Entities.Core.Buidling;
 using LSG.GM.Entities.Core.Vehicle;
 using LSG.GM.Helpers;
 using LSG.GM.Utilities;
@@ -27,6 +29,7 @@ namespace LSG.GM.Entities
 
         private static readonly List<AtmEntity> Atms = new List<AtmEntity>();
         private static readonly List<BusEntity> BusStops = new List<BusEntity>();
+        private static readonly List<BuildingEntity> Buildings = new List<BuildingEntity>();
 
         public static void Add(AccountEntity account)
         {
@@ -93,6 +96,11 @@ namespace LSG.GM.Entities
 
             return vehicles;
         }
+
+        public static void Add(BuildingEntity buildingEntity) => Buildings.Add(buildingEntity);
+
+        public static void Remove(BuildingEntity buildingEntity) => Buildings.Remove(buildingEntity);
+
         // Tworzenie blipów, markerów itp (wszystko co jest lokalnie dla gracza gdy wchodzi na serwer)
         public static async Task LoadClientEntity(IPlayer player) => await AltAsync.Do(async () =>
         {
@@ -106,6 +114,19 @@ namespace LSG.GM.Entities
             {
                 await player.CreateBlip(bus.BlipModel);
                 await player.CreateMarker(bus.MarkerModel);
+            }
+
+            foreach (BuildingEntity building in Buildings)
+            {
+                Alt.Log($"building.BlipVisable: ${building.BlipVisable}");
+                if (building.BlipVisable)
+                {
+                    Alt.Log("Tworze lokalnego blipa");
+                    await player.CreateBlip(building.Blip);
+                }
+
+                await player.CreateMarker(building.InteriorMarker);
+                await player.CreateMarker(building.ExteriorMarker);
             }
         });
 
@@ -125,6 +146,12 @@ namespace LSG.GM.Entities
                 {
                     BusEntity busEntity = new BusEntity(busStop);
                     await busEntity.Spawn();
+                }
+
+                foreach (BuildingModel building in await unit.BuildingRepository.GetAll())
+                {
+                    BuildingEntity buildingEntity = new BuildingEntity(building);
+                    await buildingEntity.Spawn();
                 }
             }
         });

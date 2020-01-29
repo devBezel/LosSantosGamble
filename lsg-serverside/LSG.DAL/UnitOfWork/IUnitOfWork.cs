@@ -13,5 +13,6 @@ namespace LSG.DAL.UnitOfWork
         IVehicleRepository VehicleRepository { get; set; }
         IAtmRepository AtmRepository { get; set; }
         IBusRepository BusRepository { get; set; }
+        IBuildingRepository BuildingRepository { get; set; }
     }
 }

@@ -61,7 +61,7 @@ namespace LSG.GM.Entities.Common.Atm
                 TextureDict = null,
                 TextureName = null,
                 DrawOnEnts = false,
-                UniqueID = $"MARKER{DbModel.Id}"
+                UniqueID = $"ATM_MARKER{DbModel.Id}"
             };
 
             BlipModel = new BlipModel()

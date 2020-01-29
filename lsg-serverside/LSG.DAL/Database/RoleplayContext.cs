@@ -1,6 +1,7 @@
 ﻿using LSG.DAL.Database.Models;
 using LSG.DAL.Database.Models.AccountModels;
 using LSG.DAL.Database.Models.BankModels;
+using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.BusModels;
 using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Database.Models.ItemModels;
@@ -29,6 +30,7 @@ namespace LSG.DAL.Database
         public DbSet<BusStop> BusStops { get; set; }
         public DbSet<BusStopStation> BusStopStations { get; set; }
         public DbSet<ItemModel> Items { get; set; }
+        public DbSet<BuildingModel> Buildings { get; set; }
 
     }
 }

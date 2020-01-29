@@ -31,6 +31,12 @@ namespace LSG.GM.Entities.Core.Item
                 return;
             }
 
+            if(sender.ItemsInUse.Any(item => (item is Weapon) && !ReferenceEquals(item, this)))
+            {
+                sender.AccountEntity.Player.SendNativeNotify(null, NotificationNativeType.Error, 1, "Możesz posiadać tylko jedną broń", "~g~Ekwipunek", "W dłoni możesz posiadać tylko jedną broń", 1);
+                return;
+            }
+
             if (sender.ItemsInUse.Any(item => ReferenceEquals(item, this)))
             {                
                 //TODO: Dokończyć amunicje

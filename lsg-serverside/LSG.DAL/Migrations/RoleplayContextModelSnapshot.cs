@@ -76,6 +76,56 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Atms");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.BuildingModels.BuildingModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BuildingType");
+
+                    b.Property<int?>("CharacterId");
+
+                    b.Property<DateTime>("CreatedTime");
+
+                    b.Property<int>("CreatorId");
+
+                    b.Property<int>("CurrentObjectsCount");
+
+                    b.Property<string>("Description");
+
+                    b.Property<float>("EntryFee");
+
+                    b.Property<float>("ExternalPickupPositionX");
+
+                    b.Property<float>("ExternalPickupPositionY");
+
+                    b.Property<float>("ExternalPickupPositionZ");
+
+                    b.Property<bool>("HasCCTV");
+
+                    b.Property<bool>("HasSafe");
+
+                    b.Property<float>("InternalPickupPositionX");
+
+                    b.Property<float>("InternalPickupPositionY");
+
+                    b.Property<float>("InternalPickupPositionZ");
+
+                    b.Property<int>("MaxObjectsCount");
+
+                    b.Property<string>("Name");
+
+                    b.Property<bool>("SpawnPossible");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("Buildings");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.BusModels.BusStop", b =>
                 {
                     b.Property<int>("Id")
@@ -348,6 +398,8 @@ namespace LSG.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("BuildingModelId");
+
                     b.Property<int?>("CharacterId");
 
                     b.Property<int?>("CreatorId");
@@ -369,6 +421,8 @@ namespace LSG.DAL.Migrations
                     b.Property<int?>("VehicleId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BuildingModelId");
 
                     b.HasIndex("CharacterId");
 
@@ -433,6 +487,18 @@ namespace LSG.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.BuildingModels.BuildingModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
+                        .WithMany()
+                        .HasForeignKey("CharacterId");
+
+                    b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.BusModels.BusStop", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
@@ -480,6 +546,10 @@ namespace LSG.DAL.Migrations
 
             modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.ItemModel", b =>
                 {
+                    b.HasOne("LSG.DAL.Database.Models.BuildingModels.BuildingModel")
+                        .WithMany("ItemsInBuilding")
+                        .HasForeignKey("BuildingModelId");
+
                     b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
                         .WithMany("Items")
                         .HasForeignKey("CharacterId");
