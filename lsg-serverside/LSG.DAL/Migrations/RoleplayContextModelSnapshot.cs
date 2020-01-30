@@ -115,6 +115,10 @@ namespace LSG.DAL.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<bool>("OnSale");
+
+                    b.Property<int>("SaleCost");
+
                     b.Property<bool>("SpawnPossible");
 
                     b.HasKey("Id");

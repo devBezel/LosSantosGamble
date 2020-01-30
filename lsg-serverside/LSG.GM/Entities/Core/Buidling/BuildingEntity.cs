@@ -7,6 +7,7 @@ using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
 using LSG.GM.Enums;
+using LSG.GM.Extensions;
 using LSG.GM.Helpers;
 using LSG.GM.Helpers.Models;
 using System;
@@ -38,13 +39,13 @@ namespace LSG.GM.Entities.Core.Buidling
 
         public async Task Spawn() => await AltAsync.Do(async () =>
         {
-            InteriorColshape = Alt.CreateColShapeCylinder(new Position(DbModel.InternalPickupPositionX, DbModel.InternalPickupPositionY, DbModel.InternalPickupPositionZ), 2f, 2f);
-            ExteriorColshape = Alt.CreateColShapeCylinder(new Position(DbModel.ExternalPickupPositionX, DbModel.ExternalPickupPositionY, DbModel.ExternalPickupPositionZ), 2f, 2f);
+            InteriorColshape = Alt.CreateColShapeCylinder(new Position(DbModel.InternalPickupPositionX, DbModel.InternalPickupPositionY, DbModel.InternalPickupPositionZ), 1f, 2f);
+            ExteriorColshape = Alt.CreateColShapeCylinder(new Position(DbModel.ExternalPickupPositionX, DbModel.ExternalPickupPositionY, DbModel.ExternalPickupPositionZ), 1f, 2f);
             ExteriorColshape.Dimension = DbModel.Id;
 
             InteriorMarker = new MarkerModel()
             {
-                Type = 2,
+                Type = 27,
                 PosX = DbModel.InternalPickupPositionX,
                 PosY = DbModel.InternalPickupPositionY,
                 PosZ = DbModel.InternalPickupPositionZ,
@@ -73,7 +74,7 @@ namespace LSG.GM.Entities.Core.Buidling
 
             ExteriorMarker = new MarkerModel()
             {
-                Type = 2,
+                Type = 27,
                 PosX = DbModel.ExternalPickupPositionX,
                 PosY = DbModel.ExternalPickupPositionY,
                 PosZ = DbModel.ExternalPickupPositionZ,
@@ -107,7 +108,7 @@ namespace LSG.GM.Entities.Core.Buidling
             if (BlipVisable)
             {
                 string blipName = BuildingFactory.CreateName(DbModel.BuildingType);
-                int blip = BuildingFactory.CreateBlip(DbModel.BuildingType);
+                int blip = BuildingFactory.CreateBlip(DbModel.BuildingType, DbModel.OnSale);
                 Blip = new BlipModel()
                 {
                     PosX = DbModel.InternalPickupPositionX,
@@ -156,6 +157,11 @@ namespace LSG.GM.Entities.Core.Buidling
             Save();
 
             return new BuildingEntity(buildingToCreate);
+        }
+
+        public bool IsCharacterOwner(IPlayer player)
+        {
+            return DbModel.CharacterId == player.GetAccountEntity().characterEntity.DbModel.Id ? true : false;
         }
 
         public void Save()

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace LSG.GM.Entities.Core.Buidling
 {
@@ -18,6 +19,8 @@ namespace LSG.GM.Entities.Core.Buidling
             AltAsync.OnColShape += OnEnterColshape;
             Alt.OnClient("building:enterBuilding", OnEnterBuilding);
             Alt.OnClient("building:exitBuilding", OnExitBuilding);
+            Alt.OnClient("building:getManageData", GetBuildingManageData);
+            Alt.OnClient("building:requestLockBuilding", RequestLockBuilding);
         }
 
         private async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
@@ -36,16 +39,15 @@ namespace LSG.GM.Entities.Core.Buidling
 
             IPlayer player = targetEntity as IPlayer;
 
-            Alt.Log("Przeszedł ifa ze sprawdzaniem colshapeow");
             // Wejście do budynku
             if(buildingEntity.InteriorColshape == colShape)
             {
-                player.EmitAsync("building:request", buildingEntity.DbModel.EntryFee, buildingEntity.DbModel.Name, true);
+                player.EmitAsync("building:request", buildingEntity.DbModel.EntryFee, buildingEntity.DbModel.Name, true, buildingEntity.IsCharacterOwner(player));
                 player.SetData("current:doors", colShape);
 
             } else if (buildingEntity.ExteriorColshape == colShape)
             {
-                player.EmitAsync("building:request", buildingEntity.DbModel.EntryFee, buildingEntity.DbModel.Name, false);
+                player.EmitAsync("building:request", buildingEntity.DbModel.EntryFee, buildingEntity.DbModel.Name, false, buildingEntity.IsCharacterOwner(player));
             }
         });
 
@@ -55,6 +57,12 @@ namespace LSG.GM.Entities.Core.Buidling
             if (colShape == null) return;
 
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
+
+            if(buildingEntity.IsLocked)
+            {
+                player.SendNativeNotify(null, NotificationNativeType.Normal, 1, "Drzwi są zamknięte", "~g~ Budynek", "Drzwi od tego budynku są zamknięte");
+                return;
+            }
 
             player.Dimension = buildingEntity.DbModel.Id;
             player.Position = new Position(buildingEntity.DbModel.ExternalPickupPositionX, buildingEntity.DbModel.ExternalPickupPositionY, buildingEntity.DbModel.ExternalPickupPositionZ);
@@ -77,6 +85,11 @@ namespace LSG.GM.Entities.Core.Buidling
 
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
 
+            if (buildingEntity.IsLocked)
+            {
+                player.SendNativeNotify(null, NotificationNativeType.Normal, 1, "Drzwi są zamknięte", "~g~ Budynek", "Drzwi od tego budynku są zamknięte");
+                return;
+            }
 
             player.Dimension = 0; // Defaultowy świat graczy
             player.Position = new Position(buildingEntity.DbModel.InternalPickupPositionX, buildingEntity.DbModel.InternalPickupPositionY, buildingEntity.DbModel.InternalPickupPositionZ);
@@ -84,6 +97,42 @@ namespace LSG.GM.Entities.Core.Buidling
             buildingEntity.PlayersInBuilding.Remove(player);
 
             player.DeleteData("current:doors");
+        }
+
+        private void GetBuildingManageData(IPlayer player, object[] args)
+        {
+            player.GetData("current:doors", out IColShape colShape);
+            if (colShape == null) return;
+
+            BuildingEntity buildingEntity = colShape.GetBuildingEntity();
+            if (!buildingEntity.IsCharacterOwner(player)) return;
+
+            player.Emit("building:manageData", buildingEntity.DbModel);
+
+        }
+
+        private void RequestLockBuilding(IPlayer player, object[] args)
+        {
+            player.GetData("current:doors", out IColShape colShape);
+            if (colShape == null) return;
+
+            BuildingEntity buildingEntity = colShape.GetBuildingEntity();
+            if (!buildingEntity.IsCharacterOwner(player)) return;
+
+            if(buildingEntity.IsLocked)
+            {
+                buildingEntity.IsLocked = false;
+                player.SendNativeNotify(null, NotificationNativeType.Normal, 1, "Otworzyłeś budynek", "~g~Budynek", "Ten budynek został otwarty");
+                
+
+            } else
+            {
+                buildingEntity.IsLocked = true;
+                player.SendNativeNotify(null, NotificationNativeType.Normal, 1, "Zamknąłeś budynek", "~g~Budynek", "Ten budynek został zamknięty");
+            }
+
+            Timer timer = new Timer(4000);
+            timer.Start();
         }
     }
 }

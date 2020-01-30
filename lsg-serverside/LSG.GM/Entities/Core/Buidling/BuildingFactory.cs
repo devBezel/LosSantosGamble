@@ -18,12 +18,14 @@ namespace LSG.GM.Entities.Core.Buidling
             }
         }
 
-        public static int CreateBlip(BuildingType buildingType)
+        public static int CreateBlip(BuildingType buildingType, bool onSale)
         {
             switch (buildingType)
             {
-                case BuildingType.Apartament: return 369;
-                case BuildingType.House: return 40;
+                case BuildingType.Apartament:
+                    if (onSale) return 369; return 411;
+                case BuildingType.House:
+                    if(onSale) return 375; return 40;
                 default:
                     return 0;
             }
