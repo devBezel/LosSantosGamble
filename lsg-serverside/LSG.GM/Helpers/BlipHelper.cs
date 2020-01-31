@@ -30,5 +30,10 @@ namespace LSG.GM.Helpers
         {
             AltAsync.EmitAllClients("blip:delete", uniqueID);
         });
+
+        public static async Task UpdateGlobalBlip(string uniqueID, int sprite, string name, int color) => await AltAsync.Do(() =>
+        {
+            AltAsync.EmitAllClients("blip:updateBlip", uniqueID, sprite, name, color);
+        });
     }
 }

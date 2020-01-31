@@ -73,7 +73,7 @@ namespace LSG.GM.Entities.Common.Atm
                 Color = 25,
                 Size = EBlipSize.Medium,
                 Name = "ATM",
-                ShortRange = 1.0f,
+                ShortRange = true,
                 UniqueID = $"ATM{DbModel.Id}"
             };
 

@@ -49,6 +49,7 @@ namespace LSG.GM
 
         public override void OnStop()
         {
+            // Zapis wszystkich budynków itp
             Alt.Log("Serwer wylączony");
         }
     }

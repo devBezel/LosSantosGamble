@@ -81,6 +81,8 @@ namespace LSG.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("Balance");
+
                     b.Property<int>("BuildingType");
 
                     b.Property<int?>("CharacterId");
@@ -93,7 +95,7 @@ namespace LSG.DAL.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<float>("EntryFee");
+                    b.Property<int>("EntryFee");
 
                     b.Property<float>("ExternalPickupPositionX");
 
@@ -200,6 +202,8 @@ namespace LSG.DAL.Migrations
                     b.Property<bool>("BankStatus");
 
                     b.Property<string>("Description");
+
+                    b.Property<int>("Dimension");
 
                     b.Property<float>("DirtyMoney");
 

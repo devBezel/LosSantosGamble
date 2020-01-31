@@ -13,6 +13,7 @@ namespace LSG.GM.Entities.Core.Buidling
             {
                 case BuildingType.Apartament: return "Mieszkanie";
                 case BuildingType.House: return "Dom jednorodzinny";
+                case BuildingType.Staircase: return "Blok mieszkalny";
                 default:
                     return "Nieznane";
             }
@@ -28,6 +29,18 @@ namespace LSG.GM.Entities.Core.Buidling
                     if(onSale) return 375; return 40;
                 default:
                     return 0;
+            }
+        }
+
+        public static int CreateColor(bool onSale)
+        {
+            if (onSale)
+            {
+                return 25;
+            }
+            else
+            {
+                return 49;
             }
         }
     }

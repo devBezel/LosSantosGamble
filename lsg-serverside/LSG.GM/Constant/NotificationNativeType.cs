@@ -11,5 +11,7 @@ namespace LSG.GM.Constant
         public static string Error = "CHAR_BLOCKED";
         public static string Bank = "CHAR_BANK_FLEECA";
         public static string Bus = "CHAR_CHENGSR";
+        public static string Building = "CHAR_PROPERTY_SONAR_COLLECTIONS";
+        public static string OnSale = "DIA_TANNOY";
     }
 }

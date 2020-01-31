@@ -17,7 +17,7 @@ namespace LSG.DAL.Database.Models.BuildingModels
         public string Name { get; set; }
         [EnumDataType(typeof(BuildingType))]
         public BuildingType BuildingType { get; set; }
-        public float EntryFee { get; set; }
+        public int EntryFee { get; set; }
         public float ExternalPickupPositionX { get; set; }
         public float ExternalPickupPositionY { get; set; }
         public float ExternalPickupPositionZ { get; set; }
@@ -29,6 +29,7 @@ namespace LSG.DAL.Database.Models.BuildingModels
         public bool HasCCTV { get; set; }
         public bool HasSafe { get; set; }
         public bool SpawnPossible { get; set; }
+        public int Balance { get; set; }
         public string Description { get; set; }
         public DateTime CreatedTime { get; set; }
 
@@ -94,6 +95,9 @@ namespace LSG.DAL.Database.Models.BuildingModels
 
             writer.Name("spawnPossible");
             writer.Value(SpawnPossible);
+
+            writer.Name("balance");
+            writer.Value(Balance);
 
             writer.Name("description");
             writer.Value(Description);

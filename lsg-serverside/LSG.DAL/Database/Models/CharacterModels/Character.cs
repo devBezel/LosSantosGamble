@@ -27,6 +27,7 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public float PosX { get; set; }
         public float PosY { get; set; }
         public float PosZ { get; set; }
+        public int Dimension { get; set; }
         public float Rotation { get; set; }
         public float Money { get; set; }
         public float DirtyMoney { get; set; }
@@ -82,6 +83,9 @@ namespace LSG.DAL.Database.Models.CharacterModels
 
             writer.Name("posZ");
             writer.Value(PosZ);
+
+            writer.Name("dimension");
+            writer.Value(Dimension);
 
             writer.Name("rotation");
             writer.Value(Rotation);

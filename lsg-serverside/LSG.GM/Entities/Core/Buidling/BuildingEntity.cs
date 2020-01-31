@@ -109,16 +109,17 @@ namespace LSG.GM.Entities.Core.Buidling
             {
                 string blipName = BuildingFactory.CreateName(DbModel.BuildingType);
                 int blip = BuildingFactory.CreateBlip(DbModel.BuildingType, DbModel.OnSale);
+                int color = BuildingFactory.CreateColor(DbModel.OnSale);
                 Blip = new BlipModel()
                 {
                     PosX = DbModel.InternalPickupPositionX,
                     PosY = DbModel.InternalPickupPositionY,
                     PosZ = DbModel.InternalPickupPositionZ + 1,
                     Blip = blip,
-                    Color = 37, // Kolor pózniej do zmiany jak budynek będzie kupiony
+                    Color = color, // Kolor pózniej do zmiany jak budynek będzie kupiony
                     Size = EBlipSize.Medium,
                     Name = blipName,
-                    ShortRange = 1.0f,
+                    ShortRange = true,
                     UniqueID = $"BUILDING{DbModel.Id}"
                 };
                 Alt.Log("Tworze blipa z budynkiem");
@@ -159,9 +160,35 @@ namespace LSG.GM.Entities.Core.Buidling
             return new BuildingEntity(buildingToCreate);
         }
 
+        public async Task UpdateBlip() => await AltAsync.Do(async () =>
+        {
+            if (!BlipVisable) return;
+
+            string blipName = BuildingFactory.CreateName(DbModel.BuildingType);
+            int blip = BuildingFactory.CreateBlip(DbModel.BuildingType, DbModel.OnSale);
+            int color = BuildingFactory.CreateColor(DbModel.OnSale);
+
+            await BlipHelper.UpdateGlobalBlip($"BUILDING{DbModel.Id}", blip, blipName, color);
+        });
+
         public bool IsCharacterOwner(IPlayer player)
         {
             return DbModel.CharacterId == player.GetAccountEntity().characterEntity.DbModel.Id ? true : false;
+        }
+
+        public void AddMoney(int amount)
+        {
+            DbModel.Balance += amount;
+        }
+
+        public void RemoveMoney(int amount)
+        {
+            DbModel.Balance -= amount;
+        }
+
+        public bool HasEnoughMoney(int amount)
+        {
+            return (DbModel.Balance >= amount) ? true : false;
         }
 
         public void Save()

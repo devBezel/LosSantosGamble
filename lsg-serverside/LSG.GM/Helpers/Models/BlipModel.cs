@@ -14,7 +14,7 @@ namespace LSG.GM.Helpers.Models
         public int Color { get; set; }
         public float Size { get; set; }
         public string Name { get; set; }
-        public float ShortRange { get; set; }
+        public bool ShortRange { get; set; }
         public string UniqueID { get; set; }
 
         public void OnWrite(IMValueWriter writer)

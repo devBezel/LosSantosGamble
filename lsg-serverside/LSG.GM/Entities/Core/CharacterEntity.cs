@@ -72,9 +72,28 @@ namespace LSG.GM.Entities.Core
             AccountEntity.Player.EmitAsync("character:wearClothes", DbModel.CharacterLook);
         });
 
+        public Position CharacterPosition
+        {
+            get
+            {
+                return AccountEntity.Player.Position;
+            }
+            set
+            {
+                DbModel.PosX = AccountEntity.Player.Position.X;
+                DbModel.PosY = AccountEntity.Player.Position.Y;
+                DbModel.PosZ = AccountEntity.Player.Position.Z;
+            }
+        }
+
 
         public void Save()
         {
+
+            if (AccountEntity != null)
+            {
+                CharacterPosition = AccountEntity.Player.Position;
+            }
 
             RoleplayContext ctx = Singleton.GetDatabaseInstance();
             using (UnitOfWork unitOfWork = new UnitOfWork(ctx))

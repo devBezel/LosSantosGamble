@@ -86,7 +86,7 @@ namespace LSG.GM.Entities.Common.Bus
                 Color = 37,
                 Size = EBlipSize.Medium,
                 Name = "Przystanek",
-                ShortRange = 1.0f,
+                ShortRange = true,
                 UniqueID = $"BUS{DbModel.Id}"
             };
 
