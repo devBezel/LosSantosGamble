@@ -41,7 +41,7 @@ namespace LSG.GM
 
         private void OnPlayerDisconnect(IPlayer player, string reason)
         {
-            if (player == null) return;
+            if (player == null || player.GetAccountEntity() == null) return;
             player.GetAccountEntity().Dispose();
         }
 

@@ -2,10 +2,13 @@
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using LSG.DAL.Database.Models.ItemModels;
 using LSG.GM.Constant;
 using LSG.GM.Extensions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -24,6 +27,8 @@ namespace LSG.GM.Entities.Core.Buidling
             Alt.OnClient("building:editData", BuildingEditData);
             AltAsync.OnClient("building:editOnSaleData", BuildingEditOnSaleData);
             Alt.OnClient("building:withdrawBalance", BuildingWithdrawBalance);
+            Alt.OnClient("building:insertItemToMagazine", BuildingInsertItemToMagazine);
+            Alt.OnClient("building:insertItemFromMagazineToEquipment", BuildingInsertItemFromMagazineToEquipment);
         }
 
         private async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
@@ -122,7 +127,7 @@ namespace LSG.GM.Entities.Core.Buidling
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
             if (!buildingEntity.IsCharacterOwner(player)) return;
 
-            player.Emit("building:manageData", buildingEntity.DbModel);
+            player.Emit("building:manageData", buildingEntity.DbModel, buildingEntity.DbModel.ItemsInBuilding, player.GetAccountEntity().characterEntity.DbModel.Items);
 
         }
 
@@ -208,6 +213,54 @@ namespace LSG.GM.Entities.Core.Buidling
             player.GetAccountEntity().characterEntity.AddMoney(toWithdraw);
 
             player.SendNativeNotify(null, NotificationNativeType.Building, 1, "Wypłaciłeś środki", "~g~Budynek", $"Wypłaciłeś z salda budynku ~g~{toWithdraw}$", 1);
+        }
+
+        public void BuildingInsertItemToMagazine(IPlayer player, object[] args)
+        {
+            player.GetData("current:doors", out IColShape colShape);
+            if (colShape == null) return;
+
+            BuildingEntity buildingEntity = colShape.GetBuildingEntity();
+            if (!buildingEntity.IsCharacterOwner(player)) return;
+
+            int itemID = (int)(long)args[0];
+
+
+            ItemModel itemToChange = player.GetAccountEntity().characterEntity.DbModel.Items.FirstOrDefault(item => item.Id == itemID);
+            if (itemToChange == null) return;
+            if (itemToChange.ItemInUse) return;
+
+            itemToChange.CharacterId = null;
+            itemToChange.BuildingId = buildingEntity.DbModel.Id;
+
+            Alt.Log($"Po wlozeniu: {itemToChange.BuildingId}");
+            player.SendNativeNotify(null, NotificationNativeType.Building, 1, "Włożyłeś przedmiot do magazynu", "~g~Budynek", $"Włożyłeś {itemToChange.Name} do magazynu tego budynku");
+
+            // Zrobić zapis
+        }
+
+        public void BuildingInsertItemFromMagazineToEquipment(IPlayer player, object[] args)
+        {
+            player.GetData("current:doors", out IColShape colShape);
+            if (colShape == null) return;
+
+            BuildingEntity buildingEntity = colShape.GetBuildingEntity();
+            if (!buildingEntity.IsCharacterOwner(player)) return;
+
+            int itemID = (int)(long)args[0];
+
+
+            ItemModel itemToChange = buildingEntity.DbModel.ItemsInBuilding.FirstOrDefault(item => item.Id == itemID);
+            if (itemToChange == null) return;
+
+            itemToChange.ItemInUse = false;
+            itemToChange.CharacterId = player.GetAccountEntity().characterEntity.DbModel.Id;
+            itemToChange.BuildingId = null;
+
+            Alt.Log($"Po wyciągnięciu: {itemToChange.CharacterId}");
+            player.SendNativeNotify(null, NotificationNativeType.Building, 1, "Wyjąłeś przedmiot z magazynu", "~g~Budynek", $"Wyjąłeś {itemToChange.Name} z magazynu tego budynku");
+
+            // Zrobić zapis
         }
 
     }

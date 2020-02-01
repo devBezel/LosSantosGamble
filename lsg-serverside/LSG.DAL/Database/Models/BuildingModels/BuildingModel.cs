@@ -44,7 +44,7 @@ namespace LSG.DAL.Database.Models.BuildingModels
 
         //Grupy pózniej itp
 
-        public virtual IEnumerable<ItemModel> ItemsInBuilding { get; set; }
+        public List<ItemModel> ItemsInBuilding { get; set; }
 
 
         public void OnWrite(IMValueWriter writer)
@@ -116,10 +116,6 @@ namespace LSG.DAL.Database.Models.BuildingModels
                 writer.Name("characterId");
                 writer.Value(CharacterId.Value);
             }
-
-            writer.Name("itemsInBuilding");
-            writer.Value(JsonConvert.SerializeObject(ItemsInBuilding));
-
 
             writer.EndObject();
 

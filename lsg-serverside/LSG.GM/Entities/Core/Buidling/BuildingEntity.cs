@@ -45,10 +45,10 @@ namespace LSG.GM.Entities.Core.Buidling
 
             InteriorMarker = new MarkerModel()
             {
-                Type = 27,
+                Type = 1,
                 PosX = DbModel.InternalPickupPositionX,
                 PosY = DbModel.InternalPickupPositionY,
-                PosZ = DbModel.InternalPickupPositionZ,
+                PosZ = DbModel.InternalPickupPositionZ - 1,
                 DirX = 0,
                 DirY = 0,
                 DirZ = 0,
@@ -74,10 +74,10 @@ namespace LSG.GM.Entities.Core.Buidling
 
             ExteriorMarker = new MarkerModel()
             {
-                Type = 27,
+                Type = 1,
                 PosX = DbModel.ExternalPickupPositionX,
                 PosY = DbModel.ExternalPickupPositionY,
-                PosZ = DbModel.ExternalPickupPositionZ,
+                PosZ = DbModel.ExternalPickupPositionZ - 1,
                 DirX = 0,
                 DirY = 0,
                 DirZ = 0,
@@ -104,12 +104,15 @@ namespace LSG.GM.Entities.Core.Buidling
             await MarkerHelper.CreateGlobalMarker(InteriorMarker);
             await MarkerHelper.CreateGlobalMarker(ExteriorMarker);
 
+            // Później to zmienić i dodać do bazy może, ale to się zobaczy
+            if (DbModel.BuildingType == BuildingType.Apartament) BlipVisable = false;
+
 
             if (BlipVisable)
             {
                 string blipName = BuildingFactory.CreateName(DbModel.BuildingType);
                 int blip = BuildingFactory.CreateBlip(DbModel.BuildingType, DbModel.OnSale);
-                int color = BuildingFactory.CreateColor(DbModel.OnSale);
+                int color = BuildingFactory.CreateColor(DbModel.OnSale, DbModel.BuildingType);
                 Blip = new BlipModel()
                 {
                     PosX = DbModel.InternalPickupPositionX,
@@ -166,7 +169,7 @@ namespace LSG.GM.Entities.Core.Buidling
 
             string blipName = BuildingFactory.CreateName(DbModel.BuildingType);
             int blip = BuildingFactory.CreateBlip(DbModel.BuildingType, DbModel.OnSale);
-            int color = BuildingFactory.CreateColor(DbModel.OnSale);
+            int color = BuildingFactory.CreateColor(DbModel.OnSale, DbModel.BuildingType);
 
             await BlipHelper.UpdateGlobalBlip($"BUILDING{DbModel.Id}", blip, blipName, color);
         });

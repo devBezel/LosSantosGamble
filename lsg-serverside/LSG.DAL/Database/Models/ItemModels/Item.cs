@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using LSG.DAL.Database.Models.AccountModels;
+using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Database.Models.VehicleModels;
 using LSG.DAL.Enums;
@@ -28,6 +29,10 @@ namespace LSG.DAL.Database.Models.ItemModels
         public Character Character { get; set; }
         public int? VehicleId { get; set; } 
         public Vehicle Vehicle { get; set; }
+
+        public int? BuildingId { get; set; }
+        public BuildingModel Building { get; set; }
+
         public bool ItemInUse { get; set; }
 
 
@@ -84,6 +89,12 @@ namespace LSG.DAL.Database.Models.ItemModels
             {
                 writer.Name("vehicleId");
                 writer.Value(VehicleId.Value);
+            }
+
+            if(BuildingId.HasValue)
+            {
+                writer.Name("buildingId");
+                writer.Value(BuildingId.Value);
             }
 
             writer.Name("itemInUse");

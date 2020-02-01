@@ -406,7 +406,7 @@ namespace LSG.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BuildingModelId");
+                    b.Property<int?>("BuildingId");
 
                     b.Property<int?>("CharacterId");
 
@@ -430,7 +430,7 @@ namespace LSG.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BuildingModelId");
+                    b.HasIndex("BuildingId");
 
                     b.HasIndex("CharacterId");
 
@@ -554,9 +554,9 @@ namespace LSG.DAL.Migrations
 
             modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.ItemModel", b =>
                 {
-                    b.HasOne("LSG.DAL.Database.Models.BuildingModels.BuildingModel")
+                    b.HasOne("LSG.DAL.Database.Models.BuildingModels.BuildingModel", "Building")
                         .WithMany("ItemsInBuilding")
-                        .HasForeignKey("BuildingModelId");
+                        .HasForeignKey("BuildingId");
 
                     b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
                         .WithMany("Items")

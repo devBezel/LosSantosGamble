@@ -27,13 +27,17 @@ namespace LSG.GM.Entities.Core.Buidling
                     if (onSale) return 369; return 411;
                 case BuildingType.House:
                     if(onSale) return 375; return 40;
+                case BuildingType.Staircase:
+                    return 475;
                 default:
                     return 0;
             }
         }
 
-        public static int CreateColor(bool onSale)
+        public static int CreateColor(bool onSale, BuildingType buildingType)
         {
+            if (buildingType == BuildingType.Staircase) return 37;
+
             if (onSale)
             {
                 return 25;
