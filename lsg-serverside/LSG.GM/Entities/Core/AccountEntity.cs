@@ -1,4 +1,5 @@
-﻿using AltV.Net.Async;
+﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
@@ -122,6 +123,7 @@ namespace LSG.GM.Entities.Core
             {
                 unitOfWork.AccountRepository.Update(DbModel);
             }
+            Alt.Log($"[ACCOUNT-ENTITY]: Zapisałem konto: [{DbModel.Id} | {DbModel.Username}]");
         }
 
         public void Dispose()

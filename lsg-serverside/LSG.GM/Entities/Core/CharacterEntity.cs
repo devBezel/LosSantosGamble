@@ -44,6 +44,7 @@ namespace LSG.GM.Entities.Core
             AccountEntity.Player.SetHealthAsync((ushort)DbModel.Health);
             AccountEntity.Player.SetModelAsync(0x705E61F2);
             AccountEntity.Player.SetNameAsync(DbModel.Name);
+            AccountEntity.Player.Dimension = DbModel.Dimension;
             UpdateName(FormatName);
 
 
@@ -101,6 +102,8 @@ namespace LSG.GM.Entities.Core
                 unitOfWork.CharacterRepository.Update(DbModel);
             }
             SetCharacterDataToClient();
+
+            Alt.Log($"[CHARACTER-ENTITY]: Zapisałem postać: [{DbModel.Id} | {DbModel.Name} {DbModel.Surname}]");
         }
 
         public void UpdateName(string newName)

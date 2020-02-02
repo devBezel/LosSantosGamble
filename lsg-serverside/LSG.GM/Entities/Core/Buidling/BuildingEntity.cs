@@ -2,14 +2,17 @@
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using LSG.DAL.Database;
 using LSG.DAL.Database.Models.AccountModels;
 using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
+using LSG.DAL.UnitOfWork;
 using LSG.GM.Enums;
 using LSG.GM.Extensions;
 using LSG.GM.Helpers;
 using LSG.GM.Helpers.Models;
+using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -196,6 +199,13 @@ namespace LSG.GM.Entities.Core.Buidling
 
         public void Save()
         {
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+            using (UnitOfWork unitOfWork = new UnitOfWork(ctx))
+            {
+                unitOfWork.BuildingRepository.Update(DbModel);
+            }
+
+            Alt.Log($"[BUILDING-ENTITY]: Zapisałem budynek: [{DbModel.Id} | {DbModel.Name}]");
             // Zrobić zapisów budynków
         }
 

@@ -1,6 +1,9 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Resources.Chat.Api;
 using LSG.DAL.Database.Models.ItemModels;
+using LSG.DAL.Enums;
+using LSG.GM.Enums;
 using LSG.GM.Extensions;
 using Newtonsoft.Json;
 using System;
@@ -49,5 +52,42 @@ namespace LSG.GM.Entities.Core.Item.Scripts
             ItemEntity itemEntity = ItemFactory.Create(characterEntity.DbModel.Items.FirstOrDefault(x => x.Id == itemID));
             itemEntity.UseItem(characterEntity);
         }
+        //Do usunięcia pózniej
+        [Command("createitem")]
+        public void CreateItemCMD(IPlayer sender, int playerId, string name, int first, int second, int third, int fourth, int itemEntityType)
+        {
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Supporter))
+                return;
+
+            if (!sender.GetAccountEntity().OnAdminDuty)
+            {
+                sender.SendErrorNotify("Wystąpił bląd!", "Aby użyć tej komendy musisz wejść na służbę administratora");
+                return;
+            }
+
+            IPlayer getter = PlayerExtenstion.GetPlayerById(playerId);
+            if (getter == null)
+            {
+                sender.SendErrorNotify(null, $"Gracz o ID {playerId} nie jest w grze");
+                return;
+            }
+            ItemModel item = new ItemModel()
+            {
+                Name = name,
+                CreatorId = sender.GetAccountEntity().DbModel.Id,
+                FirstParameter = first,
+                SecondParameter = second,
+                ThirdParameter = third,
+                FourthParameter = fourth,
+                ItemEntityType = (ItemEntityType)itemEntityType,
+                CharacterId = getter.GetAccountEntity().characterEntity.DbModel.Id,
+                VehicleId = null,
+                BuildingId = null,
+                ItemInUse = false
+            };
+            ItemEntity itemEntity = ItemFactory.Create(item);
+            itemEntity.Create(getter.GetAccountEntity().characterEntity);
+        }
+
     }
 }

@@ -14,5 +14,6 @@ namespace LSG.DAL.UnitOfWork
         IAtmRepository AtmRepository { get; set; }
         IBusRepository BusRepository { get; set; }
         IBuildingRepository BuildingRepository { get; set; }
+        IItemRepository ItemRepository { get; set; }
     }
 }

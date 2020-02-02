@@ -1,6 +1,9 @@
 ﻿using AltV.Net;
+using LSG.DAL.Database;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
+using LSG.DAL.UnitOfWork;
+using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,7 +28,7 @@ namespace LSG.GM.Entities.Core.Item
             {
                 characterEntity.DbModel.Items.Add(DbModel);
             }
-
+            Save();
             // Zrobić zapis do bazy danych tego itemu
         }
 
@@ -34,10 +37,15 @@ namespace LSG.GM.Entities.Core.Item
             Alt.Log($"[ITEM] {characterEntity.DbModel.Name} {characterEntity.DbModel.Surname} użył item ID: {Id} nazwa: {Name}");
         }
 
-        protected virtual void Save()
+        public virtual void Save()
         {
-            Alt.Log("Zapisuje item");
-            // Zrobić zapis
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+            using (UnitOfWork unitOfWork = new UnitOfWork(ctx))
+            {
+                unitOfWork.ItemRepository.Update(DbModel);
+            }
+
+            Alt.Log($"[ITEM-ENTITY]: Zapisałem item: [{DbModel.Id} | {DbModel.Name}]");
         }
 
 

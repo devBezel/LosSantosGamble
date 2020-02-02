@@ -4,6 +4,7 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.GM.Constant;
+using LSG.GM.Entities.Core.Item;
 using LSG.GM.Extensions;
 using Newtonsoft.Json;
 using System;
@@ -17,6 +18,8 @@ namespace LSG.GM.Entities.Core.Buidling
 {
     public class BuildingScript : IScript
     {
+        public static ItemEntityFactory ItemFactory { get; } = new ItemEntityFactory();
+
         public BuildingScript()
         {
             AltAsync.OnColShape += OnEnterColshape;
@@ -47,15 +50,13 @@ namespace LSG.GM.Entities.Core.Buidling
 
             IPlayer player = targetEntity as IPlayer;
 
-            // Wejście do budynku
-            if(buildingEntity.InteriorColshape == colShape)
+            // Wejście do budynku lub wyjście
+            if (buildingEntity.InteriorColshape == colShape || buildingEntity.ExteriorColshape == colShape)
             {
-                player.EmitAsync("building:request", buildingEntity.DbModel.EntryFee, buildingEntity.DbModel.Name, true, buildingEntity.IsCharacterOwner(player));
-                player.SetData("current:doors", colShape);
+                bool colshapeState = buildingEntity.InteriorColshape == colShape ? true : false;
 
-            } else if (buildingEntity.ExteriorColshape == colShape)
-            {
-                player.EmitAsync("building:request", buildingEntity.DbModel.EntryFee, buildingEntity.DbModel.Name, false, buildingEntity.IsCharacterOwner(player));
+                player.EmitAsync("building:request", buildingEntity.DbModel.EntryFee, buildingEntity.DbModel.Name, colshapeState, buildingEntity.IsCharacterOwner(player));
+                player.SetData("current:doors", colShape);
             }
 
             
@@ -127,7 +128,7 @@ namespace LSG.GM.Entities.Core.Buidling
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
             if (!buildingEntity.IsCharacterOwner(player)) return;
 
-            player.Emit("building:manageData", buildingEntity.DbModel, buildingEntity.DbModel.ItemsInBuilding, player.GetAccountEntity().characterEntity.DbModel.Items);
+            player.Emit("building:manageData", buildingEntity.DbModel, buildingEntity.DbModel.ItemsInBuilding, player.GetAccountEntity().characterEntity.DbModel.Items, buildingEntity.PlayersInBuilding);
 
         }
 
@@ -237,9 +238,11 @@ namespace LSG.GM.Entities.Core.Buidling
             player.SendNativeNotify(null, NotificationNativeType.Building, 1, "Włożyłeś przedmiot do magazynu", "~g~Budynek", $"Włożyłeś {itemToChange.Name} do magazynu tego budynku");
 
             // Zrobić zapis
+            ItemEntity itemEntity = ItemFactory.Create(itemToChange);
+            itemEntity.Save();
         }
 
-        public void BuildingInsertItemFromMagazineToEquipment(IPlayer player, object[] args)
+        private void BuildingInsertItemFromMagazineToEquipment(IPlayer player, object[] args)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -260,7 +263,8 @@ namespace LSG.GM.Entities.Core.Buidling
             Alt.Log($"Po wyciągnięciu: {itemToChange.CharacterId}");
             player.SendNativeNotify(null, NotificationNativeType.Building, 1, "Wyjąłeś przedmiot z magazynu", "~g~Budynek", $"Wyjąłeś {itemToChange.Name} z magazynu tego budynku");
 
-            // Zrobić zapis
+            ItemEntity itemEntity = ItemFactory.Create(itemToChange);
+            itemEntity.Save();
         }
 
     }
