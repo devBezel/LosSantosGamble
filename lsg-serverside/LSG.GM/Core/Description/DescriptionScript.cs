@@ -10,10 +10,22 @@ namespace LSG.GM.Core.Description
 {
     public class DescriptionScript : IScript
     {
+        public DescriptionScript()
+        {
+            Alt.OnClient("character:setDescription", SetCharacterDescritpion);
+        }
+
         [Command("opis")]
         public void GetCharacterDescriptionCMD(IPlayer player)
         {
             player.Emit("description:getCharacterDescription");
+        }
+
+        private void SetCharacterDescritpion(IPlayer player, object[] args)
+        {
+            string contentDescription = (string)args[0];
+
+            player.SetSyncedMetaData("character:description", contentDescription);
         }
     }
 }

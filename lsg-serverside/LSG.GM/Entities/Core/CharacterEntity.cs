@@ -44,7 +44,7 @@ namespace LSG.GM.Entities.Core
             AccountEntity.Player.SetHealthAsync((ushort)DbModel.Health);
             AccountEntity.Player.SetModelAsync(0x705E61F2);
             AccountEntity.Player.SetNameAsync(DbModel.Name);
-            AccountEntity.Player.Dimension = DbModel.Dimension;
+            Dimension = DbModel.Dimension;
             UpdateName(FormatName);
 
 
@@ -138,6 +138,20 @@ namespace LSG.GM.Entities.Core
                 return false;
             else
                 return true;
+        }
+
+        public int Dimension
+        {
+            get
+            {
+                return AccountEntity.Player.Dimension;
+            }
+            set
+            {
+                AccountEntity.Player.SetSyncedMetaData("player:dimension", value);
+                AccountEntity.Player.Dimension = value;
+                DbModel.Dimension = value;
+            }
         }
 
     }

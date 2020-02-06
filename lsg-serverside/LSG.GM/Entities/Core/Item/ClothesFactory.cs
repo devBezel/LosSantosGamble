@@ -36,6 +36,10 @@ namespace LSG.GM.Entities.Core.Item
                     sender.DbModel.CharacterLook.TopId = drawableId;
                     sender.DbModel.CharacterLook.TopTexture = textureId;
                     break;
+                case (int)ClothesType.Torso:
+                    sender.DbModel.CharacterLook.TorsoId = drawableId;
+                    sender.DbModel.CharacterLook.TorsoTexture = textureId;
+                    break;
                 default:
                     break;
             }

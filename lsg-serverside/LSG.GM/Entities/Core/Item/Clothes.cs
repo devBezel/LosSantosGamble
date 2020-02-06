@@ -30,6 +30,24 @@ namespace LSG.GM.Entities.Core.Item
                 DbModel.ItemInUse = false;
 
                 ClothesFactory.ChangeClothes(sender, ComponentId, 0, 0);
+
+                switch (ComponentId)
+                {
+                    case (int)ClothesType.Legs: ClothesFactory.ChangeClothes(sender, ComponentId, 21, 0);
+                        break;
+                    case (int)ClothesType.Shoes: ClothesFactory.ChangeClothes(sender, ComponentId, 34, 0);
+                        break;
+                    case (int)ClothesType.Undershirt:
+                        ClothesFactory.ChangeClothes(sender, ComponentId, 15, 0);
+                        ClothesFactory.ChangeClothes(sender, (int)ClothesType.Torso, 15, 0);
+                        break;
+                    case (int)ClothesType.Top:
+                        ClothesFactory.ChangeClothes(sender, ComponentId, 15, 0);
+                        ClothesFactory.ChangeClothes(sender, (int)ClothesType.Torso, 15, 0);
+                        break;
+                    default:
+                        break;
+                }
                 sender.AccountEntity.Player.Emit("item:takeOffClothes", ComponentId);
             } else
             {

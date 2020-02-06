@@ -51,6 +51,7 @@ namespace LSG.GM.Entities.Common.Bus
             MarkerModel = new MarkerModel()
             {
                 Type = 22,
+                Dimension = 0,
                 PosX = DbModel.PosX,
                 PosY = DbModel.PosY,
                 PosZ = DbModel.PosZ,

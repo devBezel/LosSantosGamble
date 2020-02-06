@@ -49,6 +49,7 @@ namespace LSG.GM.Entities.Core.Buidling
             InteriorMarker = new MarkerModel()
             {
                 Type = 1,
+                Dimension = 0,
                 PosX = DbModel.InternalPickupPositionX,
                 PosY = DbModel.InternalPickupPositionY,
                 PosZ = DbModel.InternalPickupPositionZ - 1,
@@ -78,6 +79,7 @@ namespace LSG.GM.Entities.Core.Buidling
             ExteriorMarker = new MarkerModel()
             {
                 Type = 1,
+                Dimension = DbModel.Id,
                 PosX = DbModel.ExternalPickupPositionX,
                 PosY = DbModel.ExternalPickupPositionY,
                 PosZ = DbModel.ExternalPickupPositionZ - 1,

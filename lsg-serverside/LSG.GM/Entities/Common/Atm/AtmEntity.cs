@@ -38,6 +38,7 @@ namespace LSG.GM.Entities.Common.Atm
             MarkerModel = new MarkerModel()
             {
                 Type = 27,
+                Dimension = 0,
                 PosX = DbModel.PosX,
                 PosY = DbModel.PosY,
                 PosZ = DbModel.PosZ,

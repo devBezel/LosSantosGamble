@@ -104,6 +104,7 @@ namespace LSG.GM.Entities
         // Tworzenie blipów, markerów itp (wszystko co jest lokalnie dla gracza gdy wchodzi na serwer)
         public static async Task LoadClientEntity(IPlayer player) => await AltAsync.Do(async () =>
         {
+            Alt.Log("[LoadClientEntity]");
             foreach (AtmEntity atm in Atms)
             {
                 await player.CreateBlip(atm.BlipModel);
@@ -132,24 +133,28 @@ namespace LSG.GM.Entities
 
         public static async Task LoadServerEntity() => await AltAsync.Do(async () =>
         {
+            Alt.Log("[LoadServerEntity]");
             RoleplayContext ctx = Singleton.GetDatabaseInstance();
 
             using(UnitOfWork unit = new UnitOfWork(ctx))
             {
                 foreach (Atm atm in await unit.AtmRepository.GetAll())
                 {
+                    Alt.Log($"atm {atm.Id}");
                     AtmEntity atmEntity = new AtmEntity(atm);
                     await atmEntity.Spawn();
                 }
 
                 foreach (BusStop busStop in await unit.BusRepository.GetAll())
                 {
+                    Alt.Log($"{busStop.Id}");
                     BusEntity busEntity = new BusEntity(busStop);
                     await busEntity.Spawn();
                 }
 
                 foreach (BuildingModel building in await unit.BuildingRepository.GetAll())
                 {
+                    Alt.Log($"{building.Name}");
                     BuildingEntity buildingEntity = new BuildingEntity(building);
                     await buildingEntity.Spawn();
                 }

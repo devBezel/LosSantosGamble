@@ -32,6 +32,7 @@ namespace LSG.GM.Entities.Core.Buidling
             Alt.OnClient("building:withdrawBalance", BuildingWithdrawBalance);
             Alt.OnClient("building:insertItemToMagazine", BuildingInsertItemToMagazine);
             Alt.OnClient("building:insertItemFromMagazineToEquipment", BuildingInsertItemFromMagazineToEquipment);
+            Alt.OnClient("building:turnSbOut", BuildingPlayerTurnSbOut);
         }
 
         private async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
@@ -91,8 +92,7 @@ namespace LSG.GM.Entities.Core.Buidling
 
             // W późniejszym czasie wczytywanie customowych obiektów - dorobić tabelę building_objects i tam umieszczać obiekty
 
-            player.GetAccountEntity().characterEntity.DbModel.Dimension = buildingEntity.DbModel.Id;
-            player.Dimension = buildingEntity.DbModel.Id;
+            player.GetAccountEntity().characterEntity.Dimension = buildingEntity.DbModel.Id;
 
             player.Position = new Position(buildingEntity.DbModel.ExternalPickupPositionX, buildingEntity.DbModel.ExternalPickupPositionY, buildingEntity.DbModel.ExternalPickupPositionZ);
             buildingEntity.PlayersInBuilding.Add(player);
@@ -111,8 +111,7 @@ namespace LSG.GM.Entities.Core.Buidling
                 return;
             }
 
-            player.GetAccountEntity().characterEntity.DbModel.Dimension = 0;
-            player.Dimension = 0; // Defaultowy świat graczy
+            player.GetAccountEntity().characterEntity.Dimension = 0; // Defaultowy świat graczy
             player.Position = new Position(buildingEntity.DbModel.InternalPickupPositionX, buildingEntity.DbModel.InternalPickupPositionY, buildingEntity.DbModel.InternalPickupPositionZ);
 
             buildingEntity.PlayersInBuilding.Remove(player);
@@ -265,6 +264,25 @@ namespace LSG.GM.Entities.Core.Buidling
 
             ItemEntity itemEntity = ItemFactory.Create(itemToChange);
             itemEntity.Save();
+        }
+
+        private void BuildingPlayerTurnSbOut(IPlayer player, object[] args)
+        {
+            player.GetData("current:doors", out IColShape colShape);
+            if (colShape == null) return;
+
+            BuildingEntity buildingEntity = colShape.GetBuildingEntity();
+            if (!buildingEntity.IsCharacterOwner(player)) return;
+
+            int getterId = (int)(long)args[0];
+            IPlayer getter = PlayerExtenstion.GetPlayerById(getterId);
+            if (getter == null) return;
+
+            getter.Position = buildingEntity.InteriorColshape.Position;
+            getter.GetAccountEntity().characterEntity.Dimension = buildingEntity.DbModel.Id;
+
+            player.SendNativeNotify(null, NotificationNativeType.Building, 1, $"Wyproszono {getter.GetAccountEntity().characterEntity.FormatName} z budynku", "~g~Budynek", "Ta osoba została wyproszona na zewnątrz budynku");
+            getter.SendNativeNotify(null, NotificationNativeType.Building, 1, "Wyproszono Cię z budynku", "~g~Budynek", "Zostałeś wyproczony z tego budynku przez osobę uprawnioną");
         }
 
     }

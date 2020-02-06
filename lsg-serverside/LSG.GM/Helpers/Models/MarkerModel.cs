@@ -9,6 +9,8 @@ namespace LSG.GM.Helpers
             get;
             set;
         }
+
+        public int Dimension { get; set; }
         public float PosX
         {
             get;
@@ -131,12 +133,17 @@ namespace LSG.GM.Helpers
         }
 
 
+
+
         public void OnWrite(IMValueWriter writer)
         {
             writer.BeginObject();
 
             writer.Name("type");
             writer.Value(Type);
+
+            writer.Name("dimension");
+            writer.Value(Dimension);
 
             writer.Name("posX");
             writer.Value(PosX);
