@@ -111,5 +111,15 @@ namespace LSG.GM.Entities.Common.Bus
                     unitOfWork.BusRepository.Update(DbModel);
             }
         }
+
+        public static async Task LoadBusAsync(UnitOfWork unit) => await AltAsync.Do(async () =>
+        {
+            foreach (BusStop busStop in await unit.BusRepository.GetAll())
+            {
+                Alt.Log($"{busStop.Id}");
+                BusEntity busEntity = new BusEntity(busStop);
+                await busEntity.Spawn();
+            }
+        });
     }
 }

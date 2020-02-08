@@ -132,6 +132,40 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Buildings");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.BuildingModels.BuildingTenantModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BuildingId");
+
+                    b.Property<bool>("CanEditBuilding");
+
+                    b.Property<bool>("CanLockDoor");
+
+                    b.Property<bool>("CanManagmentGuests");
+
+                    b.Property<bool>("CanManagmentMagazine");
+
+                    b.Property<bool>("CanManagmentTenants");
+
+                    b.Property<bool>("CanRespawnInBuilding");
+
+                    b.Property<bool>("CanWithdrawDeposit");
+
+                    b.Property<int>("CharacterId");
+
+                    b.Property<DateTime>("TenantAdded");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuildingId");
+
+                    b.HasIndex("CharacterId");
+
+                    b.ToTable("BuildingTenants");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.BusModels.BusStop", b =>
                 {
                     b.Property<int>("Id")
@@ -504,6 +538,19 @@ namespace LSG.DAL.Migrations
                     b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BuildingModels.BuildingTenantModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.BuildingModels.BuildingModel", "Building")
+                        .WithMany("BuildingTenants")
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
+                        .WithMany()
+                        .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

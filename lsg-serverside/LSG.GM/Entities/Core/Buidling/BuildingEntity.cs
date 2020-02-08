@@ -211,6 +211,17 @@ namespace LSG.GM.Entities.Core.Buidling
             // Zrobić zapisów budynków
         }
 
+        public static async Task LoadBuildingsAsync(UnitOfWork unit) => await AltAsync.Do(async () =>
+        {
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+            foreach (BuildingModel building in await unit.BuildingRepository.GetAll())
+            {
+                Alt.Log($"{building.Name}");
+                BuildingEntity buildingEntity = new BuildingEntity(building);
+                await buildingEntity.Spawn();
+            }
+        });
+
         public async Task Dispose() => await AltAsync.Do(async () =>
         {
             InteriorColshape.Remove();

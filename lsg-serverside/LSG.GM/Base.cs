@@ -14,6 +14,7 @@ using LSG.GM.Core.Description;
 using LSG.GM.Core.Login;
 using LSG.GM.Entities;
 using LSG.GM.Extensions;
+using LSG.GM.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -37,6 +38,7 @@ namespace LSG.GM
         private async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(async () =>
         {
             await EntityHelper.LoadClientEntity(player);
+            Calculation.AssignPlayerServerID(player);
         });
 
         private void OnPlayerDisconnect(IPlayer player, string reason)

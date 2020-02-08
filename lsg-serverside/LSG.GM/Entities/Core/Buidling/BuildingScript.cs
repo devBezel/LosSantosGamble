@@ -6,6 +6,7 @@ using LSG.DAL.Database.Models.ItemModels;
 using LSG.GM.Constant;
 using LSG.GM.Entities.Core.Item;
 using LSG.GM.Extensions;
+using LSG.GM.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -33,11 +34,14 @@ namespace LSG.GM.Entities.Core.Buidling
             Alt.OnClient("building:insertItemToMagazine", BuildingInsertItemToMagazine);
             Alt.OnClient("building:insertItemFromMagazineToEquipment", BuildingInsertItemFromMagazineToEquipment);
             Alt.OnClient("building:turnSbOut", BuildingPlayerTurnSbOut);
+            Alt.OnClient("building:openWindow", OpenInteractionBuildingWindow);
         }
 
         private async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
         {
+            IPlayer player = targetEntity as IPlayer;
             if (!state) return;
+
 
             if (colShape == null || !colShape.Exists) return;
             if (targetEntity.Type != BaseObjectType.Player) return;
@@ -49,19 +53,32 @@ namespace LSG.GM.Entities.Core.Buidling
 
             if (buildingEntity == null) return;
 
-            IPlayer player = targetEntity as IPlayer;
+            //IPlayer player = targetEntity as IPlayer;
 
             // Wejście do budynku lub wyjście
             if (buildingEntity.InteriorColshape == colShape || buildingEntity.ExteriorColshape == colShape)
             {
-                bool colshapeState = buildingEntity.InteriorColshape == colShape ? true : false;
+                bool colshapeEnter = buildingEntity.InteriorColshape == colShape ? true : false;
+                string interactionText = colshapeEnter ? "wejść do" : "wyjść z";
+                new Interaction(player, "building:openWindow", $"aby {interactionText} ~g~budynku");
 
-                player.EmitAsync("building:request", buildingEntity.DbModel.EntryFee, buildingEntity.DbModel.Name, colshapeState, buildingEntity.IsCharacterOwner(player));
                 player.SetData("current:doors", colShape);
             }
 
             
         });
+
+        public void OpenInteractionBuildingWindow(IPlayer player, object[] args)
+        {
+            player.GetData("current:doors", out IColShape colShape);
+            if (colShape == null) return;
+
+            BuildingEntity buildingEntity = colShape.GetBuildingEntity();
+            bool colshapeEnter = buildingEntity.InteriorColshape == colShape ? true : false;
+
+            player.EmitAsync("building:request", buildingEntity.DbModel.EntryFee, buildingEntity.DbModel.Name, colshapeEnter, buildingEntity.IsCharacterOwner(player));
+            player.SetData("current:doors", colShape);
+        }
 
         public void OnEnterBuilding(IPlayer player, object[] args)
         {
@@ -279,11 +296,12 @@ namespace LSG.GM.Entities.Core.Buidling
             if (getter == null) return;
 
             getter.Position = buildingEntity.InteriorColshape.Position;
-            getter.GetAccountEntity().characterEntity.Dimension = buildingEntity.DbModel.Id;
+            getter.GetAccountEntity().characterEntity.Dimension = 0;
 
             player.SendNativeNotify(null, NotificationNativeType.Building, 1, $"Wyproszono {getter.GetAccountEntity().characterEntity.FormatName} z budynku", "~g~Budynek", "Ta osoba została wyproszona na zewnątrz budynku");
             getter.SendNativeNotify(null, NotificationNativeType.Building, 1, "Wyproszono Cię z budynku", "~g~Budynek", "Zostałeś wyproczony z tego budynku przez osobę uprawnioną");
         }
+
 
     }
 }

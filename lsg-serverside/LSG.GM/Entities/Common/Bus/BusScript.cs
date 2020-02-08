@@ -8,6 +8,7 @@ using LSG.GM.Constant;
 using LSG.GM.Entities.Core;
 using LSG.GM.Enums;
 using LSG.GM.Extensions;
+using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,6 +24,7 @@ namespace LSG.GM.Entities.Common.Bus
             {
                 AltAsync.OnColShape += OnColshape;
                 AltAsync.OnClient("bus:selectStation", BusStationSelected);
+                Alt.OnClient("bus:openWindow", BusOpenWindow);
             });
 
         }
@@ -43,11 +45,18 @@ namespace LSG.GM.Entities.Common.Bus
 
             if (player.IsInVehicle) return;
 
+            new Interaction(player, "bus:openWindow", "aby otworzyć ~g~rozkład jazdy");
+            player.SetData("current:bus", busEntity);
+        });
 
+        private void BusOpenWindow(IPlayer player, object[] args)
+        {
+            player.GetData("current:bus", out BusEntity busEntity);
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
 
-            player.EmitAsync("bus:information", busEntity.DbModel, busEntity.DbModel.BusStopStations);
-        });
+            player.Emit("bus:information", busEntity.DbModel, busEntity.DbModel.BusStopStations);
+            player.DeleteData("current:bus");
+        }
 
         private async Task BusStationSelected(IPlayer player, object[] args) => await AltAsync.Do(() =>
         {

@@ -1,4 +1,5 @@
 ﻿using LSG.DAL.Database.Models.ItemModels;
+using LSG.DAL.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace LSG.GM.Entities.Core.Item
             if(sender.ItemsInUse.Any(item => ReferenceEquals(item, this)))
             {
                 DbModel.ItemInUse = false;
-
+                ClothesFactory.ChangeClothes(sender, (int)ClothesType.Undershirt, 15, 0);
                 Save();
 
                 sender.AccountEntity.Player.Emit("item:weaponHolsterHide", DbModel.Character.CharacterLook.UndershirtId, DbModel.Character.CharacterLook.UndershirtTexture);
@@ -25,6 +26,8 @@ namespace LSG.GM.Entities.Core.Item
             }
             else
             {
+                ClothesFactory.ChangeClothes(sender, (int)ClothesType.Undershirt, GunHolsterObject, 0);
+
                 DbModel.ItemInUse = true;
                 sender.AccountEntity.Player.Emit("item:weaponHolsterTakeOut", GunHolsterObject);
                 sender.ItemsInUse.Add(this);

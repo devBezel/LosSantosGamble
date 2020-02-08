@@ -20,7 +20,7 @@ namespace LSG.DAL.Repositories
 
         public async Task<List<BuildingModel>> GetAll()
         {
-            return await _context.Buildings.Include(items => items.ItemsInBuilding).ToListAsync();
+            return await _context.Buildings.Include(items => items.ItemsInBuilding).Include(tenants => tenants.BuildingTenants).ToListAsync();
         }
     }
 }

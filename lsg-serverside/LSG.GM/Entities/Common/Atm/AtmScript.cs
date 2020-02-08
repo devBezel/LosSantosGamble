@@ -7,6 +7,7 @@ using LSG.GM.Economy.Bank;
 using LSG.GM.Entities.Core;
 using LSG.GM.Enums;
 using LSG.GM.Extensions;
+using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,6 +28,7 @@ namespace LSG.GM.Entities.Common.Atm
 
             Alt.OnClient("atm:deposit", AtmDepositMoney);
             Alt.OnClient("atm:withdraw", AtmWithdrawMoney);
+            Alt.OnClient("atm:openWindow", AtmOpenWindow);
         }
 
         private async Task OnColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
@@ -44,9 +46,15 @@ namespace LSG.GM.Entities.Common.Atm
             IPlayer player = targetEntity as IPlayer;
             if (player.IsInVehicle) return;
 
+            new Interaction(player, "atm:openWindow", "aby otworzyć ~g~ATM");
+        });
+
+
+        public void AtmOpenWindow(IPlayer player, object[] args)
+        {
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
 
-            if(!characterEntity.DbModel.BankStatus)
+            if (!characterEntity.DbModel.BankStatus)
             {
                 player.SendNativeNotify(null, NotificationNativeType.Bank, 1, "Nie masz konta w banku", "~g~ Bank Los Santos", $"Aby je założyć udaj się do najbliżej placówki");
                 return;
@@ -54,7 +62,7 @@ namespace LSG.GM.Entities.Common.Atm
 
 
             player.Emit("atm:information", characterEntity.DbModel.Name, characterEntity.DbModel.Surname, characterEntity.DbModel.Money, characterEntity.DbModel.Bank);
-        });
+        }
 
         [Command("createatm")]
         public async Task CreateAtmCMD(IPlayer sender) => await AltAsync.Do(async () =>

@@ -35,7 +35,6 @@ namespace LSG.GM.Entities.Core
         public async void Login(Character character)
         {
             Player.SetData("account:data", this);
-            Player.SetData("account:id", Calculation.GenerateFreeIdentifier());
             SetAccountDataToClient();
 
             characterEntity = new CharacterEntity(this, character);

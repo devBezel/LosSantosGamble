@@ -31,6 +31,7 @@ namespace LSG.DAL.Database
         public DbSet<BusStopStation> BusStopStations { get; set; }
         public DbSet<ItemModel> Items { get; set; }
         public DbSet<BuildingModel> Buildings { get; set; }
+        public DbSet<BuildingTenantModel> BuildingTenants { get; set; }
 
     }
 }

@@ -44,6 +44,7 @@ namespace LSG.DAL.Database.Models.BuildingModels
 
         //Grupy pózniej itp
 
+        public List<BuildingTenantModel> BuildingTenants { get; set; }
         public List<ItemModel> ItemsInBuilding { get; set; }
 
 
