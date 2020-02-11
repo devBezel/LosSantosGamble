@@ -49,31 +49,26 @@ namespace LSG.GM.Entities.Core.Buidling
 
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
 
-            Alt.Log("Pozycja exterioru: "  + buildingEntity.ExteriorColshape.Position.ToString());
-
             if (buildingEntity == null) return;
-
+            if (buildingEntity.InteriorColshape != colShape && buildingEntity.ExteriorColshape != colShape) return;
             //IPlayer player = targetEntity as IPlayer;
+            Alt.Log("Przeszło");
+            bool colshapeEnter = buildingEntity.InteriorColshape == colShape ? true : false;
+            string interactionText = colshapeEnter ? "wejść do" : "wyjść z";
+            new Interaction(player, "building:openWindow", $"aby {interactionText} ~g~budynku");
 
-            // Wejście do budynku lub wyjście
-            if (buildingEntity.InteriorColshape == colShape || buildingEntity.ExteriorColshape == colShape)
-            {
-                bool colshapeEnter = buildingEntity.InteriorColshape == colShape ? true : false;
-                string interactionText = colshapeEnter ? "wejść do" : "wyjść z";
-                new Interaction(player, "building:openWindow", $"aby {interactionText} ~g~budynku");
+            player.SetData("current:doors", colShape);
 
-                player.SetData("current:doors", colShape);
-            }
 
-            
         });
 
         public void OpenInteractionBuildingWindow(IPlayer player, object[] args)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
-
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
+
+
             bool colshapeEnter = buildingEntity.InteriorColshape == colShape ? true : false;
 
             player.EmitAsync("building:request", buildingEntity.DbModel.EntryFee, buildingEntity.DbModel.Name, colshapeEnter, buildingEntity.IsCharacterOwner(player));
@@ -297,6 +292,8 @@ namespace LSG.GM.Entities.Core.Buidling
 
             getter.Position = buildingEntity.InteriorColshape.Position;
             getter.GetAccountEntity().characterEntity.Dimension = 0;
+
+            buildingEntity.PlayersInBuilding.Remove(getter);
 
             player.SendNativeNotify(null, NotificationNativeType.Building, 1, $"Wyproszono {getter.GetAccountEntity().characterEntity.FormatName} z budynku", "~g~Budynek", "Ta osoba została wyproszona na zewnątrz budynku");
             getter.SendNativeNotify(null, NotificationNativeType.Building, 1, "Wyproszono Cię z budynku", "~g~Budynek", "Zostałeś wyproczony z tego budynku przez osobę uprawnioną");

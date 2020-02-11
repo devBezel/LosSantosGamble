@@ -54,7 +54,7 @@ namespace LSG.GM.Entities.Core.Item.Scripts
         }
         //Do usunięcia pózniej
         [Command("createitem")]
-        public void CreateItemCMD(IPlayer sender, int playerId, string name, int first, int second, int third, int fourth, int itemEntityType)
+        public void CreateItemCMD(IPlayer sender, int playerId, string name, double first, double second, double third, double fourth, int itemEntityType)
         {
             if (!sender.GetAccountEntity().HasRank((int)EAdmin.Supporter))
                 return;

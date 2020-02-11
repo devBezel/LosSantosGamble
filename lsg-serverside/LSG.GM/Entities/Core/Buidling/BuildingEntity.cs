@@ -199,6 +199,13 @@ namespace LSG.GM.Entities.Core.Buidling
             return (DbModel.Balance >= amount) ? true : false;
         }
 
+        public void AddTenantToBuilding(CharacterEntity characterEntity)
+        {
+            if (characterEntity.DbModel.Id == DbModel.CharacterId) return;
+
+            //Dodać postać itp
+        }
+
         public void Save()
         {
             RoleplayContext ctx = Singleton.GetDatabaseInstance();
