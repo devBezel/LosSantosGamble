@@ -35,6 +35,8 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public bool BankStatus { get; set; }
         public float Health { get; set; }
         public float Armor { get; set; }
+        public float Thirsty { get; set; }
+        public float Hunger { get; set; }
         public IEnumerable<Vehicle> Vehicles { get; set; }
         public IEnumerable<CharacterDescription> CharacterDescriptions { get; set; }
         public List<ItemModel> Items { get; set; }
@@ -110,6 +112,12 @@ namespace LSG.DAL.Database.Models.CharacterModels
 
             writer.Name("armor");
             writer.Value(Armor);
+
+            writer.Name("thirsty");
+            writer.Value(Thirsty);
+
+            writer.Name("hunger");
+            writer.Value(Hunger);
 
             writer.Name("vehicles");
             writer.Value(JsonConvert.SerializeObject(Vehicles));

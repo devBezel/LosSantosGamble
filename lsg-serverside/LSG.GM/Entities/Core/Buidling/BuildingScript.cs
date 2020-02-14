@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.GM.Constant;
 using LSG.GM.Entities.Core.Item;
@@ -34,7 +35,8 @@ namespace LSG.GM.Entities.Core.Buidling
             Alt.OnClient("building:insertItemToMagazine", BuildingInsertItemToMagazine);
             Alt.OnClient("building:insertItemFromMagazineToEquipment", BuildingInsertItemFromMagazineToEquipment);
             Alt.OnClient("building:turnSbOut", BuildingPlayerTurnSbOut);
-            Alt.OnClient("building:openWindow", OpenInteractionBuildingWindow);
+            //Alt.OnClient("building:openWindow", OpenInteractionBuildingWindow);
+            Alt.OnClient("building:addPlayer", AddPlayerToBuilding);
         }
 
         private async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
@@ -51,29 +53,37 @@ namespace LSG.GM.Entities.Core.Buidling
 
             if (buildingEntity == null) return;
             if (buildingEntity.InteriorColshape != colShape && buildingEntity.ExteriorColshape != colShape) return;
-            //IPlayer player = targetEntity as IPlayer;
-            Alt.Log("Przeszło");
-            bool colshapeEnter = buildingEntity.InteriorColshape == colShape ? true : false;
-            string interactionText = colshapeEnter ? "wejść do" : "wyjść z";
-            new Interaction(player, "building:openWindow", $"aby {interactionText} ~g~budynku");
 
+            bool colshapeEnter = buildingEntity.InteriorColshape == colShape ? true : false;
+            Alt.Log("buildingEntity.IsCharacterTenant(player.GetAccountEntity().characterEntity): " + buildingEntity.IsCharacterTenant(player.GetAccountEntity().characterEntity).ToString());
+            player.EmitAsync("building:request",
+                buildingEntity.DbModel.EntryFee,
+                buildingEntity.DbModel.Name,
+                colshapeEnter,
+                buildingEntity.IsCharacterOwner(player),
+                buildingEntity.IsCharacterTenant(player.GetAccountEntity().characterEntity));
             player.SetData("current:doors", colShape);
 
 
         });
 
-        public void OpenInteractionBuildingWindow(IPlayer player, object[] args)
-        {
-            player.GetData("current:doors", out IColShape colShape);
-            if (colShape == null) return;
-            BuildingEntity buildingEntity = colShape.GetBuildingEntity();
+        //public void OpenInteractionBuildingWindow(IPlayer player, object[] args)
+        //{
+        //    player.GetData("current:doors", out IColShape colShape);
+        //    if (colShape == null) return;
+        //    BuildingEntity buildingEntity = colShape.GetBuildingEntity();
 
 
-            bool colshapeEnter = buildingEntity.InteriorColshape == colShape ? true : false;
-
-            player.EmitAsync("building:request", buildingEntity.DbModel.EntryFee, buildingEntity.DbModel.Name, colshapeEnter, buildingEntity.IsCharacterOwner(player));
-            player.SetData("current:doors", colShape);
-        }
+        //    bool colshapeEnter = buildingEntity.InteriorColshape == colShape ? true : false;
+        //    Alt.Log("buildingEntity.IsCharacterTenant(player.GetAccountEntity().characterEntity): " + buildingEntity.IsCharacterTenant(player.GetAccountEntity().characterEntity).ToString());
+        //    player.EmitAsync("building:request", 
+        //        buildingEntity.DbModel.EntryFee, 
+        //        buildingEntity.DbModel.Name, 
+        //        colshapeEnter, 
+        //        buildingEntity.IsCharacterOwner(player),
+        //        buildingEntity.IsCharacterTenant(player.GetAccountEntity().characterEntity));
+        //    player.SetData("current:doors", colShape);
+        //}
 
         public void OnEnterBuilding(IPlayer player, object[] args)
         {
@@ -88,7 +98,7 @@ namespace LSG.GM.Entities.Core.Buidling
                 return;
             }
 
-            if(buildingEntity.DbModel.EntryFee > 0 && !buildingEntity.IsCharacterOwner(player))
+            if(buildingEntity.DbModel.EntryFee > 0 && (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.IsCharacterTenant(player.GetAccountEntity().characterEntity)))
             {
                 if(!player.GetAccountEntity().characterEntity.HasEnoughMoney(buildingEntity.DbModel.EntryFee))
                 {
@@ -137,9 +147,16 @@ namespace LSG.GM.Entities.Core.Buidling
             if (colShape == null) return;
 
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
-            if (!buildingEntity.IsCharacterOwner(player)) return;
+            if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.IsCharacterTenant(player.GetAccountEntity().characterEntity)) return;
 
-            player.Emit("building:manageData", buildingEntity.DbModel, buildingEntity.DbModel.ItemsInBuilding, player.GetAccountEntity().characterEntity.DbModel.Items, buildingEntity.PlayersInBuilding);
+            BuildingTenantModel tenant = buildingEntity.DbModel.BuildingTenants.SingleOrDefault(plr => plr.CharacterId == player.GetAccountEntity().characterEntity.DbModel.Id);
+
+            player.Emit("building:manageData", 
+                buildingEntity.DbModel, 
+                buildingEntity.DbModel.ItemsInBuilding, 
+                player.GetAccountEntity().characterEntity.DbModel.Items, 
+                buildingEntity.PlayersInBuilding, 
+                tenant);
 
         }
 
@@ -149,7 +166,7 @@ namespace LSG.GM.Entities.Core.Buidling
             if (colShape == null) return;
 
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
-            if (!buildingEntity.IsCharacterOwner(player)) return;
+            if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerLockDoor(player.GetAccountEntity().characterEntity)) return;
             Alt.Log("Przeszlo Lock pomyslnie");
             if(buildingEntity.IsLocked)
             {
@@ -173,7 +190,7 @@ namespace LSG.GM.Entities.Core.Buidling
             if (colShape == null) return;
 
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
-            if (!buildingEntity.IsCharacterOwner(player)) return;
+            if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerEditBuilding(player.GetAccountEntity().characterEntity)) return;
 
             string newBuildingName = args[0].ToString();
             int newEntryFee = Convert.ToInt32(args[1]);
@@ -211,7 +228,7 @@ namespace LSG.GM.Entities.Core.Buidling
             if (colShape == null) return;
 
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
-            if (!buildingEntity.IsCharacterOwner(player)) return;
+            if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerWithdrawDeposit(player.GetAccountEntity().characterEntity)) return;
 
             int toWithdraw = Convert.ToInt32(args[0]);
 
@@ -233,7 +250,7 @@ namespace LSG.GM.Entities.Core.Buidling
             if (colShape == null) return;
 
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
-            if (!buildingEntity.IsCharacterOwner(player)) return;
+            if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerManagmentMagazine(player.GetAccountEntity().characterEntity)) return;
 
             int itemID = (int)(long)args[0];
 
@@ -259,7 +276,7 @@ namespace LSG.GM.Entities.Core.Buidling
             if (colShape == null) return;
 
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
-            if (!buildingEntity.IsCharacterOwner(player)) return;
+            if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerManagmentMagazine(player.GetAccountEntity().characterEntity)) return;
 
             int itemID = (int)(long)args[0];
 
@@ -284,7 +301,7 @@ namespace LSG.GM.Entities.Core.Buidling
             if (colShape == null) return;
 
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
-            if (!buildingEntity.IsCharacterOwner(player)) return;
+            if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerManagmentGuests(player.GetAccountEntity().characterEntity)) return;
 
             int getterId = (int)(long)args[0];
             IPlayer getter = PlayerExtenstion.GetPlayerById(getterId);
@@ -299,6 +316,20 @@ namespace LSG.GM.Entities.Core.Buidling
             getter.SendNativeNotify(null, NotificationNativeType.Building, 1, "Wyproszono Cię z budynku", "~g~Budynek", "Zostałeś wyproczony z tego budynku przez osobę uprawnioną");
         }
 
+        private void AddPlayerToBuilding(IPlayer player, object[] args)
+        {
+            player.GetData("current:doors", out IColShape colShape);
+            if (colShape == null) return;
+
+            BuildingEntity buildingEntity = colShape.GetBuildingEntity();
+            if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerManagmentTenants(player.GetAccountEntity().characterEntity)) return;
+
+            int getterId = (int)(long)args[0];
+            IPlayer getter = PlayerExtenstion.GetPlayerById(getterId);
+            if (getter == null) return;
+
+            buildingEntity.AddTenantToBuilding(getter.GetAccountEntity().characterEntity);
+        }
 
     }
 }

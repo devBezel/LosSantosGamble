@@ -249,6 +249,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<string>("History");
 
+                    b.Property<float>("Hunger");
+
                     b.Property<float>("Money");
 
                     b.Property<string>("Name");
@@ -264,6 +266,8 @@ namespace LSG.DAL.Migrations
                     b.Property<float>("Rotation");
 
                     b.Property<string>("Surname");
+
+                    b.Property<float>("Thirsty");
 
                     b.Property<float>("Weight");
 

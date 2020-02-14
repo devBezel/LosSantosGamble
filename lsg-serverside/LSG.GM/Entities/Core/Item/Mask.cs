@@ -22,6 +22,13 @@ namespace LSG.GM.Entities.Core.Item
         {
             string encryptedName = $"Nieznajomy {sender.FormatName.GetHashCode().ToString().Substring(1, 6)}";
 
+            if(UseCount == 0 && DbModel.ItemInUse)
+            {
+                sender.ItemsInUse.Remove(this);
+                Save();
+                return;
+            }
+
             if(sender.ItemsInUse.Any(item => ReferenceEquals(item, this)))
             {
                 sender.UpdateName(sender.FormatName);

@@ -44,6 +44,8 @@ namespace LSG.GM.Entities.Core
             AccountEntity.Player.SetHealthAsync((ushort)DbModel.Health);
             AccountEntity.Player.SetModelAsync(0x705E61F2);
             AccountEntity.Player.SetNameAsync(DbModel.Name);
+            AccountEntity.Player.SetSyncedMetaDataAsync("character:hunger", DbModel.Hunger);
+            AccountEntity.Player.SetSyncedMetaDataAsync("character:thirsty", DbModel.Thirsty);
             Dimension = DbModel.Dimension;
             UpdateName(FormatName);
 
@@ -119,12 +121,16 @@ namespace LSG.GM.Entities.Core
 
         public void AddMoney(int amount)
         {
+            // Do zrobienia
             DbModel.Money += amount;
+            SetCharacterDataToClient();
         }
 
         public void RemoveMoney(int amount)
         {
+            // Do zrobienia
             DbModel.Money -= amount;
+            SetCharacterDataToClient();
         }
 
         public bool HasEnoughMoney(int amount)
@@ -138,6 +144,34 @@ namespace LSG.GM.Entities.Core
                 return false;
             else
                 return true;
+        }
+
+        public float Hunger
+        {
+            get
+            {
+                return DbModel.Hunger;
+            }
+
+            set
+            {
+                DbModel.Hunger = value;
+                AccountEntity.Player.SetSyncedMetaData("character:hunger", DbModel.Hunger);
+            }
+        }
+
+        public float Thirsty
+        {
+            get
+            {
+                return DbModel.Thirsty;
+            }
+
+            set
+            {
+                DbModel.Thirsty = value;
+                AccountEntity.Player.SetSyncedMetaData("character:thirsty", DbModel.Thirsty);
+            }
         }
 
         public int Dimension

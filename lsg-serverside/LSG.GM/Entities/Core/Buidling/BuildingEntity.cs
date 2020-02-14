@@ -15,6 +15,7 @@ using LSG.GM.Helpers.Models;
 using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -203,7 +204,59 @@ namespace LSG.GM.Entities.Core.Buidling
         {
             if (characterEntity.DbModel.Id == DbModel.CharacterId) return;
 
+            if(DbModel.BuildingTenants.Any(plr => plr.CharacterId == characterEntity.DbModel.Id)) return;
+
             //Dodać postać itp
+            BuildingTenantModel tenantToAdd = new BuildingTenantModel()
+            {
+                BuildingId = DbModel.Id,
+                CharacterId = characterEntity.DbModel.Id,
+                TenantAdded = DateTime.Now
+
+            };
+
+            DbModel.BuildingTenants.Add(tenantToAdd);
+            Save();
+        }
+
+        public bool IsCharacterTenant(CharacterEntity characterEntity)
+        {
+            return DbModel.BuildingTenants.Any(x => x.CharacterId == characterEntity.DbModel.Id);
+        }
+
+        public bool CanPlayerEditBuilding(CharacterEntity characterEntity)
+        {
+            return DbModel.BuildingTenants.FirstOrDefault(x => x.CharacterId == characterEntity.DbModel.Id).CanEditBuilding;
+        }
+
+        public bool CanPlayerWithdrawDeposit(CharacterEntity characterEntity)
+        {
+            return DbModel.BuildingTenants.FirstOrDefault(x => x.CharacterId == characterEntity.DbModel.Id).CanWithdrawDeposit;
+        }
+
+        public bool CanPlayerManagmentTenants(CharacterEntity characterEntity)
+        {
+            return DbModel.BuildingTenants.FirstOrDefault(x => x.CharacterId == characterEntity.DbModel.Id).CanManagmentTenants;
+        }
+
+        public bool CanPlayerManagmentMagazine(CharacterEntity characterEntity)
+        {
+            return DbModel.BuildingTenants.FirstOrDefault(x => x.CharacterId == characterEntity.DbModel.Id).CanManagmentMagazine;
+        }
+
+        public bool CanPlayerRespawnInBuilding(CharacterEntity characterEntity)
+        {
+            return DbModel.BuildingTenants.FirstOrDefault(x => x.CharacterId == characterEntity.DbModel.Id).CanRespawnInBuilding;
+        }
+
+        public bool CanPlayerLockDoor(CharacterEntity characterEntity)
+        {
+            return DbModel.BuildingTenants.FirstOrDefault(x => x.CharacterId == characterEntity.DbModel.Id).CanLockDoor;
+        }
+
+        public bool CanPlayerManagmentGuests(CharacterEntity characterEntity)
+        {
+            return DbModel.BuildingTenants.FirstOrDefault(x => x.CharacterId == characterEntity.DbModel.Id).CanManagmentGuests;
         }
 
         public void Save()
