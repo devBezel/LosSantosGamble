@@ -22,6 +22,7 @@ namespace LSG.DAL.UnitOfWork
             BusRepository = new BusRepository(_context);
             BuildingRepository = new BuildingRepository(_context);
             ItemRepository = new ItemRepository(_context);
+            ShopRepository = new ShopRepository(_context);
         }
         public IAccountRepository AccountRepository { get; set; }
         public ICharacterRepository CharacterRepository { get; set; }
@@ -32,6 +33,8 @@ namespace LSG.DAL.UnitOfWork
         public IBuildingRepository BuildingRepository { get; set; }
 
         public IItemRepository ItemRepository { get; set; }
+
+        public IShopRepository ShopRepository { get; set; }
 
 
         public void Dispose()

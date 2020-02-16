@@ -49,9 +49,13 @@ namespace LSG.GM.Entities.Core.Item
         }
 
 
-        protected virtual void Delete()
+        protected virtual void Remove()
         {
-            // Zrobić usuwanie
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+            using(UnitOfWork unitOfWork = new UnitOfWork(ctx))
+            {
+                unitOfWork.ItemRepository.Delete(DbModel);
+            }
         }
     }
 }

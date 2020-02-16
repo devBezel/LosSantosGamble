@@ -5,6 +5,7 @@ using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.BusModels;
 using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Database.Models.ItemModels;
+using LSG.DAL.Database.Models.ShopModels;
 using LSG.DAL.Database.Models.VehicleModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -32,6 +33,8 @@ namespace LSG.DAL.Database
         public DbSet<ItemModel> Items { get; set; }
         public DbSet<BuildingModel> Buildings { get; set; }
         public DbSet<BuildingTenantModel> BuildingTenants { get; set; }
+        public DbSet<ShopModel> Shops { get; set; }
+        public DbSet<ShopAssortmentModel> ShopAssortments { get; set; }
 
     }
 }

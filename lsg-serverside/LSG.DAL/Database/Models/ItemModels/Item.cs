@@ -17,6 +17,7 @@ namespace LSG.DAL.Database.Models.ItemModels
         public int? CreatorId { get; set; } 
         public Account Creator { get; set; }
         public string Name { get; set; }
+        public int Count { get; set; }
         public double? FirstParameter { get; set; } 
         public double? SecondParameter { get; set; } 
         public double? ThirdParameter { get; set; } 
@@ -52,7 +53,10 @@ namespace LSG.DAL.Database.Models.ItemModels
             writer.Name("name");
             writer.Value(Name);
 
-            if(FirstParameter.HasValue)
+            writer.Name("count");
+            writer.Value(Count);
+
+            if (FirstParameter.HasValue)
             {
                 writer.Name("firstParameter");
                 writer.Value(FirstParameter.Value);

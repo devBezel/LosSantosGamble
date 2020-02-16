@@ -11,6 +11,7 @@ namespace LSG.DAL.Enums
         WeaponClip,
         Food,
         Mask,
-        Clothes
+        Clothes,
+        Water
     }
 }

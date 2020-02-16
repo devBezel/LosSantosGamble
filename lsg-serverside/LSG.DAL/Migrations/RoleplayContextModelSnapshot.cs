@@ -448,6 +448,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int?>("CharacterId");
 
+                    b.Property<int>("Count");
+
                     b.Property<int?>("CreatorId");
 
                     b.Property<double?>("FirstParameter");
@@ -477,6 +479,52 @@ namespace LSG.DAL.Migrations
                     b.HasIndex("VehicleId");
 
                     b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.ShopModels.ShopAssortmentModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Count");
+
+                    b.Property<double?>("FirstParameter");
+
+                    b.Property<double?>("FourthParameter");
+
+                    b.Property<int>("ItemEntityType");
+
+                    b.Property<string>("Name");
+
+                    b.Property<double?>("SecondParameter");
+
+                    b.Property<int>("ShopId");
+
+                    b.Property<double?>("ThirdParameter");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShopId");
+
+                    b.ToTable("ShopAssortments");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.ShopModels.ShopModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<float>("PosX");
+
+                    b.Property<float>("PosY");
+
+                    b.Property<float>("PosZ");
+
+                    b.Property<int>("ShopEntityType");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Shops");
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
@@ -620,6 +668,14 @@ namespace LSG.DAL.Migrations
                     b.HasOne("LSG.DAL.Database.Models.VehicleModels.Vehicle", "Vehicle")
                         .WithMany()
                         .HasForeignKey("VehicleId");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.ShopModels.ShopAssortmentModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.ShopModels.ShopModel", "Shop")
+                        .WithMany("ShopAssortments")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>

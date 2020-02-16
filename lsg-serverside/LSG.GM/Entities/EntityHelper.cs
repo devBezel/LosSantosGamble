@@ -5,9 +5,11 @@ using LSG.DAL.Database;
 using LSG.DAL.Database.Models.BankModels;
 using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.BusModels;
+using LSG.DAL.Database.Models.ShopModels;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Entities.Common.Atm;
 using LSG.GM.Entities.Common.Bus;
+using LSG.GM.Entities.Common.Shop;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Buidling;
 using LSG.GM.Entities.Core.Vehicle;
@@ -30,6 +32,7 @@ namespace LSG.GM.Entities
         private static readonly List<AtmEntity> Atms = new List<AtmEntity>();
         private static readonly List<BusEntity> BusStops = new List<BusEntity>();
         private static readonly List<BuildingEntity> Buildings = new List<BuildingEntity>();
+        private static readonly List<ShopEntity> Shops = new List<ShopEntity>();
 
         public static void Add(AccountEntity account)
         {
@@ -69,6 +72,7 @@ namespace LSG.GM.Entities
             return bus;
         }
 
+        public static void Add(ShopEntity shopEntity) => Shops.Add(shopEntity);
 
         public static VehicleEntity GetSpawnedVehicleById(int id)
         {
@@ -129,6 +133,12 @@ namespace LSG.GM.Entities
                 await player.CreateMarker(building.InteriorMarker);
                 await player.CreateMarker(building.ExteriorMarker);
             }
+
+            foreach (ShopEntity shop in Shops)
+            {
+                await player.CreateBlip(shop.BlipModel);
+                await player.CreateMarker(shop.MarkerModel);
+            }
         });
 
         public static async Task LoadServerEntity() => await AltAsync.Do(async () =>
@@ -141,6 +151,7 @@ namespace LSG.GM.Entities
                 await BuildingEntity.LoadBuildingsAsync(unit);
                 await AtmEntity.LoadAtmsAsync(unit);
                 await BusEntity.LoadBusAsync(unit);
+                await ShopEntity.LoadShopAsync(unit);
             }
         });
 
