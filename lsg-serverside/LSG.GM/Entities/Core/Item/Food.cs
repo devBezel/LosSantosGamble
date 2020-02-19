@@ -28,6 +28,7 @@ namespace LSG.GM.Entities.Core.Item
             if (DbModel.Count <= 0)
             {
                 Remove();
+                return;
             }
 
             DbModel.Count--;

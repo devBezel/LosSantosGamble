@@ -30,7 +30,7 @@ namespace LSG.GM.Entities.Common.Shop
 
         public async Task Spawn() => await AltAsync.Do(async () =>
         {
-            ColShape = Alt.CreateColShapeCylinder(new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), 1f, 2f);
+            ColShape = Alt.CreateColShapeCylinder(new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ - 0.9f), 1f, 2f);
 
             MarkerModel = new MarkerModel()
             {
@@ -38,7 +38,7 @@ namespace LSG.GM.Entities.Common.Shop
                 Dimension = 0,
                 PosX = DbModel.PosX,
                 PosY = DbModel.PosY,
-                PosZ = DbModel.PosZ,
+                PosZ = DbModel.PosZ - 0.9f,
                 DirX = 0,
                 DirY = 0,
                 DirZ = 0,

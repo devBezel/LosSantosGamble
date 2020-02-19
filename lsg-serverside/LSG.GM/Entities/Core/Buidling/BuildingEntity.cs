@@ -43,8 +43,8 @@ namespace LSG.GM.Entities.Core.Buidling
 
         public async Task Spawn() => await AltAsync.Do(async () =>
         {
-            InteriorColshape = Alt.CreateColShapeCylinder(new Position(DbModel.InternalPickupPositionX, DbModel.InternalPickupPositionY, DbModel.InternalPickupPositionZ), 1f, 2f);
-            ExteriorColshape = Alt.CreateColShapeCylinder(new Position(DbModel.ExternalPickupPositionX, DbModel.ExternalPickupPositionY, DbModel.ExternalPickupPositionZ), 1f, 2f);
+            InteriorColshape = Alt.CreateColShapeCylinder(new Position(DbModel.InternalPickupPositionX, DbModel.InternalPickupPositionY, DbModel.InternalPickupPositionZ - 0.9f), 1f, 2f);
+            ExteriorColshape = Alt.CreateColShapeCylinder(new Position(DbModel.ExternalPickupPositionX, DbModel.ExternalPickupPositionY, DbModel.ExternalPickupPositionZ - 0.9f), 1f, 2f);
             ExteriorColshape.Dimension = DbModel.Id;
 
             InteriorMarker = new MarkerModel()
@@ -53,7 +53,7 @@ namespace LSG.GM.Entities.Core.Buidling
                 Dimension = 0,
                 PosX = DbModel.InternalPickupPositionX,
                 PosY = DbModel.InternalPickupPositionY,
-                PosZ = DbModel.InternalPickupPositionZ - 1,
+                PosZ = DbModel.InternalPickupPositionZ - 0.9f,
                 DirX = 0,
                 DirY = 0,
                 DirZ = 0,
@@ -83,7 +83,7 @@ namespace LSG.GM.Entities.Core.Buidling
                 Dimension = DbModel.Id,
                 PosX = DbModel.ExternalPickupPositionX,
                 PosY = DbModel.ExternalPickupPositionY,
-                PosZ = DbModel.ExternalPickupPositionZ - 1,
+                PosZ = DbModel.ExternalPickupPositionZ - 0.9f,
                 DirX = 0,
                 DirY = 0,
                 DirZ = 0,

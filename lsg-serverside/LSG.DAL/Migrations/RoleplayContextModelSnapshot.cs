@@ -486,6 +486,8 @@ namespace LSG.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("Cost");
+
                     b.Property<int>("Count");
 
                     b.Property<double?>("FirstParameter");
