@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.ColoredConsole;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using LSG.DAL.Database;
@@ -276,7 +277,7 @@ namespace LSG.GM.Entities.Core.Buidling
             RoleplayContext ctx = Singleton.GetDatabaseInstance();
             foreach (BuildingModel building in await unit.BuildingRepository.GetAll())
             {
-                Alt.Log($"{building.Name}");
+                Alt.Log($"[BUILDING-ENTITY: LOAD]: budynek o ID: {building.Id} został wczytany poprawnie!");
                 BuildingEntity buildingEntity = new BuildingEntity(building);
                 await buildingEntity.Spawn();
             }

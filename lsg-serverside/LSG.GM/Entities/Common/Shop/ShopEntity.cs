@@ -85,6 +85,7 @@ namespace LSG.GM.Entities.Common.Shop
         {
             foreach (ShopModel shop in await unit.ShopRepository.GetAll())
             {
+                Alt.Log($"[SHOP-ENTITY: LOAD]: sklep o ID: {shop.Id} został wczytany poprawnie!");
                 ShopEntity shopEntity = new ShopEntity(shop);
                 await shopEntity.Spawn();
             }

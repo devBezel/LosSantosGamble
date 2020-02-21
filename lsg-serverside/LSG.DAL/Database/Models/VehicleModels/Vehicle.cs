@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Database.Models.ItemModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,6 +26,8 @@ namespace LSG.DAL.Database.Models.VehicleModels
         public bool State { get; set; }
         public int Health { get; set; }
         //public int Dimension { get; set; }
+
+        public List<ItemModel> ItemsInVehicle { get; set; }
 
 
         public void OnWrite(IMValueWriter writer)

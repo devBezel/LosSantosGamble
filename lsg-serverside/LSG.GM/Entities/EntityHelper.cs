@@ -15,6 +15,7 @@ using LSG.GM.Entities.Core.Buidling;
 using LSG.GM.Entities.Core.Vehicle;
 using LSG.GM.Helpers;
 using LSG.GM.Utilities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -89,7 +90,7 @@ namespace LSG.GM.Entities
 
         public static VehicleDb GetVehicleDatabaseById(int id)
         {
-            VehicleDb vehicle = Singleton.GetDatabaseInstance().Vehicles.SingleOrDefault(v => v.Id == id);
+            VehicleDb vehicle = Singleton.GetDatabaseInstance().Vehicles.Include(item => item.ItemsInVehicle).SingleOrDefault(v => v.Id == id);
 
             return vehicle;
         }

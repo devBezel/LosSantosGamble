@@ -10,7 +10,7 @@ namespace LSG.GM.Extensions
     {
         public static VehicleEntity GetVehicleEntity(this IVehicle vehicle)
         {
-            vehicle.GetData("account:data", out VehicleEntity vehicleEntity);
+            vehicle.GetData("vehicle:data", out VehicleEntity vehicleEntity);
 
             return vehicleEntity;
         }

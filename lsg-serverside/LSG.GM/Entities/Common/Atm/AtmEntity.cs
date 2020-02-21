@@ -103,7 +103,7 @@ namespace LSG.GM.Entities.Common.Atm
         {
             foreach (AtmModel atm in await unit.AtmRepository.GetAll())
             {
-                Alt.Log($"atm {atm.Id}");
+                Alt.Log($"[ATM-ENTITY: LOAD]: atm o ID: {atm.Id} został wczytany poprawnie!");
                 AtmEntity atmEntity = new AtmEntity(atm);
                 await atmEntity.Spawn();
             }

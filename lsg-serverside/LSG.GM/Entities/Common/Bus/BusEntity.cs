@@ -116,7 +116,7 @@ namespace LSG.GM.Entities.Common.Bus
         {
             foreach (BusStop busStop in await unit.BusRepository.GetAll())
             {
-                Alt.Log($"{busStop.Id}");
+                Alt.Log($"[BUS-ENTITY: LOAD]: bus o ID: {busStop.Id} został wczytany poprawnie!");
                 BusEntity busEntity = new BusEntity(busStop);
                 await busEntity.Spawn();
             }
