@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using System;
 using System.Collections.Generic;
@@ -67,6 +68,15 @@ namespace LSG.GM.Utilities
 
             Alt.Log($"[SYSTEM-ID] Nadałem graczowi {player.Name} ID: {freeID}");
             player.SetData("account:id", freeID);
+        }
+
+        public static Position GetPositionInBackOfPosition(this Position pos, float rotation, float distance)
+        {
+            Position position = pos;
+            float rot = rotation;
+            var radius = rot * Math.PI / 180;
+            Position newPos = new Position(position.X + (float)(distance * Math.Sin(-radius)), position.Y + (float)(distance * Math.Cos(-radius)), position.Z);
+            return newPos;
         }
     }
 }

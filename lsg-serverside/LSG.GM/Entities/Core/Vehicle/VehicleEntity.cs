@@ -27,6 +27,8 @@ namespace LSG.GM.Entities.Core.Vehicle
         public VehicleDb DbModel { get; set; }
         private bool _nonDbVehicle;
 
+        public bool TrunkOpen { get; set; } = false;
+
         public VehicleEntity(VehicleDb model)
         {
             DbModel = model;

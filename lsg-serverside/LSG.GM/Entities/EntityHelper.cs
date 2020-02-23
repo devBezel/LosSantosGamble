@@ -35,6 +35,9 @@ namespace LSG.GM.Entities
         private static readonly List<BuildingEntity> Buildings = new List<BuildingEntity>();
         private static readonly List<ShopEntity> Shops = new List<ShopEntity>();
 
+
+        private static readonly List<MarkerModel> VehicleTrunkMarkers = new List<MarkerModel>();
+
         public static void Add(AccountEntity account)
         {
             if (Accounts.Any(acc => acc.DbModel.Id == account.DbModel.Id))
@@ -74,6 +77,9 @@ namespace LSG.GM.Entities
         }
 
         public static void Add(ShopEntity shopEntity) => Shops.Add(shopEntity);
+
+        public static void Add(MarkerModel markerModel) => VehicleTrunkMarkers.Add(markerModel);
+        public static void Remove(MarkerModel markerModel) => VehicleTrunkMarkers.Remove(markerModel);
 
         public static VehicleEntity GetSpawnedVehicleById(int id)
         {
@@ -139,6 +145,11 @@ namespace LSG.GM.Entities
             {
                 await player.CreateBlip(shop.BlipModel);
                 await player.CreateMarker(shop.MarkerModel);
+            }
+
+            foreach (MarkerModel marker in VehicleTrunkMarkers)
+            {
+                await player.CreateMarker(marker);
             }
         });
 

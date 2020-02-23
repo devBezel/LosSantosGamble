@@ -19,5 +19,10 @@ namespace LSG.GM.Helpers
         {
             AltAsync.EmitAllClients("marker:create", marker);
         });
+
+        public static async Task RemoveGlobalMarker(string uniqueID) => await AltAsync.Do(() =>
+        {
+            AltAsync.EmitAllClients("marker:remove", uniqueID);
+        });
     }
 }
