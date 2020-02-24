@@ -6,10 +6,13 @@ using AltV.Net.Enums;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.GM.Extensions;
 using LSG.GM.Helpers;
+using LSG.GM.Helpers.Models;
 using LSG.GM.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +22,7 @@ namespace LSG.GM.Entities.Core.Vehicle
     {
         public VehicleTrunkScript()
         {
-            AltAsync.OnClient("vehicle-interaction:openTrunkRequest", OpenVehicleTrunkRequest);
+            Alt.OnClient("vehicle-interaction:openTrunkRequest", OpenVehicleTrunkRequest);
             AltAsync.OnColShape += OnEnterColshape;
             AltAsync.OnPlayerEnterVehicle += OnEnterPlayerVehicle;
             Alt.OnClient("vehicle-trunk:open", OpenVehicleTrunk);
@@ -30,12 +33,12 @@ namespace LSG.GM.Entities.Core.Vehicle
 
         private async Task OnEnterPlayerVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(async () =>
         {
-            if (!player.HasData("current:trunk")) return;
-            if ((int)seat != 1) return;
+            if (!vehicle.GetVehicleEntity().TrunkOpen) return;
+            //if ((int)seat != 1) return;
 
             Alt.Log("Dotarł event z OnEnterPlayerVehicle TRUNK");
 
-            await DisposeVehicleTrunk(vehicle, player);
+            DisposeVehicleTrunk(vehicle, player);
         });
 
         private async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
@@ -55,50 +58,40 @@ namespace LSG.GM.Entities.Core.Vehicle
 
         });
 
-        public async Task OpenVehicleTrunkRequest(IPlayer player, object[] args) => await AltAsync.Do(async () =>
+        public void OpenVehicleTrunkRequest(IPlayer player, object[] args)
         {
             IVehicle vehicle = (IVehicle)args[0];
+            
+            Vector3 positionTrunk = JsonConvert.DeserializeObject<Vector3>(args[1].ToString());
+
+
+            Alt.Log("Doszedl event trunk");
+            Alt.Log($"xx: {positionTrunk.X} y: {positionTrunk.Y} z: {positionTrunk.Z}");
+
             VehicleEntity vehicleEntity = vehicle.GetVehicleEntity();
 
             if (vehicleEntity == null) return;
 
-            IColShape trunkColShape = Alt.CreateColShapeCylinder(new Position(vehicle.Position.X, vehicle.Position.Y - 4, vehicle.Position.Z), 1f, 2f);
+            IColShape trunkColShape = Alt.CreateColShapeCylinder(new Position(positionTrunk.X, positionTrunk.Y, positionTrunk.Z), 2f, 2f);
             trunkColShape.SetData("vehicle:trunk", vehicleEntity);
+            vehicle.SetData("current:vehicle-trunks", trunkColShape);
 
 
-            MarkerModel marker = new MarkerModel()
+            DrawTextModel drawTextModel = new DrawTextModel()
             {
-                Type = 27,
+                Text = "Kliknij ~g~E ~w~ aby otworzyć bagażnik",
+                X = positionTrunk.X,
+                Y = positionTrunk.Y,
+                Z = positionTrunk.Z,
                 Dimension = vehicle.Dimension,
-                PosX = vehicle.Position.X,
-                PosY = vehicle.Position.Y - 4,
-                PosZ = vehicle.Position.Z,
-                DirX = 0,
-                DirY = 0,
-                DirZ = 0,
-                RotX = 0,
-                RotY = 0,
-                RotZ = 0,
-                ScaleX = 1f,
-                ScaleY = 1f,
-                ScaleZ = 1f,
-                Red = 0,
-                Green = 153,
-                Blue = 0,
-                Alpha = 100,
-                BobUpAndDown = false,
-                FaceCamera = false,
-                P19 = 2,
-                Rotate = false,
-                TextureDict = null,
-                TextureName = null,
-                DrawOnEnts = false,
-                UniqueID = $"VEHICLE_TRUNK_MARKER{vehicleEntity.DbModel.Id}"
+                UniqueID = $"VEHICLE_TRUNK_DRAW_TEXT{vehicleEntity.DbModel.Id}"
             };
 
-            await MarkerHelper.CreateGlobalMarker(marker);
-            EntityHelper.Add(marker);
-        });
+            DrawTextHelper.CreateGlobalDrawText(drawTextModel);
+
+            vehicleEntity.TrunkOpen = true;
+            EntityHelper.Add(drawTextModel);
+        }
 
         public void OpenVehicleTrunk(IPlayer player, object[] args)
         {
@@ -123,15 +116,9 @@ namespace LSG.GM.Entities.Core.Vehicle
 
         public async Task CloseVehicleTrunk(IPlayer player, object[] args) => await AltAsync.Do(async () =>
         {
-            player.GetData("current:vehicle-trunk", out IColShape trunkColshape);
-            if (trunkColshape == null) return;
+            IVehicle vehicle = (IVehicle)args[0];
 
-            trunkColshape.GetData("vehicle:trunk", out VehicleEntity vehicleEntity);
-            if (vehicleEntity == null) return;
-
-            Alt.Log("Dotarł event CloseVehicleTrunk");
-
-            await DisposeVehicleTrunk(vehicleEntity.GameVehicle, player);
+            DisposeVehicleTrunk(vehicle, player);
         });
 
         public void PutItemToEquipmentFromTrunk(IPlayer player, object[] args)
@@ -184,22 +171,24 @@ namespace LSG.GM.Entities.Core.Vehicle
             vehicleEntity.DbModel.ItemsInVehicle.Add(itemToChange);
         }
 
-        private async Task DisposeVehicleTrunk(IVehicle vehicle, IPlayer player) => await AltAsync.Do(async () =>
+        private void DisposeVehicleTrunk(IVehicle vehicle, IPlayer player)
         {
-            player.GetData("current:vehicle-trunk", out IColShape trunkColshape);
-            if (trunkColshape == null && vehicle.GetVehicleEntity().TrunkOpen)
+            VehicleEntity vehicleEntity = vehicle.GetVehicleEntity();
+            if (vehicleEntity == null) return;
+
+
+            vehicle.GetData("current:vehicle-trunks", out IColShape trunkColshape);
+            if (trunkColshape == null && !vehicleEntity.TrunkOpen)
             {
-                await MarkerHelper.RemoveGlobalMarker($"VEHICLE_TRUNK_MARKER{vehicle.GetVehicleEntity().DbModel.Id}");
                 return;
             }
 
-            trunkColshape.GetData("vehicle:trunk", out VehicleEntity vehicleEntity);
-            if (vehicleEntity == null) return;
+            vehicleEntity.TrunkOpen = false;
 
-            await MarkerHelper.RemoveGlobalMarker($"VEHICLE_TRUNK_MARKER{vehicleEntity.DbModel.Id}");
+            DrawTextHelper.RemoveGlobalDrawText($"VEHICLE_TRUNK_DRAW_TEXT{vehicleEntity.DbModel.Id}");
             trunkColshape.Remove();
 
-            await vehicleEntity.GameVehicle.SetDoorStateAsync(VehicleDoor.Trunk, VehicleDoorState.Closed);
-        });
+            vehicleEntity.GameVehicle.SetDoorState(VehicleDoor.Trunk, VehicleDoorState.Closed);
+        }
     }
 }

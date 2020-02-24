@@ -14,6 +14,7 @@ using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Buidling;
 using LSG.GM.Entities.Core.Vehicle;
 using LSG.GM.Helpers;
+using LSG.GM.Helpers.Models;
 using LSG.GM.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -36,7 +37,7 @@ namespace LSG.GM.Entities
         private static readonly List<ShopEntity> Shops = new List<ShopEntity>();
 
 
-        private static readonly List<MarkerModel> VehicleTrunkMarkers = new List<MarkerModel>();
+        private static readonly List<DrawTextModel> VehicleTrunkDrawsText = new List<DrawTextModel>();
 
         public static void Add(AccountEntity account)
         {
@@ -78,8 +79,8 @@ namespace LSG.GM.Entities
 
         public static void Add(ShopEntity shopEntity) => Shops.Add(shopEntity);
 
-        public static void Add(MarkerModel markerModel) => VehicleTrunkMarkers.Add(markerModel);
-        public static void Remove(MarkerModel markerModel) => VehicleTrunkMarkers.Remove(markerModel);
+        public static void Add(DrawTextModel drawTextModel) => VehicleTrunkDrawsText.Add(drawTextModel);
+        public static void Remove(DrawTextModel drawTextModel) => VehicleTrunkDrawsText.Remove(drawTextModel);
 
         public static VehicleEntity GetSpawnedVehicleById(int id)
         {
@@ -147,9 +148,9 @@ namespace LSG.GM.Entities
                 await player.CreateMarker(shop.MarkerModel);
             }
 
-            foreach (MarkerModel marker in VehicleTrunkMarkers)
+            foreach (DrawTextModel drawText in VehicleTrunkDrawsText)
             {
-                await player.CreateMarker(marker);
+                player.CreateDrawText(drawText);
             }
         });
 
