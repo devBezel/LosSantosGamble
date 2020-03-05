@@ -22,6 +22,8 @@ namespace LSG.GM.Entities.Core.Item.Scripts
         {
             Alt.OnClient("inventory:getItems", InventoryGetItems);
             Alt.OnClient("inventory:useItem", InventoryUseItem);
+            Alt.OnClient("inventory:offerPlayerItem", InventoryOfferPlayerItem);
+            Alt.OnClient("inventory:offerRequestResult", InventoryOfferRequestResult);
         }
         public void InventoryGetItems(IPlayer player, object[] args)
         {
@@ -87,6 +89,50 @@ namespace LSG.GM.Entities.Core.Item.Scripts
             };
             ItemEntity itemEntity = ItemFactory.Create(item);
             itemEntity.Create(getter.GetAccountEntity().characterEntity);
+        }
+
+        public void InventoryOfferPlayerItem(IPlayer sender, object[] args)
+        {
+            ItemModel itemModel = JsonConvert.DeserializeObject<ItemModel>(args[0].ToString());
+            Alt.Log($"itemModel: {itemModel.Name}");
+            IPlayer getter = (IPlayer)args[1];
+            int costItem = Convert.ToInt32(args[2]);
+
+            if (getter == null) return;
+
+            if(sender == getter)
+            {
+                sender.SendErrorNotify("Wystąpił bląd", "Nie możesz zaoferować przedmiotu sam sobie");
+                return;
+            }
+
+            getter.Emit("inventory:sendRequestOffer", itemModel, costItem, sender.GetAccountEntity().ServerID);
+        }
+        private void InventoryOfferRequestResult(IPlayer getter, object[] args)
+        {
+            ItemModel itemModel = JsonConvert.DeserializeObject<ItemModel>(args[0].ToString());
+            int costItem = Convert.ToInt32(args[1]);
+            int senderID = Convert.ToInt32(args[2]);
+            bool accept = (bool)args[3];
+
+            IPlayer sender = PlayerExtenstion.GetPlayerById(senderID);
+
+            if (sender == null) 
+                return;
+
+            if(!accept)
+            {
+                sender.SendWarningNotify("Gracz odrzucił ofertę", "Twoja oferta została odrzucona");
+                return;
+            }
+
+            CharacterEntity senderEntity = sender.GetAccountEntity().characterEntity;
+            CharacterEntity getterEntity = getter.GetAccountEntity().characterEntity;
+
+
+            ItemEntity itemEntity = ItemFactory.Create(itemModel);
+
+            itemEntity.Offer(senderEntity, getterEntity, costItem);
         }
 
     }

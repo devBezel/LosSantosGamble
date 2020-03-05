@@ -18,6 +18,7 @@ namespace LSG.GM.Extensions
             Alt.Log("Wykonuje się getcurrentweaponammo");
             Alt.Log("Current ammo: " + (int)(long)args[0]);
             player.SetData("item:weapon-ammo", (int)(long)args[0]);
+            
         }
     }
 }

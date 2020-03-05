@@ -4,6 +4,7 @@ using LSG.DAL.Database.Models.BankModels;
 using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.BusModels;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.ShopModels;
 using LSG.DAL.Database.Models.VehicleModels;
@@ -35,6 +36,8 @@ namespace LSG.DAL.Database
         public DbSet<BuildingTenantModel> BuildingTenants { get; set; }
         public DbSet<ShopModel> Shops { get; set; }
         public DbSet<ShopAssortmentModel> ShopAssortments { get; set; }
+        public DbSet<GroupModel> Groups { get; set; }
+        public DbSet<GroupWorkerModel> GroupWorkers { get; set; }
 
     }
 }

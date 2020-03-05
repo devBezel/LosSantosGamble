@@ -3,6 +3,7 @@ using LSG.DAL.Database;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
 using LSG.DAL.UnitOfWork;
+using LSG.GM.Extensions;
 using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace LSG.GM.Entities.Core.Item
 
         public virtual void Create(CharacterEntity characterEntity)
         {
-            if(characterEntity != null)
+            if (characterEntity != null)
             {
                 characterEntity.DbModel.Items.Add(DbModel);
             }
@@ -52,10 +53,36 @@ namespace LSG.GM.Entities.Core.Item
         protected virtual void Remove()
         {
             RoleplayContext ctx = Singleton.GetDatabaseInstance();
-            using(UnitOfWork unitOfWork = new UnitOfWork(ctx))
+            using (UnitOfWork unitOfWork = new UnitOfWork(ctx))
             {
                 unitOfWork.ItemRepository.Delete(DbModel);
             }
+        }
+
+        public virtual void Offer(CharacterEntity sender, CharacterEntity getter, int cost)
+        {
+            if (DbModel.ItemInUse) return;
+
+            if(!getter.HasEnoughMoney(cost))
+            {
+                getter.AccountEntity.Player.SendErrorNotify("Brak wystarczającej ilości gotówki", "Nie posiadasz przy sobie tyle gotówki");
+                return;
+            }
+
+            if(cost != 0)
+            {
+                sender.AddMoney(cost);
+                getter.RemoveMoney(cost);
+            }
+
+            DbModel.CharacterId = getter.DbModel.Id;
+
+            sender.DbModel.Items.Remove(DbModel);
+            getter.DbModel.Items.Add(DbModel);
+
+            sender.AccountEntity.Player.SendSuccessNotify("Gracz zaakceptował ofertę", "Gracz pomyślnie zaakceptował twoją ofertę");
+            getter.AccountEntity.Player.SendSuccessNotify("Zaakceptowałeś ofertę", "Oferta gracza została zaakceptowana pomyślnie");
+
         }
     }
 }
