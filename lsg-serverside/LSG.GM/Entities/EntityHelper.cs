@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using LSG.DAL.Database;
 using LSG.DAL.Database.Models.BankModels;
@@ -12,6 +13,8 @@ using LSG.GM.Entities.Common.Bus;
 using LSG.GM.Entities.Common.Shop;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Buidling;
+using LSG.GM.Entities.Core.Group;
+using LSG.GM.Entities.Core.Item;
 using LSG.GM.Entities.Core.Vehicle;
 using LSG.GM.Helpers;
 using LSG.GM.Helpers.Models;
@@ -35,9 +38,12 @@ namespace LSG.GM.Entities
         private static readonly List<BusEntity> BusStops = new List<BusEntity>();
         private static readonly List<BuildingEntity> Buildings = new List<BuildingEntity>();
         private static readonly List<ShopEntity> Shops = new List<ShopEntity>();
+        private static readonly List<GroupEntity> Groups = new List<GroupEntity>();
 
+        private static readonly List<ItemInWorldModel> ItemInWorld = new List<ItemInWorldModel>();
 
         private static readonly List<DrawTextModel> VehicleTrunkDrawsText = new List<DrawTextModel>();
+
 
         public static void Add(AccountEntity account)
         {
@@ -79,6 +85,8 @@ namespace LSG.GM.Entities
 
         public static void Add(ShopEntity shopEntity) => Shops.Add(shopEntity);
 
+        public static void Add(GroupEntity groupEntity) => Groups.Add(groupEntity);
+
         public static void Add(DrawTextModel drawTextModel) => VehicleTrunkDrawsText.Add(drawTextModel);
         public static void Remove(DrawTextModel drawTextModel) => VehicleTrunkDrawsText.Remove(drawTextModel);
 
@@ -94,6 +102,14 @@ namespace LSG.GM.Entities
             }
             return null;
         }
+
+        public static IEnumerable<GroupEntity> GetPlayerGroups(AccountEntity accountEntity)
+        {
+            return Groups.Where(g => g.DbModel.Workers.Any(x => x.Character?.Id == accountEntity.characterEntity.DbModel.Id));
+        }
+
+        public static void Add(ItemInWorldModel itemInWorldModel) => ItemInWorld.Add(itemInWorldModel);
+        public static void Remove(ItemInWorldModel itemInWorldModel) => ItemInWorld.Remove(itemInWorldModel);
 
         public static VehicleDb GetVehicleDatabaseById(int id)
         {
@@ -165,6 +181,7 @@ namespace LSG.GM.Entities
                 await AtmEntity.LoadAtmsAsync(unit);
                 await BusEntity.LoadBusAsync(unit);
                 await ShopEntity.LoadShopAsync(unit);
+                await GroupEntity.LoadGroupsAsync(unit);
             }
         });
 

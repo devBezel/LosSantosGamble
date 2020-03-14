@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.ItemModels;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,12 @@ namespace LSG.DAL.Database.Models.VehicleModels
     {
         public int Id { get; set; }
         public string Model { get; set; }
-        public int OwnerId { get; set; }
+        public int? OwnerId { get; set; }
         public Character Owner { get; set; }
+
+        public int? GroupId { get; set; }
+        public GroupModel Group { get; set; }
+
         public float PosX { get; set; }
         public float PosY { get; set; }
         public float PosZ { get; set; }
@@ -41,7 +46,16 @@ namespace LSG.DAL.Database.Models.VehicleModels
             writer.Value(Model);
 
             writer.Name("ownerId");
-            writer.Value(OwnerId);
+            if(OwnerId.HasValue)
+            {
+                writer.Value(OwnerId.Value);
+            }
+
+            writer.Name("groupId");
+            if(GroupId.HasValue)
+            {
+                writer.Value(GroupId.Value);
+            }
 
             writer.Name("posX");
             writer.Value(PosX);

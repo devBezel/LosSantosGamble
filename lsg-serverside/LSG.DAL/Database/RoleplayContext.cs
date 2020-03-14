@@ -38,6 +38,7 @@ namespace LSG.DAL.Database
         public DbSet<ShopAssortmentModel> ShopAssortments { get; set; }
         public DbSet<GroupModel> Groups { get; set; }
         public DbSet<GroupWorkerModel> GroupWorkers { get; set; }
+        public DbSet<GroupRankModel> GroupRanks { get; set; }
 
     }
 }

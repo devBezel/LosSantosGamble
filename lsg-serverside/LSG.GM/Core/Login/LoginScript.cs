@@ -42,6 +42,7 @@ namespace LSG.GM.Core.Login
             Character characterClient = JsonConvert.DeserializeObject<Character>((string)args[0]);
             Character characterDatabase = Singleton.GetDatabaseInstance().Characters
             .Include(l => l.CharacterLook)
+            .Include(g => g.GroupWorkers)
             .Include(i => i.Items)
             .Include(a => a.Account)
             .ThenInclude(p => p.AccountPremium)

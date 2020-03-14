@@ -9,6 +9,7 @@ using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
 using LSG.DAL.UnitOfWork;
+using LSG.GM.Entities.Core.Group;
 using LSG.GM.Entities.Core.Item;
 using LSG.GM.Entities.Core.Item.Scripts;
 using LSG.GM.Extensions;
@@ -25,6 +26,7 @@ namespace LSG.GM.Entities.Core
     {
         public AccountEntity AccountEntity { get; private set; }
         public Character DbModel { get; set; }
+        public GroupEntity OnDutyGroup { get; set; }
         internal List<ItemEntity> ItemsInUse { get; set; } = new List<ItemEntity>();
         public bool HasBw { get; set; } = false;
 

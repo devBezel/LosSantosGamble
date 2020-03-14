@@ -31,7 +31,7 @@ namespace LSG.GM.Entities.Core.Vehicle
             Alt.OnClient("trunk:putItemToVehicleTrunk", PutItemToVehicleTrunk);
         }
 
-        private async Task OnEnterPlayerVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(async () =>
+        private async Task OnEnterPlayerVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
         {
             if (!vehicle.GetVehicleEntity().TrunkOpen) return;
             //if ((int)seat != 1) return;
@@ -114,7 +114,7 @@ namespace LSG.GM.Entities.Core.Vehicle
                 vehicleEntity.DbModel.ItemsInVehicle);
         }
 
-        public async Task CloseVehicleTrunk(IPlayer player, object[] args) => await AltAsync.Do(async () =>
+        public async Task CloseVehicleTrunk(IPlayer player, object[] args) => await AltAsync.Do(() =>
         {
             IVehicle vehicle = (IVehicle)args[0];
 

@@ -4,6 +4,7 @@ using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Extensions;
+using LSG.GM.Helpers.Models;
 using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
@@ -59,6 +60,7 @@ namespace LSG.GM.Entities.Core.Item
             }
         }
 
+        // TODO: przenieść to do osobnego skryptu z ofertami
         public virtual void Offer(CharacterEntity sender, CharacterEntity getter, int cost)
         {
             if (DbModel.ItemInUse) return;
@@ -83,6 +85,33 @@ namespace LSG.GM.Entities.Core.Item
             sender.AccountEntity.Player.SendSuccessNotify("Gracz zaakceptował ofertę", "Gracz pomyślnie zaakceptował twoją ofertę");
             getter.AccountEntity.Player.SendSuccessNotify("Zaakceptowałeś ofertę", "Oferta gracza została zaakceptowana pomyślnie");
 
+        }
+
+        public virtual void PickUp(CharacterEntity characterEntity)
+        {
+            if (DbModel.CharacterId != null) return;
+
+            
+        }
+
+        public virtual void Drop(CharacterEntity characterEntity)
+        {
+            if (DbModel.ItemInUse) return;
+
+            if (DbModel.CharacterId == null) return;
+
+            DbModel.CharacterId = null;
+            ItemInWorldModel itemInWorld = new ItemInWorldModel()
+            {
+                ItemEntity = this,
+                Position = characterEntity.AccountEntity.Player.Position,
+                Dimension = characterEntity.AccountEntity.Player.Dimension
+            };
+
+            EntityHelper.Add(itemInWorld);
+
+            // Wykonanie animacji + stworzenie obiektu + dxText
+            
         }
     }
 }

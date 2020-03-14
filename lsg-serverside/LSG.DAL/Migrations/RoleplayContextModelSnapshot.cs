@@ -439,6 +439,90 @@ namespace LSG.DAL.Migrations
                     b.ToTable("CharacterLooks");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<int>("CreatorId");
+
+                    b.Property<int>("Grant");
+
+                    b.Property<int>("GroupType");
+
+                    b.Property<int>("LeaderId");
+
+                    b.Property<int>("MaxPayday");
+
+                    b.Property<int>("Money");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Tag");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("LeaderId");
+
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupRankModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("DefaultForGroupId");
+
+                    b.Property<int>("GroupId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Rights");
+
+                    b.Property<int>("Salary");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DefaultForGroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupRanks");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupWorkerModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CharacterId");
+
+                    b.Property<int>("DutyMinutes");
+
+                    b.Property<int>("GroupId");
+
+                    b.Property<int>("GroupRankId");
+
+                    b.Property<int>("Rights");
+
+                    b.Property<int>("Salary");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("GroupRankId");
+
+                    b.ToTable("GroupWorkers");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.ItemModel", b =>
                 {
                     b.Property<int>("Id")
@@ -538,11 +622,13 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int>("G");
 
+                    b.Property<int?>("GroupId");
+
                     b.Property<int>("Health");
 
                     b.Property<string>("Model");
 
-                    b.Property<int>("OwnerId");
+                    b.Property<int?>("OwnerId");
 
                     b.Property<float>("PosX");
 
@@ -561,6 +647,8 @@ namespace LSG.DAL.Migrations
                     b.Property<bool>("State");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("OwnerId");
 
@@ -653,6 +741,50 @@ namespace LSG.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Leader")
+                        .WithMany()
+                        .HasForeignKey("LeaderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupRankModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "DefaultForGroup")
+                        .WithMany()
+                        .HasForeignKey("DefaultForGroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupWorkerModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
+                        .WithMany("GroupWorkers")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
+                        .WithMany("Workers")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupRankModel", "GroupRank")
+                        .WithMany("Workers")
+                        .HasForeignKey("GroupRankId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.ItemModel", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.BuildingModels.BuildingModel", "Building")
@@ -668,7 +800,7 @@ namespace LSG.DAL.Migrations
                         .HasForeignKey("CreatorId");
 
                     b.HasOne("LSG.DAL.Database.Models.VehicleModels.Vehicle", "Vehicle")
-                        .WithMany()
+                        .WithMany("ItemsInVehicle")
                         .HasForeignKey("VehicleId");
                 });
 
@@ -682,10 +814,13 @@ namespace LSG.DAL.Migrations
 
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
                 {
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
+                        .WithMany("Vehicles")
+                        .HasForeignKey("GroupId");
+
                     b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Owner")
                         .WithMany("Vehicles")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("OwnerId");
                 });
 #pragma warning restore 612, 618
         }

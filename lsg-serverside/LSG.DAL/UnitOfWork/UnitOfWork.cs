@@ -23,6 +23,7 @@ namespace LSG.DAL.UnitOfWork
             BuildingRepository = new BuildingRepository(_context);
             ItemRepository = new ItemRepository(_context);
             ShopRepository = new ShopRepository(_context);
+            GroupRepository = new GroupRepository(_context);
         }
         public IAccountRepository AccountRepository { get; set; }
         public ICharacterRepository CharacterRepository { get; set; }
@@ -35,6 +36,8 @@ namespace LSG.DAL.UnitOfWork
         public IItemRepository ItemRepository { get; set; }
 
         public IShopRepository ShopRepository { get; set; }
+
+        public IGroupRepository GroupRepository { get; set; }
 
 
         public void Dispose()

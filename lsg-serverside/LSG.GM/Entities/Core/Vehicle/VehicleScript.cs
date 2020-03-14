@@ -64,11 +64,24 @@ namespace LSG.GM.Entities.Core.Vehicle
             int vehicleId = (int)(long)args[0];
    
             VehicleEntity spawnedVehicle = EntityHelper.GetSpawnedVehicleById(vehicleId);
+
+            //TODO: Zrobić autoryzacje
+            //if(spawnedVehicle.DbModel.OwnerId != player.GetAccountEntity().characterEntity.DbModel.Id || spawnedVehicle.DbModel.GroupId != )
+            //{
+
+            //}
+
             if (spawnedVehicle != null)
             {
                 if(player.Vehicle == spawnedVehicle.GameVehicle)
                 {
                     player.SendErrorNotify(null, $"Aby odpspawnić pojazd musisz z niego wyjść");
+                    return;
+                }
+
+                if (spawnedVehicle.TrunkOpen)
+                {
+                    player.SendErrorNotify(null, "Aby odspawnić pojazd musisz zamknąć bagażnik");
                     return;
                 }
 

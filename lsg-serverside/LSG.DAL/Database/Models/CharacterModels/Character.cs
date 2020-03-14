@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using AltV.Net;
 using LSG.DAL.Database.Models.AccountModels;
+using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.VehicleModels;
 using Newtonsoft.Json;
@@ -37,10 +38,13 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public float Armor { get; set; }
         public float Thirsty { get; set; }
         public float Hunger { get; set; }
+        public CharacterLook CharacterLook { get; set; }
+
+
         public IEnumerable<Vehicle> Vehicles { get; set; }
         public IEnumerable<CharacterDescription> CharacterDescriptions { get; set; }
         public List<ItemModel> Items { get; set; }
-        public CharacterLook CharacterLook { get; set; }
+        public List<GroupWorkerModel> GroupWorkers { get; set; }
 
 
         public void OnWrite(IMValueWriter writer)
@@ -122,11 +126,13 @@ namespace LSG.DAL.Database.Models.CharacterModels
             writer.Name("vehicles");
             writer.Value(JsonConvert.SerializeObject(Vehicles));
 
+
             writer.Name("characterDescriptions");
-            writer.Value(JsonConvert.SerializeObject(CharacterDescriptions));
+            //writer.Value(JsonConvert.SerializeObject(CharacterDescriptions));
 
             writer.Name("characterLook");
-            writer.Value(JsonConvert.SerializeObject(CharacterLook));
+            //writer.Value(JsonConvert.SerializeObject(CharacterLook));
+            CharacterLook.OnWrite(writer);
 
             writer.EndObject();
 
