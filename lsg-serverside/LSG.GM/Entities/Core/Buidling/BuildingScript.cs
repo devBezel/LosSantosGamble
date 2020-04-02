@@ -22,24 +22,25 @@ namespace LSG.GM.Entities.Core.Buidling
     {
         public static ItemEntityFactory ItemFactory { get; } = new ItemEntityFactory();
 
-        public BuildingScript()
-        {
-            AltAsync.OnColShape += OnEnterColshape;
-            Alt.OnClient("building:enterBuilding", OnEnterBuilding);
-            Alt.OnClient("building:exitBuilding", OnExitBuilding);
-            Alt.OnClient("building:getManageData", GetBuildingManageData);
-            Alt.OnClient("building:requestLockBuilding", RequestLockBuilding);
-            Alt.OnClient("building:editData", BuildingEditData);
-            AltAsync.OnClient("building:editOnSaleData", BuildingEditOnSaleData);
-            Alt.OnClient("building:withdrawBalance", BuildingWithdrawBalance);
-            Alt.OnClient("building:insertItemToMagazine", BuildingInsertItemToMagazine);
-            Alt.OnClient("building:insertItemFromMagazineToEquipment", BuildingInsertItemFromMagazineToEquipment);
-            Alt.OnClient("building:turnSbOut", BuildingPlayerTurnSbOut);
-            //Alt.OnClient("building:openWindow", OpenInteractionBuildingWindow);
-            Alt.OnClient("building:addPlayer", AddPlayerToBuilding);
-        }
+        //public BuildingScript()
+        //{
+        //    //AltAsync.OnColShape += OnEnterColshape;
+        //    //Alt.OnClient("building:enterBuilding", OnEnterBuilding);
+        //    //Alt.OnClient("building:exitBuilding", OnExitBuilding);
+        //    //Alt.OnClient("building:getManageData", GetBuildingManageData);
+        //    //Alt.OnClient("building:requestLockBuilding", RequestLockBuilding);
+        //    //Alt.OnClient("building:editData", BuildingEditData);
+        //    //AltAsync.OnClient("building:editOnSaleData", BuildingEditOnSaleData);
+        //    //Alt.OnClient("building:withdrawBalance", BuildingWithdrawBalance);
+        //    //Alt.OnClient("building:insertItemToMagazine", BuildingInsertItemToMagazine);
+        //    //Alt.OnClient("building:insertItemFromMagazineToEquipment", BuildingInsertItemFromMagazineToEquipment);
+        //    //Alt.OnClient("building:turnSbOut", BuildingPlayerTurnSbOut);
+        //    //Alt.OnClient("building:openWindow", OpenInteractionBuildingWindow);
+        //    //Alt.OnClient("building:addPlayer", AddPlayerToBuilding);
+        //}
 
-        private async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
+        [AsyncScriptEvent(ScriptEventType.ColShape)]
+        public async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
         {
             IPlayer player = targetEntity as IPlayer;
             if (!state) return;
@@ -85,7 +86,8 @@ namespace LSG.GM.Entities.Core.Buidling
         //    player.SetData("current:doors", colShape);
         //}
 
-        public void OnEnterBuilding(IPlayer player, object[] args)
+        [ClientEvent("building:enterBuilding")]
+        public void OnEnterBuilding(IPlayer player)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -120,7 +122,8 @@ namespace LSG.GM.Entities.Core.Buidling
             buildingEntity.PlayersInBuilding.Add(player);
         }
 
-        public void OnExitBuilding(IPlayer player, object[] args)
+        [ClientEvent("building:exitBuilding")]
+        public void OnExitBuilding(IPlayer player)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -141,7 +144,8 @@ namespace LSG.GM.Entities.Core.Buidling
             player.DeleteData("current:doors");
         }
 
-        private void GetBuildingManageData(IPlayer player, object[] args)
+        [ClientEvent("building:getManageData")]
+        public void GetBuildingManageData(IPlayer player)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -160,7 +164,8 @@ namespace LSG.GM.Entities.Core.Buidling
 
         }
 
-        private void RequestLockBuilding(IPlayer player, object[] args)
+        [ClientEvent("building:requestLockBuilding")]
+        public void RequestLockBuilding(IPlayer player)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -184,7 +189,8 @@ namespace LSG.GM.Entities.Core.Buidling
             timer.Start();
         }
 
-        private void BuildingEditData(IPlayer player, object[] args)
+        [ClientEvent("building:editData")]
+        public void BuildingEditData(IPlayer player, string newBuildingName, int newEntryFee)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -192,8 +198,8 @@ namespace LSG.GM.Entities.Core.Buidling
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
             if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerEditBuilding(player.GetAccountEntity().characterEntity)) return;
 
-            string newBuildingName = args[0].ToString();
-            int newEntryFee = Convert.ToInt32(args[1]);
+            //string newBuildingName = args[0].ToString();
+            //int newEntryFee = Convert.ToInt32(args[1]);
 
             Alt.Log($"name: {newBuildingName} entryfee: {newEntryFee}");
 
@@ -203,7 +209,8 @@ namespace LSG.GM.Entities.Core.Buidling
             player.SendNativeNotify(null, NotificationNativeType.Building, 1, "Edycja budynku", "~g~Budynek", "Edycja budynku przebiegła pomyślnie", 1);
         }
 
-        private async Task BuildingEditOnSaleData(IPlayer player, object[] args) => await AltAsync.Do(async () =>
+        [AsyncClientEvent("building:editOnSaleData")]
+        public async Task BuildingEditOnSaleData(IPlayer player, bool onSale, int saleCost) => await AltAsync.Do(async () =>
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -211,8 +218,8 @@ namespace LSG.GM.Entities.Core.Buidling
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
             if (!buildingEntity.IsCharacterOwner(player)) return;
 
-            bool onSale = (bool)args[0];
-            int saleCost = Convert.ToInt32(args[1]);
+            //bool onSale = (bool)args[0];
+            //int saleCost = Convert.ToInt32(args[1]);
 
             buildingEntity.DbModel.OnSale = onSale;
             buildingEntity.DbModel.SaleCost = saleCost;
@@ -222,7 +229,9 @@ namespace LSG.GM.Entities.Core.Buidling
             await buildingEntity.UpdateBlip();
             player.SendNativeNotify(null, NotificationNativeType.Normal, 1, "Wystawiłeś budynek na sprzedaż", "~g~Budynek", $"Twój budynek został wystawiony na sprzedaż za ~g~{saleCost}$", 1);
         });
-        private void BuildingWithdrawBalance(IPlayer player, object[] args)
+
+        [ClientEvent("building:withdrawBalance")]
+        public void BuildingWithdrawBalance(IPlayer player, int toWithdraw)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -230,7 +239,7 @@ namespace LSG.GM.Entities.Core.Buidling
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
             if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerWithdrawDeposit(player.GetAccountEntity().characterEntity)) return;
 
-            int toWithdraw = Convert.ToInt32(args[0]);
+            //int toWithdraw = Convert.ToInt32(args[0]);
 
             if(!buildingEntity.HasEnoughMoney(toWithdraw))
             {
@@ -243,8 +252,8 @@ namespace LSG.GM.Entities.Core.Buidling
 
             player.SendNativeNotify(null, NotificationNativeType.Building, 1, "Wypłaciłeś środki", "~g~Budynek", $"Wypłaciłeś z salda budynku ~g~{toWithdraw}$", 1);
         }
-
-        public void BuildingInsertItemToMagazine(IPlayer player, object[] args)
+        [ClientEvent("building:insertItemToMagazine")]
+        public void BuildingInsertItemToMagazine(IPlayer player, int itemID)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -252,7 +261,7 @@ namespace LSG.GM.Entities.Core.Buidling
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
             if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerManagmentMagazine(player.GetAccountEntity().characterEntity)) return;
 
-            int itemID = (int)(long)args[0];
+            //int itemID = (int)(long)args[0];
 
 
             ItemModel itemToChange = player.GetAccountEntity().characterEntity.DbModel.Items.FirstOrDefault(item => item.Id == itemID);
@@ -270,7 +279,8 @@ namespace LSG.GM.Entities.Core.Buidling
             itemEntity.Save();
         }
 
-        private void BuildingInsertItemFromMagazineToEquipment(IPlayer player, object[] args)
+        [ClientEvent("building:insertItemFromMagazineToEquipment")]
+        public void BuildingInsertItemFromMagazineToEquipment(IPlayer player, int itemID)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -278,7 +288,7 @@ namespace LSG.GM.Entities.Core.Buidling
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
             if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerManagmentMagazine(player.GetAccountEntity().characterEntity)) return;
 
-            int itemID = (int)(long)args[0];
+            //int itemID = (int)(long)args[0];
 
 
             ItemModel itemToChange = buildingEntity.DbModel.ItemsInBuilding.FirstOrDefault(item => item.Id == itemID);
@@ -295,7 +305,8 @@ namespace LSG.GM.Entities.Core.Buidling
             itemEntity.Save();
         }
 
-        private void BuildingPlayerTurnSbOut(IPlayer player, object[] args)
+        [ClientEvent("building:turnSbOut")]
+        public void BuildingPlayerTurnSbOut(IPlayer player, int getterId)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -303,7 +314,7 @@ namespace LSG.GM.Entities.Core.Buidling
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
             if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerManagmentGuests(player.GetAccountEntity().characterEntity)) return;
 
-            int getterId = (int)(long)args[0];
+            //int getterId = (int)(long)args[0];
             IPlayer getter = PlayerExtenstion.GetPlayerById(getterId);
             if (getter == null) return;
 
@@ -316,7 +327,8 @@ namespace LSG.GM.Entities.Core.Buidling
             getter.SendNativeNotify(null, NotificationNativeType.Building, 1, "Wyproszono Cię z budynku", "~g~Budynek", "Zostałeś wyproczony z tego budynku przez osobę uprawnioną");
         }
 
-        private void AddPlayerToBuilding(IPlayer player, object[] args)
+        [ClientEvent("building:addPlayer")]
+        public void AddPlayerToBuilding(IPlayer player, int getterId)
         {
             player.GetData("current:doors", out IColShape colShape);
             if (colShape == null) return;
@@ -324,7 +336,7 @@ namespace LSG.GM.Entities.Core.Buidling
             BuildingEntity buildingEntity = colShape.GetBuildingEntity();
             if (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.CanPlayerManagmentTenants(player.GetAccountEntity().characterEntity)) return;
 
-            int getterId = (int)(long)args[0];
+            //int getterId = (int)(long)args[0];
             IPlayer getter = PlayerExtenstion.GetPlayerById(getterId);
             if (getter == null) return;
 

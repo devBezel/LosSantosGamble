@@ -12,12 +12,13 @@ namespace LSG.GM.Core.Player.Scripts
 {
     public class HungerAndThirstyScript : IScript
     {
-        public HungerAndThirstyScript()
-        {
-            AltAsync.OnClient("hungerThirsty:subtract", SubtractHungerAndThirsty);
-        }
+        //public HungerAndThirstyScript()
+        //{
+        //    AltAsync.OnClient("hungerThirsty:subtract", SubtractHungerAndThirsty);
+        //}
 
-        private async Task SubtractHungerAndThirsty(IPlayer player, object[] args) => await AltAsync.Do(() =>
+        [AsyncClientEvent("hungerThirsty:subtract")]
+        public async Task SubtractHungerAndThirsty(IPlayer player) => await AltAsync.Do(() =>
         {
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
             if (characterEntity.Hunger == 0 || characterEntity.Thirsty == 0) return;

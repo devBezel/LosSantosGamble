@@ -84,19 +84,7 @@ namespace LSG.GM.Economy.Groups
 
             if(player.TryGetGroupByUnsafeSlot(Convert.ToInt16(slot), out GroupEntity group, out GroupWorkerModel worker))
             {
-                if(!group.CanPlayerOpenGroupPanel(worker))
-                {
-                    player.SendErrorNotify("Nie masz uprawnień", "Nie posiadasz uprawnień, aby wykonać tą akcję");
-                    return;
-                }
-
-                Alt.Log(group.DbModel.Name);
-
-                foreach (var item in group.DbModel.Workers)
-                {
-                    Alt.Log($"{item.CharacterId} {item.Character.Name}");
-                }
-                player.Emit("group-general:openGroupPanel", group.DbModel, group.DbModel.Workers, group.DbModel.Vehicles);
+                player.Emit("group-general:openGroupPanel", group.DbModel, group.DbModel.Workers, group.DbModel.Vehicles, worker);
             }
         }
     }

@@ -18,14 +18,16 @@ namespace LSG.GM.Entities.Core.Item.Scripts
         public static ItemEntityFactory ItemFactory { get; } = new ItemEntityFactory();
 
 
-        public InventoryScript()
-        {
-            Alt.OnClient("inventory:getItems", InventoryGetItems);
-            Alt.OnClient("inventory:useItem", InventoryUseItem);
-            Alt.OnClient("inventory:offerPlayerItem", InventoryOfferPlayerItem);
-            Alt.OnClient("inventory:offerRequestResult", InventoryOfferRequestResult);
-        }
-        public void InventoryGetItems(IPlayer player, object[] args)
+        //public InventoryScript()
+        //{
+        //    Alt.OnClient("inventory:getItems", InventoryGetItems);
+        //    Alt.OnClient("inventory:useItem", InventoryUseItem);
+        //    Alt.OnClient("inventory:offerPlayerItem", InventoryOfferPlayerItem);
+        //    Alt.OnClient("inventory:offerRequestResult", InventoryOfferRequestResult);
+        //}
+
+        [ClientEvent("inventory:getItems")]
+        public void InventoryGetItems(IPlayer player)
         {
             List<ItemModel> items = player.GetAccountEntity().characterEntity.DbModel.Items.ToList();
             List<ItemEntity> usedItems = player.GetAccountEntity().characterEntity.ItemsInUse.ToList();
@@ -34,9 +36,10 @@ namespace LSG.GM.Entities.Core.Item.Scripts
             player.Emit("inventory:items", items);
         }
 
-        public void InventoryUseItem(IPlayer sender, object[] args)
+        [ClientEvent("inventory:useItem")]
+        public void InventoryUseItem(IPlayer sender, int itemID)
         {
-            int itemID = (int)(long)args[0];
+            //int itemID = (int)(long)args[0];
 
             Alt.Log("ItemID: " + itemID);
             
@@ -91,12 +94,13 @@ namespace LSG.GM.Entities.Core.Item.Scripts
             itemEntity.Create(getter.GetAccountEntity().characterEntity);
         }
 
-        public void InventoryOfferPlayerItem(IPlayer sender, object[] args)
+        [ClientEvent("inventory:offerPlayerItem")]
+        public void InventoryOfferPlayerItem(IPlayer sender, string itemModelJson, IPlayer getter, int costItem)
         {
-            ItemModel itemModel = JsonConvert.DeserializeObject<ItemModel>(args[0].ToString());
+            ItemModel itemModel = JsonConvert.DeserializeObject<ItemModel>(itemModelJson);
             Alt.Log($"itemModel: {itemModel.Name}");
-            IPlayer getter = (IPlayer)args[1];
-            int costItem = Convert.ToInt32(args[2]);
+            //IPlayer getter = (IPlayer)args[1];
+            //int costItem = Convert.ToInt32(args[2]);
 
             if (getter == null) return;
 
@@ -108,12 +112,14 @@ namespace LSG.GM.Entities.Core.Item.Scripts
 
             getter.Emit("inventory:sendRequestOffer", itemModel, costItem, sender.GetAccountEntity().ServerID);
         }
-        private void InventoryOfferRequestResult(IPlayer getter, object[] args)
+
+        [ClientEvent("inventory:offerRequestResult")]
+        public void InventoryOfferRequestResult(IPlayer getter, string itemModelJson, int costItem, int senderID, bool accept)
         {
-            ItemModel itemModel = JsonConvert.DeserializeObject<ItemModel>(args[0].ToString());
-            int costItem = Convert.ToInt32(args[1]);
-            int senderID = Convert.ToInt32(args[2]);
-            bool accept = (bool)args[3];
+            ItemModel itemModel = JsonConvert.DeserializeObject<ItemModel>(itemModelJson);
+            //int costItem = Convert.ToInt32(args[1]);
+            //int senderID = Convert.ToInt32(args[2]);
+            //bool accept = (bool)args[3];
 
             IPlayer sender = PlayerExtenstion.GetPlayerById(senderID);
 

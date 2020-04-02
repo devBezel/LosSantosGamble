@@ -18,18 +18,18 @@ namespace LSG.GM.Entities.Common.Bus
 {
     public class BusScript : IScript
     {
-        public BusScript()
-        {
-            Task.Run(() =>
-            {
-                AltAsync.OnColShape += OnColshape;
-                AltAsync.OnClient("bus:selectStation", BusStationSelected);
-                Alt.OnClient("bus:openWindow", BusOpenWindow);
-            });
+        //public BusScript()
+        //{
+        //    Task.Run(() =>
+        //    {
+        //        AltAsync.OnColShape += OnColshape;
+        //        AltAsync.OnClient("bus:selectStation", BusStationSelected);
+        //        Alt.OnClient("bus:openWindow", BusOpenWindow);
+        //    });
 
-        }
-
-        private async Task OnColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
+        //}
+        [AsyncScriptEvent(ScriptEventType.ColShape)]
+        public async Task OnColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
         {
             if (!state) return;
             if (colShape == null || !colShape.Exists) return;
@@ -49,7 +49,8 @@ namespace LSG.GM.Entities.Common.Bus
             player.SetData("current:bus", busEntity);
         });
 
-        private void BusOpenWindow(IPlayer player, object[] args)
+        [ClientEvent("bus:openWindow")]
+        public void BusOpenWindow(IPlayer player)
         {
             player.GetData("current:bus", out BusEntity busEntity);
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
@@ -57,15 +58,15 @@ namespace LSG.GM.Entities.Common.Bus
             player.Emit("bus:information", busEntity.DbModel, busEntity.DbModel.BusStopStations);
             player.DeleteData("current:bus");
         }
-
-        private async Task BusStationSelected(IPlayer player, object[] args) => await AltAsync.Do(() =>
+        [AsyncClientEvent("bus:selectStation")]
+        public async Task BusStationSelected(IPlayer player, int id, int cost, float time, float posX, float posY, float posZ) => await AltAsync.Do(() =>
         {
-            int id = (int)(long)args[0];
-            int cost = (int)(long)args[1];
-            float time = (float)(long)args[2];
-            float posX = (float)(long)args[3];
-            float posY = (float)(long)args[4];
-            float posZ = (float)(long)args[5];
+            //int id = (int)(long)args[0];
+            //int cost = (int)(long)args[1];
+            //float time = (float)(long)args[2];
+            //float posX = (float)(long)args[3];
+            //float posY = (float)(long)args[4];
+            //float posZ = (float)(long)args[5];
 
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
 

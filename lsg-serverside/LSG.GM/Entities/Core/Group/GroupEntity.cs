@@ -45,10 +45,10 @@ namespace LSG.GM.Entities.Core.Group
             return entityFactory.Create(groupModel);
         }
 
-        public bool CanPlayerOpenGroupPanel(GroupWorkerModel worker)
-        {
-            return worker?.Rights.HasFlag(GroupRights.Panel) ?? false;
-        }
+        //public bool CanPlayerOpenGroupPanel(GroupWorkerModel worker)
+        //{
+        //    return worker?.Rights.HasFlag(GroupRights.Panel) ?? false;
+        //}
 
         public void AddMoney(int money)
         {

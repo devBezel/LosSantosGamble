@@ -16,7 +16,7 @@ namespace LSG.GM.Core.Player.Scripts
 
         public BwScript()
         {
-            Alt.OnPlayerDead += OnPlayerDeath;
+            //Alt.OnPlayerDead += OnPlayerDeath;
 
             bwTypes.Add(new BwType() { Weapon = Weapons.AssaultRifle, Time = 5 });
             bwTypes.Add(new BwType() { Weapon = Weapons.RammedByCar, Time = 5 });
@@ -25,10 +25,11 @@ namespace LSG.GM.Core.Player.Scripts
             bwTypes.Add(new BwType() { Weapon = Weapons.Drowning, Time = 5 });
             bwTypes.Add(new BwType() { Weapon = Weapons.DrowningInVehicle, Time = 5 });
 
-            Alt.OnClient("bw:gone", BwGone);
+            //Alt.OnClient("bw:gone", BwGone);
         }
 
-        private void BwGone(IPlayer player,  object[] args)
+        [ClientEvent("bw:gone")]
+        public void BwGone(IPlayer player)
         {
             if (player.GetAccountEntity() == null) return;
             player.GetAccountEntity().characterEntity.HasBw = false;
@@ -69,7 +70,8 @@ namespace LSG.GM.Core.Player.Scripts
             getter.SendSuccessNotify(null, $"Otrzymałeś UNBW od administratora {sender.GetAccountEntity().DbModel.Username}");
         }
 
-        private void OnPlayerDeath(IPlayer player, IEntity killer, uint weapon)
+        [ScriptEvent(ScriptEventType.PlayerDead)]
+        public void OnPlayerDeath(IPlayer player, IEntity killer, uint weapon)
         {
             if (player.GetAccountEntity() == null) return;
             int time = 1;

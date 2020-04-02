@@ -20,18 +20,19 @@ namespace LSG.GM.Entities.Core.Vehicle
 {
     public class VehicleTrunkScript : IScript
     {
-        public VehicleTrunkScript()
-        {
-            Alt.OnClient("vehicle-interaction:openTrunkRequest", OpenVehicleTrunkRequest);
-            AltAsync.OnColShape += OnEnterColshape;
-            AltAsync.OnPlayerEnterVehicle += OnEnterPlayerVehicle;
-            Alt.OnClient("vehicle-trunk:open", OpenVehicleTrunk);
-            AltAsync.OnClient("vehicle-interaction:closeTrunkRequest", CloseVehicleTrunk);
-            Alt.OnClient("trunk:putItemToEquipment", PutItemToEquipmentFromTrunk);
-            Alt.OnClient("trunk:putItemToVehicleTrunk", PutItemToVehicleTrunk);
-        }
+        //public VehicleTrunkScript()
+        //{
+        //    //Alt.OnClient("vehicle-interaction:openTrunkRequest", OpenVehicleTrunkRequest);
+        //    //AltAsync.OnColShape += OnEnterColshape;
+        //    //AltAsync.OnPlayerEnterVehicle += OnEnterPlayerVehicle;
+        //    //Alt.OnClient("vehicle-trunk:open", OpenVehicleTrunk);
+        //    //AltAsync.OnClient("vehicle-interaction:closeTrunkRequest", CloseVehicleTrunk);
+        //    //Alt.OnClient("trunk:putItemToEquipment", PutItemToEquipmentFromTrunk);
+        //    //Alt.OnClient("trunk:putItemToVehicleTrunk", PutItemToVehicleTrunk);
+        //}
 
-        private async Task OnEnterPlayerVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
+        [AsyncScriptEvent(ScriptEventType.PlayerEnterVehicle)]
+        public async Task OnEnterPlayerVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
         {
             if (!vehicle.GetVehicleEntity().TrunkOpen) return;
             //if ((int)seat != 1) return;
@@ -41,7 +42,8 @@ namespace LSG.GM.Entities.Core.Vehicle
             DisposeVehicleTrunk(vehicle, player);
         });
 
-        private async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
+        [AsyncScriptEvent(ScriptEventType.ColShape)]
+        public async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
         {
             IPlayer player = targetEntity as IPlayer;
             if (!state) return;
@@ -57,12 +59,12 @@ namespace LSG.GM.Entities.Core.Vehicle
             player.SetData("current:vehicle-trunk", colShape);
 
         });
-
-        public void OpenVehicleTrunkRequest(IPlayer player, object[] args)
+        [ClientEvent("vehicle-interaction:openTrunkRequest")]
+        public void OpenVehicleTrunkRequest(IPlayer player, IVehicle vehicle, string positionJson)
         {
-            IVehicle vehicle = (IVehicle)args[0];
+            //IVehicle vehicle = (IVehicle)args[0];
             
-            Vector3 positionTrunk = JsonConvert.DeserializeObject<Vector3>(args[1].ToString());
+            Vector3 positionTrunk = JsonConvert.DeserializeObject<Vector3>(positionJson);
 
 
             Alt.Log("Doszedl event trunk");
@@ -92,8 +94,8 @@ namespace LSG.GM.Entities.Core.Vehicle
             vehicleEntity.TrunkOpen = true;
             EntityHelper.Add(drawTextModel);
         }
-
-        public void OpenVehicleTrunk(IPlayer player, object[] args)
+        [ClientEvent("vehicle-trunk:open")]
+        public void OpenVehicleTrunk(IPlayer player)
         {
             player.GetData("current:vehicle-trunk", out IColShape trunkColshape);
             if (trunkColshape == null) return;
@@ -114,16 +116,17 @@ namespace LSG.GM.Entities.Core.Vehicle
                 vehicleEntity.DbModel.ItemsInVehicle);
         }
 
-        public async Task CloseVehicleTrunk(IPlayer player, object[] args) => await AltAsync.Do(() =>
+        [AsyncClientEvent("vehicle-interaction:closeTrunkRequest")]
+        public async Task CloseVehicleTrunk(IPlayer player, IVehicle vehicle) => await AltAsync.Do(() =>
         {
-            IVehicle vehicle = (IVehicle)args[0];
+            //IVehicle vehicle = (IVehicle)args[0];
 
             DisposeVehicleTrunk(vehicle, player);
         });
-
-        public void PutItemToEquipmentFromTrunk(IPlayer player, object[] args)
+        [ClientEvent("trunk:putItemToEquipment")]
+        public void PutItemToEquipmentFromTrunk(IPlayer player, int itemID)
         {
-            int itemID = (int)(long)args[0];
+            //int itemID = (int)(long)args[0];
 
             player.GetData("current:vehicle-trunk", out IColShape trunkColshape);
             if (trunkColshape == null) return;
@@ -142,10 +145,10 @@ namespace LSG.GM.Entities.Core.Vehicle
             vehicleEntity.DbModel.ItemsInVehicle.Remove(itemToChange);
             characterEntity.DbModel.Items.Add(itemToChange);
         }
-
-        private void PutItemToVehicleTrunk(IPlayer player, object[] args)
+        [ClientEvent("trunk:putItemToVehicleTrunk")]
+        public void PutItemToVehicleTrunk(IPlayer player, int itemID)
         {
-            int itemID = (int)(long)args[0];
+            //int itemID = (int)(long)args[0];
 
             player.GetData("current:vehicle-trunk", out IColShape trunkColshape);
             if (trunkColshape == null) return;
@@ -170,8 +173,7 @@ namespace LSG.GM.Entities.Core.Vehicle
             characterEntity.DbModel.Items.Remove(itemToChange);
             vehicleEntity.DbModel.ItemsInVehicle.Add(itemToChange);
         }
-
-        private void DisposeVehicleTrunk(IVehicle vehicle, IPlayer player)
+        public void DisposeVehicleTrunk(IVehicle vehicle, IPlayer player)
         {
             VehicleEntity vehicleEntity = vehicle.GetVehicleEntity();
             if (vehicleEntity == null) return;

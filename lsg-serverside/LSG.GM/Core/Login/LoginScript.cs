@@ -20,49 +20,69 @@ using AltV.Net.Resources.Chat.Api;
 using LSG.GM.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using LSG.GM.Entities;
 
 namespace LSG.GM.Core.Login
 {
     public class LoginScript : IScript
     {
-        public LoginScript()
-        {
-            Task.Run(() =>
-            {
-                AltAsync.OnPlayerConnect += OnPlayerConnect;
-                AltAsync.OnClient("login:characterDetail", SetCharacterSettings);
-            });
+        //public LoginScript()
+        //{
+        //    Task.Run(() =>
+        //    {
+        //        AltAsync.OnPlayerConnect += OnPlayerConnect;
+        //        AltAsync.OnClient("login:characterDetail", SetCharacterSettings);
+        //    });
 
-            Alt.OnClient("login:successWearChangeWorld", ChangeCharacterWorld);
-        }
+        //    Alt.OnClient("login:successWearChangeWorld", ChangeCharacterWorld);
+        //}
 
-        private async Task SetCharacterSettings(IPlayer player, object[] args) => await AltAsync.Do(() =>
+
+        [AsyncClientEvent("login:characterDetail")]
+        public async Task SetCharacterSettings(IPlayer player, int characterId) => await AltAsync.Do(() =>
         {
-            
-            Character characterClient = JsonConvert.DeserializeObject<Character>((string)args[0]);
+            //Character characterClient = JsonConvert.DeserializeObject<Character>((string)args[0]);
+
+
             Character characterDatabase = Singleton.GetDatabaseInstance().Characters
             .Include(l => l.CharacterLook)
             .Include(g => g.GroupWorkers)
             .Include(i => i.Items)
+            .Include(v => v.Vehicles)
             .Include(a => a.Account)
             .ThenInclude(p => p.AccountPremium)
-            .FirstOrDefault(c => c.Id == characterClient.Id);
+            .FirstOrDefault(c => c.Id == characterId);
 
             Alt.Log("ilosc rzeczy z ekwipunku " + characterDatabase.Items.Count().ToString());
             AccountEntity accountEntity = new AccountEntity(characterDatabase.Account, player);
             accountEntity.Login(characterDatabase);
         });
-
-        private void ChangeCharacterWorld(IPlayer player, object[] args)
+        
+        [ClientEvent("login:successWearChangeWorld")]
+        public void ChangeCharacterWorld(IPlayer player)
         {
             // Ustawianie domyślnego świata po wyborze postaci
             Alt.Log("Zmieniam świat");
             player.Dimension = 0;
         }
 
-        private async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(() =>
+        [ScriptEvent(ScriptEventType.PlayerDisconnect)]
+        public void OnPlayerDisconnect(IPlayer player, string reason)
         {
-            player.EmitAsync("other:first-connect");
+            if (player == null || player.GetAccountEntity() == null) return;
+            player.GetAccountEntity().Dispose();
+        }
+
+
+
+        [AsyncScriptEvent(ScriptEventType.PlayerConnect)]
+        public async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(async () =>
+        {
+            await EntityHelper.LoadClientEntity(player);
+            Calculation.AssignPlayerServerID(player);
+
+
+            await player.EmitAsync("other:first-connect");
         });
 
 

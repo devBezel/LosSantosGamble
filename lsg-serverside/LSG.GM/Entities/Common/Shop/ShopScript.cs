@@ -18,14 +18,15 @@ namespace LSG.GM.Entities.Common.Shop
 {
     public class ShopScript : IScript
     {
-        public ShopScript()
-        {
-            AltAsync.OnColShape += OnEnterColshape;
-            Alt.OnClient("shop:openWindow", OpenShopWindow);
-            Alt.OnClient("shop:buyItem", BuyItemInShop);
-        }
+        //public ShopScript()
+        //{
+        //    AltAsync.OnColShape += OnEnterColshape;
+        //    Alt.OnClient("shop:openWindow", OpenShopWindow);
+        //    Alt.OnClient("shop:buyItem", BuyItemInShop);
+        //}
 
-        private async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
+        [AsyncScriptEvent(ScriptEventType.ColShape)]
+        public async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
         {
             if (!state) return;
             if (colShape == null || !colShape.Exists) return;
@@ -45,8 +46,8 @@ namespace LSG.GM.Entities.Common.Shop
             new Interaction(player, "shop:openWindow", "aby otworzyć ~g~sklep");
         });
 
-
-        private void OpenShopWindow(IPlayer player, object[] args)
+        [ClientEvent("shop:openWindow")]
+        public void OpenShopWindow(IPlayer player)
         {
             Alt.Log("otwieram okno");
             player.GetData("current:shop", out ShopEntity shopEntity);
@@ -57,14 +58,15 @@ namespace LSG.GM.Entities.Common.Shop
             player.DeleteData("current:shop");
         }
 
-        private void BuyItemInShop(IPlayer player, object[] args)
+        [ClientEvent("shop:buyItem")]
+        public void BuyItemInShop(IPlayer player, int countToBuy, string jsonItemObject)
         {
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
 
-            int countToBuy = (int)(long)args[0];
+            //int countToBuy = (int)(long)args[0];
             if (countToBuy == 0) return;
 
-            ShopAssortmentModel itemObject = JsonConvert.DeserializeObject<ShopAssortmentModel>(args[1].ToString());
+            ShopAssortmentModel itemObject = JsonConvert.DeserializeObject<ShopAssortmentModel>(jsonItemObject);
             int itemCountCalculate = itemObject.Count * countToBuy;
             int itemCostCalculate = itemObject.Cost * countToBuy;
 

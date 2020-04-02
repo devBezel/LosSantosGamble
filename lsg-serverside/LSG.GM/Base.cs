@@ -22,30 +22,33 @@ using System.Threading.Tasks;
 
 namespace LSG.GM
 {
-    public class Base : AsyncResource
+    internal class Base : AsyncResource
     {
         public override void OnStart()
         {
-            Alt.OnPlayerDisconnect += OnPlayerDisconnect;
-            Task.Run(async () =>
+            //Alt.OnPlayerDisconnect += OnPlayerDisconnect;
+            AltAsync.Do(async () =>
             {
-                AltAsync.OnPlayerConnect += OnPlayerConnect;
+                //AltAsync.OnPlayerConnect += OnPlayerConnect;
                 await EntityHelper.LoadServerEntity();
             });
 
         }
 
-        private async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(async () =>
-        {
-            await EntityHelper.LoadClientEntity(player);
-            Calculation.AssignPlayerServerID(player);
-        });
+        //[ScriptEvent(ScriptEventType.PlayerConnect)]
+        //public async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(async () =>
+        //{
+        //    await EntityHelper.LoadClientEntity(player);
+        //    Calculation.AssignPlayerServerID(player);
+        //});
 
-        private void OnPlayerDisconnect(IPlayer player, string reason)
-        {
-            if (player == null || player.GetAccountEntity() == null) return;
-            player.GetAccountEntity().Dispose();
-        }
+
+        //[ScriptEvent(ScriptEventType.PlayerDisconnect)]
+        //public void OnPlayerDisconnect(IPlayer player, string reason)
+        //{
+        //    if (player == null || player.GetAccountEntity() == null) return;
+        //    player.GetAccountEntity().Dispose();
+        //}
 
 
 

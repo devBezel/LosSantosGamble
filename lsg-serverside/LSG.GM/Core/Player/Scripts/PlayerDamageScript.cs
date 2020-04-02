@@ -11,12 +11,13 @@ namespace LSG.GM.Core.Player.Scripts
 {
     public class PlayerDamageScript : IScript
     {
-        public PlayerDamageScript()
-        {
-            AltAsync.OnPlayerDamage += OnPlayerDamage;
-        }
+        //public PlayerDamageScript()
+        //{
+        //    AltAsync.OnPlayerDamage += OnPlayerDamage;
+        //}
 
-        private async Task OnPlayerDamage(IPlayer player, IEntity attacker, ushort oldHealth, ushort oldArmor, ushort oldMaxHealth, ushort oldMaxArmor, uint weapon, ushort damage) => await AltAsync.Do(() =>
+        [AsyncScriptEvent(ScriptEventType.PlayerDamage)]
+        public async Task OnPlayerDamage(IPlayer player, IEntity attacker, ushort oldHealth, ushort oldArmor, ushort oldMaxHealth, ushort oldMaxArmor, uint weapon, ushort damage) => await AltAsync.Do(() =>
         {
             if (player.Health >= 150) return;
 

@@ -8,11 +8,11 @@ namespace LSG.DAL.Enums
     public enum GroupRights
     {
         None = 0,
-        DepositWithdrawMoney = 1 << 0,
-        Recruitment = 1 << 1,
-        Orders = 1 << 2,
-        Doors = 1 << 3,
-        Chat = 1 << 4,
+        Vehicle = 1 << 0,
+        DepositWithdrawMoney = 1 << 1,
+        Recruitment = 1 << 2,
+        Orders = 1 << 3,
+        Doors = 1 << 4,
         Offers = 1 << 5,
         First = 1 << 6,
         Second = 1 << 7,
@@ -23,7 +23,6 @@ namespace LSG.DAL.Enums
         Seventh = 1 << 12,
         Eight = 1 << 13,
         Ninth = 1 << 14,
-        Panel = 1 << 15,
-        AllBasic = DepositWithdrawMoney | Doors | Recruitment | Chat | Offers | Orders | Panel,
+        AllBasic = DepositWithdrawMoney | Doors | Recruitment | Offers | Orders,
     }
 }

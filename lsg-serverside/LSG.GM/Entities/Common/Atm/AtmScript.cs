@@ -19,19 +19,20 @@ namespace LSG.GM.Entities.Common.Atm
     public class AtmScript :  IScript
     {
 
-        public AtmScript()
-        {
-            Task.Run(() =>
-            {
-                AltAsync.OnColShape += OnColshape;
-            });
+        //public AtmScript()
+        //{
+        //    Task.Run(() =>
+        //    {
+        //        AltAsync.OnColShape += OnColshape;
+        //    });
 
-            Alt.OnClient("atm:deposit", AtmDepositMoney);
-            Alt.OnClient("atm:withdraw", AtmWithdrawMoney);
-            Alt.OnClient("atm:openWindow", AtmOpenWindow);
-        }
+        //    //Alt.OnClient("atm:deposit", AtmDepositMoney);
+        //    //Alt.OnClient("atm:withdraw", AtmWithdrawMoney);
+        //    //Alt.OnClient("atm:openWindow", AtmOpenWindow);
+        //}
 
-        private async Task OnColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
+        [ScriptEvent(ScriptEventType.ColShape)]
+        public async Task OnColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
         {
             if (!state) return;
 
@@ -49,8 +50,8 @@ namespace LSG.GM.Entities.Common.Atm
             new Interaction(player, "atm:openWindow", "aby otworzyć ~g~ATM");
         });
 
-
-        public void AtmOpenWindow(IPlayer player, object[] args)
+        [ClientEvent("atm:openWindow")]
+        public void AtmOpenWindow(IPlayer player)
         {
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
 
@@ -90,17 +91,19 @@ namespace LSG.GM.Entities.Common.Atm
 
         });
 
-        public void AtmDepositMoney(IPlayer player, object[] args)
+        [ClientEvent("atm:deposit")]
+        public void AtmDepositMoney(IPlayer player, int amount)
         {
-            int amount = (int)(long)args[0];
+            //int amount = (int)(long)args[0];
 
             BankHelper.DepositToBank(player, amount);
             player.SendNativeNotify(null, NotificationNativeType.Bank, 1, "Przyjęto wpłatę", "~g~ Bank Los Santos", $"Twoja wpłata {amount}$ została przyjęta poprawnie");
         }
 
-        public void AtmWithdrawMoney(IPlayer player, object[] args)
+        [ClientEvent("atm:withdraw")]
+        public void AtmWithdrawMoney(IPlayer player, int amount)
         {
-            int amount = (int)(long)args[0];
+            //int amount = (int)(long)args[0];
 
             BankHelper.WithdrawFromBank(player, amount);
             player.SendNativeNotify(null, NotificationNativeType.Bank, 1, "Przyjęto wypłatę", "~g~ Bank Los Santos", $"Twoja wypłata {amount}$ została przyjęta poprawnie");

@@ -17,30 +17,33 @@ namespace LSG.GM.Entities.Core.Vehicle
 {
     public class VehicleScript : IScript
     {
-        public VehicleScript()
-        {
-            Alt.OnClient("vehicle:spawnVehicle", SpawnOwnVehicle);
-            Task.Run(() =>
-            {
-                AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
-            });
+        //public VehicleScript()
+        //{
+        //    Alt.OnClient("vehicle:spawnVehicle", SpawnOwnVehicle);
+        //    Task.Run(() =>
+        //    {
+        //        AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
+        //    });
 
-            AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
-            AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
-            Alt.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
-        }
+        //    //AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
+        //    AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
+        //    Alt.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
+        //}
 
-        private void OnPlayerChangeVehicleSeat(IVehicle vehicle, IPlayer player, byte oldSeat, byte newSeat)
+        [ScriptEvent(ScriptEventType.PlayerChangeVehicleSeat)]
+        public void OnPlayerChangeVehicleSeat(IVehicle vehicle, IPlayer player, byte oldSeat, byte newSeat)
         {
             player.Emit("player:changeVehicleSeat", (int)oldSeat, (int)newSeat);
         }
 
-        private async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
+        [AsyncScriptEvent(ScriptEventType.PlayerEnterVehicle)]
+        public async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
         {
             player.EmitAsync("player:enterVehicle", (int)seat);
         });
 
-        private async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
+        [AsyncScriptEvent(ScriptEventType.PlayerLeaveVehicle)]
+        public async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
         {
             VehicleEntity vehicleEntity = vehicle.GetVehicleEntity();
             if (seat == 1)
@@ -59,9 +62,10 @@ namespace LSG.GM.Entities.Core.Vehicle
             player.EmitAsync("vehicle:openWindow", EntityHelper.GetCharacterVehicleDatabaseList(player.GetAccountEntity().characterEntity.DbModel.Id));
         });
 
-        public void SpawnOwnVehicle(IPlayer player, object[] args)
+        [ClientEvent("vehicle:spawnVehicle")]
+        public void SpawnOwnVehicle(IPlayer player, int vehicleId)
         {
-            int vehicleId = (int)(long)args[0];
+            //int vehicleId = (int)(long)args[0];
    
             VehicleEntity spawnedVehicle = EntityHelper.GetSpawnedVehicleById(vehicleId);
 

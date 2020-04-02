@@ -12,6 +12,7 @@ namespace LSG.DAL.Enums
         Food,
         Mask,
         Clothes,
-        Water
+        Water,
+        Obiect
     }
 }

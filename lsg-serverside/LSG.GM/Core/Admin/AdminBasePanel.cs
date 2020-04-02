@@ -11,13 +11,14 @@ namespace LSG.GM.Core.Admin
 {
     public class AdminBasePanel : IScript
     {
-        public AdminBasePanel()
-        {
-            Alt.OnClient("admin-panel:teleportToAdmin", TeleportPlayerToAdmin);
-            Alt.OnClient("admin-panel:teleportToPlayer", TeleportAdminToPlayer);
-        }
+        //public AdminBasePanel()
+        //{
+        //    Alt.OnClient("admin-panel:teleportToAdmin", TeleportPlayerToAdmin);
+        //    Alt.OnClient("admin-panel:teleportToPlayer", TeleportAdminToPlayer);
+        //}
 
-        private void TeleportAdminToPlayer(IPlayer sender, object[] args)
+        [ClientEvent("admin-panel:teleportToPlayer")]
+        private void TeleportAdminToPlayer(IPlayer sender, IPlayer getter)
         {
             if (!sender.GetAccountEntity().HasRank((int)EAdmin.Administrator))
                 return;
@@ -28,16 +29,15 @@ namespace LSG.GM.Core.Admin
                 return;
             }
 
-
-            IPlayer getter = (IPlayer)args[0];
             //Jesli gracz wyjdzie podczas gdy admin kliknie na niego
+            //IPlayer getter = (IPlayer)args[0];
             if (getter == null) return;
 
             sender.Position = getter.Position;
             sender.SendSuccessNotify(null, $"Przeteleportowałeś się do gracza");
         }
-
-        private void TeleportPlayerToAdmin(IPlayer sender, object[] args)
+        [ClientEvent("admin-panel:teleportToAdmin")]
+        private void TeleportPlayerToAdmin(IPlayer sender, IPlayer getter)
         {
             if (!sender.GetAccountEntity().HasRank((int)EAdmin.Administrator))
                 return;
@@ -49,7 +49,7 @@ namespace LSG.GM.Core.Admin
             }
 
 
-            IPlayer getter = (IPlayer)args[0];
+            //IPlayer getter = (IPlayer)args[0];
             //Jesli gracz wyjdzie podczas gdy admin kliknie na niego
             if (getter == null) return;
 

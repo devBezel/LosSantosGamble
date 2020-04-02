@@ -123,8 +123,8 @@ namespace LSG.DAL.Database.Models.CharacterModels
             writer.Name("hunger");
             writer.Value(Hunger);
 
-            writer.Name("vehicles");
-            writer.Value(JsonConvert.SerializeObject(Vehicles));
+            //writer.Name("vehicles");
+            //writer.Value(JsonConvert.SerializeObject(Vehicles));
 
 
             writer.Name("characterDescriptions");

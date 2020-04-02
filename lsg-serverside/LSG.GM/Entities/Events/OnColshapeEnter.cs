@@ -9,12 +9,13 @@ namespace LSG.GM.Entities.Events
 {
     public class OnColshapeEnter : IScript
     {
-        public OnColshapeEnter()
-        {
-            Alt.OnColShape += OnEnterColshape;
-        }
+        //public OnColshapeEnter()
+        //{
+        //    Alt.OnColShape += OnEnterColshape;
+        //}
 
-        private void OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state)
+        [ScriptEvent(ScriptEventType.ColShape)]
+        public void OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state)
         {
             if (targetEntity.Type != BaseObjectType.Player) return;
             IPlayer player = targetEntity as IPlayer;

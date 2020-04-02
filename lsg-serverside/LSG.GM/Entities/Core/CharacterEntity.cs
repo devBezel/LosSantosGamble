@@ -45,7 +45,7 @@ namespace LSG.GM.Entities.Core
             AccountEntity.Player.Spawn(new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ));
             AccountEntity.Player.SetHealthAsync((ushort)DbModel.Health);
             AccountEntity.Player.SetModelAsync(0x705E61F2);
-            AccountEntity.Player.SetNameAsync(DbModel.Name);
+            //AccountEntity.Player.SetNameAsync(DbModel.Name);
             AccountEntity.Player.SetSyncedMetaDataAsync("character:hunger", DbModel.Hunger);
             AccountEntity.Player.SetSyncedMetaDataAsync("character:thirsty", DbModel.Thirsty);
             Dimension = DbModel.Dimension;
