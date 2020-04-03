@@ -8,6 +8,7 @@ using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.BusModels;
 using LSG.DAL.Database.Models.ShopModels;
 using LSG.DAL.UnitOfWork;
+using LSG.GM.Core.Streamers.ObjectStreamer;
 using LSG.GM.Entities.Common.Atm;
 using LSG.GM.Entities.Common.Bus;
 using LSG.GM.Entities.Common.Shop;
@@ -31,6 +32,8 @@ namespace LSG.GM.Entities
 {
     public static class EntityHelper
     {
+        private static readonly List<DynamicObject> WorldDynamicObjects = new List<DynamicObject>();
+
 
         private static readonly List<AccountEntity> Accounts = new List<AccountEntity>();
 
@@ -43,6 +46,7 @@ namespace LSG.GM.Entities
         private static readonly List<ItemInWorldModel> ItemInWorld = new List<ItemInWorldModel>();
 
         private static readonly List<DrawTextModel> VehicleTrunkDrawsText = new List<DrawTextModel>();
+        
 
 
         public static void Add(AccountEntity account)
@@ -89,6 +93,15 @@ namespace LSG.GM.Entities
 
         public static void Add(DrawTextModel drawTextModel) => VehicleTrunkDrawsText.Add(drawTextModel);
         public static void Remove(DrawTextModel drawTextModel) => VehicleTrunkDrawsText.Remove(drawTextModel);
+
+        public static void Add(DynamicObject dynamicObject) => WorldDynamicObjects.Add(dynamicObject);
+        public static void Remove(DynamicObject dynamicObject) => WorldDynamicObjects.Remove(dynamicObject);
+        public static DynamicObject GetById(uint Id)
+        {
+            DynamicObject dynamicObject = WorldDynamicObjects.FirstOrDefault(x => x.Id == Id);
+
+            return dynamicObject;
+        }
 
         public static VehicleEntity GetSpawnedVehicleById(int id)
         {

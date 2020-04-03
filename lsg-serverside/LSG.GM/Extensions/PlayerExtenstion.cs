@@ -27,6 +27,12 @@ namespace LSG.GM.Extensions
            return plr;
         }
 
+        public static AccountEntity GetPlayerByAccountId(int id)
+        {
+            IPlayer plr = Alt.GetAllPlayers().SingleOrDefault(c => c.GetData("account:data", out AccountEntity account) && account.DbModel.Id == id);
+            return plr.GetAccountEntity();
+        }
+
         public static void SendSuccessNotify(this IPlayer player, string title = "Wykonano pomyślnie!", string message = "")
         {
             player.Emit("notify:success", title, message);
