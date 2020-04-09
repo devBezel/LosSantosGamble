@@ -1,0 +1,27 @@
+[
+  {
+    "Id":  1,
+    "Username": "Algorytm",
+    "Password": "test123",
+    "Rank": 5
+  },
+  {
+    "Id" : 2,
+    "Username": "Murdok",
+    "Password": "test123",
+    "Rank": 5
+  },
+  {
+    "Id":  3,
+    "Username": "Eswk",
+    "Password": "test123",
+    "Rank": 5
+  },
+  {
+    "Id": 4,
+    "Password": "test123",
+    "Rank": 5,
+    "Username": "Ruski"
+  }
+
+]

@@ -16,7 +16,8 @@ using System.Text;
 using VehicleDb = LSG.DAL.Database.Models.VehicleModels.Vehicle;
 using Newtonsoft.Json;
 using System.Linq;
-using LSG.GM.Entities.Admin;
+//using LSG.GM.Entities.Admin;
+using LSG.GM.Extensions;
 
 namespace LSG.GM.Entities.Core.Vehicle
 {
@@ -26,12 +27,14 @@ namespace LSG.GM.Entities.Core.Vehicle
         public VehicleDb DbModel { get; set; }
         private bool _nonDbVehicle;
 
+        public bool TrunkOpen { get; set; } = false;
+
         public VehicleEntity(VehicleDb model)
         {
             DbModel = model;
         }
 
-        public static VehicleEntity Create(Position position, VehicleModel model, string numberPlate, int numberPlateStyle, Color color, Color sedondaryColor, Character character)
+        public static VehicleEntity Create(Position position, VehicleModel model, Color color, Color sedondaryColor, Character character)
         {
             VehicleDb vehicle = new VehicleDb()
             {
@@ -83,6 +86,7 @@ namespace LSG.GM.Entities.Core.Vehicle
 
         public void Save()
         {
+            Alt.Log("Zapisuje");
             DbModel.Health = GameVehicle.EngineHealth;
             DbModel.PosX = GameVehicle.Position.X;
             DbModel.PosY = GameVehicle.Position.Y;
@@ -90,6 +94,8 @@ namespace LSG.GM.Entities.Core.Vehicle
             DbModel.RotPitch = GameVehicle.Rotation.Pitch;
             DbModel.RotRoll = GameVehicle.Rotation.Roll;
             DbModel.RotYaw = GameVehicle.Rotation.Yaw;
+
+            Alt.Log($"{GameVehicle.Rotation.Pitch}  {GameVehicle.Rotation.Roll} {GameVehicle.Rotation.Yaw} ");
 
             DbModel.R = GameVehicle.PrimaryColorRgb.R;
             DbModel.G = GameVehicle.PrimaryColorRgb.G;
@@ -104,11 +110,14 @@ namespace LSG.GM.Entities.Core.Vehicle
             }
         }
 
-        public int GetIncrementID()
+        public int IncrementID
         {
-            GameVehicle.GetData("vehicle:incrementId", out int result);
+            get
+            {
+                GameVehicle.GetData("vehicle:incrementId", out int result);
 
-            return result;
+                return result;
+            }
         }
 
         public override void Dispose()
@@ -120,14 +129,22 @@ namespace LSG.GM.Entities.Core.Vehicle
         
         public override void Spawn(IPlayer player)
         {
-            IEnumerable<IVehicle> veh = Alt.GetAllVehicles().Where(v => v.GetData("vehicle:data", out VehicleEntity vehicleData) && vehicleData.DbModel.Owner.Id == player.GetCharacterEntity().Id);
-            GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(0, 0, 0));
-            
+            IEnumerable<IVehicle> veh = Alt.GetAllVehicles().Where(v => v.GetData("vehicle:data", out VehicleEntity vehicleData) && vehicleData.DbModel.Owner.Id == player.GetAccountEntity().characterEntity.DbModel.Id);
+            GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(DbModel.RotPitch, DbModel.RotPitch, DbModel.RotYaw));
+
+            GameVehicle.PrimaryColorRgb = new Rgba((byte)DbModel.R, (byte)DbModel.G, (byte)DbModel.B, 1);
+            GameVehicle.SetWheels(1, 2);
+            GameVehicle.NumberplateText = $"LS {DbModel.Id}";
+            GameVehicle.EngineOn = false;
+            GameVehicle.ManualEngineControl = true;
+
             GameVehicle.SetData("vehicle:data", this);
             GameVehicle.SetData("vehicle:id", DbModel.Id);
             GameVehicle.SetData("vehicle:incrementId", veh.Count() + 1);
+            GameVehicle.SetSyncedMetaData("vehicle:syncedData", DbModel);
 
-            Save();
+            //Save();
         }
+
     }
 }

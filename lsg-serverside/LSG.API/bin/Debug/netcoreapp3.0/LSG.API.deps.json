@@ -315,7 +315,7 @@
           "LSG.API.dll": {}
         }
       },
-      "AltV.Net/1.22.4-beta": {
+      "AltV.Net/1.26.0-beta": {
         "runtime": {
           "lib/netcoreapp3.0/AltV.Net.dll": {
             "assemblyVersion": "1.0.0.0",
@@ -2373,7 +2373,7 @@
       },
       "LSG.BLL/1.0.0": {
         "dependencies": {
-          "AltV.Net": "1.22.4-beta",
+          "AltV.Net": "1.26.0-beta",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "6.0.0",
           "LSG.DAL": "1.0.0"
         },
@@ -2386,7 +2386,7 @@
       },
       "LSG.DAL/1.0.0": {
         "dependencies": {
-          "AltV.Net": "1.22.4-beta",
+          "AltV.Net": "1.26.0-beta",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "6.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "2.2.0",
           "Microsoft.EntityFrameworkCore": "2.2.4",
@@ -4036,12 +4036,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "AltV.Net/1.22.4-beta": {
+    "AltV.Net/1.26.0-beta": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-nlJ0IAioOfBbWjrv1aN8dX97DIqo0UZNfaW5ZfOgNYtY5tkapEcpctZ6cbtSAgt9ZdqYw7AD5Qgl1aP0ikFMVw==",
-      "path": "altv.net/1.22.4-beta",
-      "hashPath": "altv.net.1.22.4-beta.nupkg.sha512"
+      "sha512": "sha512-/eafaQ7zw1WpRUQDgAnJeV6kAjqaZ7g95lZJhbQG1NftmxcHMqkuOySjBAIltQkxg6D2tJHAwdnfYz34VifcoA==",
+      "path": "altv.net/1.26.0-beta",
+      "hashPath": "altv.net.1.26.0-beta.nupkg.sha512"
     },
     "AutoMapper/8.0.0": {
       "type": "package",

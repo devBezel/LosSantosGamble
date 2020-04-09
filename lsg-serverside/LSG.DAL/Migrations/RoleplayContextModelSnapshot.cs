@@ -54,6 +54,172 @@ namespace LSG.DAL.Migrations
                     b.ToTable("AccountPremiums");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.BankModels.Atm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedTime");
+
+                    b.Property<int>("CreatorId");
+
+                    b.Property<float>("PosX");
+
+                    b.Property<float>("PosY");
+
+                    b.Property<float>("PosZ");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("Atms");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BuildingModels.BuildingModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Balance");
+
+                    b.Property<int>("BuildingType");
+
+                    b.Property<int?>("CharacterId");
+
+                    b.Property<DateTime>("CreatedTime");
+
+                    b.Property<int>("CreatorId");
+
+                    b.Property<int>("CurrentObjectsCount");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("EntryFee");
+
+                    b.Property<float>("ExternalPickupPositionX");
+
+                    b.Property<float>("ExternalPickupPositionY");
+
+                    b.Property<float>("ExternalPickupPositionZ");
+
+                    b.Property<bool>("HasCCTV");
+
+                    b.Property<bool>("HasSafe");
+
+                    b.Property<float>("InternalPickupPositionX");
+
+                    b.Property<float>("InternalPickupPositionY");
+
+                    b.Property<float>("InternalPickupPositionZ");
+
+                    b.Property<int>("MaxObjectsCount");
+
+                    b.Property<string>("Name");
+
+                    b.Property<bool>("OnSale");
+
+                    b.Property<int>("SaleCost");
+
+                    b.Property<bool>("SpawnPossible");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("Buildings");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BuildingModels.BuildingTenantModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BuildingId");
+
+                    b.Property<bool>("CanEditBuilding");
+
+                    b.Property<bool>("CanLockDoor");
+
+                    b.Property<bool>("CanManagmentGuests");
+
+                    b.Property<bool>("CanManagmentMagazine");
+
+                    b.Property<bool>("CanManagmentTenants");
+
+                    b.Property<bool>("CanRespawnInBuilding");
+
+                    b.Property<bool>("CanWithdrawDeposit");
+
+                    b.Property<int>("CharacterId");
+
+                    b.Property<DateTime>("TenantAdded");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuildingId");
+
+                    b.HasIndex("CharacterId");
+
+                    b.ToTable("BuildingTenants");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BusModels.BusStop", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedTime");
+
+                    b.Property<int>("CreatorId");
+
+                    b.Property<float>("PosX");
+
+                    b.Property<float>("PosY");
+
+                    b.Property<float>("PosZ");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("BusStops");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BusModels.BusStopStation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BusStopId");
+
+                    b.Property<int>("Cost");
+
+                    b.Property<DateTime>("CreatedTime");
+
+                    b.Property<int>("CreatorId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<float>("PosX");
+
+                    b.Property<float>("PosY");
+
+                    b.Property<float>("PosZ");
+
+                    b.Property<float>("Time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusStopId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("BusStopStations");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.CharacterModels.Character", b =>
                 {
                     b.Property<int>("Id")
@@ -71,6 +237,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<int>("Dimension");
+
                     b.Property<float>("DirtyMoney");
 
                     b.Property<bool>("Gender");
@@ -80,6 +248,8 @@ namespace LSG.DAL.Migrations
                     b.Property<float>("Height");
 
                     b.Property<string>("History");
+
+                    b.Property<float>("Hunger");
 
                     b.Property<float>("Money");
 
@@ -96,6 +266,8 @@ namespace LSG.DAL.Migrations
                     b.Property<float>("Rotation");
 
                     b.Property<string>("Surname");
+
+                    b.Property<float>("Thirsty");
 
                     b.Property<float>("Weight");
 
@@ -267,6 +439,180 @@ namespace LSG.DAL.Migrations
                     b.ToTable("CharacterLooks");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<int>("CreatorId");
+
+                    b.Property<int>("Grant");
+
+                    b.Property<int>("GroupType");
+
+                    b.Property<int>("LeaderId");
+
+                    b.Property<int>("MaxPayday");
+
+                    b.Property<int>("Money");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Tag");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("LeaderId");
+
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupRankModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("DefaultForGroupId");
+
+                    b.Property<int>("GroupId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Rights");
+
+                    b.Property<int>("Salary");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DefaultForGroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupRanks");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupWorkerModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CharacterId");
+
+                    b.Property<int>("DutyMinutes");
+
+                    b.Property<int>("GroupId");
+
+                    b.Property<int>("GroupRankId");
+
+                    b.Property<int>("Rights");
+
+                    b.Property<int>("Salary");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("GroupRankId");
+
+                    b.ToTable("GroupWorkers");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.ItemModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("BuildingId");
+
+                    b.Property<int?>("CharacterId");
+
+                    b.Property<int>("Count");
+
+                    b.Property<int?>("CreatorId");
+
+                    b.Property<double?>("FirstParameter");
+
+                    b.Property<double?>("FourthParameter");
+
+                    b.Property<int>("ItemEntityType");
+
+                    b.Property<bool>("ItemInUse");
+
+                    b.Property<string>("Name");
+
+                    b.Property<double?>("SecondParameter");
+
+                    b.Property<double?>("ThirdParameter");
+
+                    b.Property<int?>("VehicleId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuildingId");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.ShopModels.ShopAssortmentModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Cost");
+
+                    b.Property<int>("Count");
+
+                    b.Property<double?>("FirstParameter");
+
+                    b.Property<double?>("FourthParameter");
+
+                    b.Property<int>("ItemEntityType");
+
+                    b.Property<string>("Name");
+
+                    b.Property<double?>("SecondParameter");
+
+                    b.Property<int>("ShopId");
+
+                    b.Property<double?>("ThirdParameter");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShopId");
+
+                    b.ToTable("ShopAssortments");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.ShopModels.ShopModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<float>("PosX");
+
+                    b.Property<float>("PosY");
+
+                    b.Property<float>("PosZ");
+
+                    b.Property<int>("ShopEntityType");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Shops");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
                 {
                     b.Property<int>("Id")
@@ -276,11 +622,13 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int>("G");
 
+                    b.Property<int?>("GroupId");
+
                     b.Property<int>("Health");
 
                     b.Property<string>("Model");
 
-                    b.Property<int>("OwnerId");
+                    b.Property<int?>("OwnerId");
 
                     b.Property<float>("PosX");
 
@@ -300,6 +648,8 @@ namespace LSG.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GroupId");
+
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Vehicles");
@@ -310,6 +660,60 @@ namespace LSG.DAL.Migrations
                     b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Account")
                         .WithOne("AccountPremium")
                         .HasForeignKey("LSG.DAL.Database.Models.AccountModels.AccountPremium", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BankModels.Atm", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BuildingModels.BuildingModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
+                        .WithMany()
+                        .HasForeignKey("CharacterId");
+
+                    b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BuildingModels.BuildingTenantModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.BuildingModels.BuildingModel", "Building")
+                        .WithMany("BuildingTenants")
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
+                        .WithMany()
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BusModels.BusStop", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.BusModels.BusStopStation", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.BusModels.BusStop", "BusStop")
+                        .WithMany("BusStopStations")
+                        .HasForeignKey("BusStopId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -337,12 +741,86 @@ namespace LSG.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Leader")
+                        .WithMany()
+                        .HasForeignKey("LeaderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupRankModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "DefaultForGroup")
+                        .WithMany()
+                        .HasForeignKey("DefaultForGroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupWorkerModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
+                        .WithMany("GroupWorkers")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
+                        .WithMany("Workers")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupRankModel", "GroupRank")
+                        .WithMany("Workers")
+                        .HasForeignKey("GroupRankId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.ItemModels.ItemModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.BuildingModels.BuildingModel", "Building")
+                        .WithMany("ItemsInBuilding")
+                        .HasForeignKey("BuildingId");
+
+                    b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Character")
+                        .WithMany("Items")
+                        .HasForeignKey("CharacterId");
+
+                    b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
+                    b.HasOne("LSG.DAL.Database.Models.VehicleModels.Vehicle", "Vehicle")
+                        .WithMany("ItemsInVehicle")
+                        .HasForeignKey("VehicleId");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.ShopModels.ShopAssortmentModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.ShopModels.ShopModel", "Shop")
+                        .WithMany("ShopAssortments")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
                 {
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
+                        .WithMany("Vehicles")
+                        .HasForeignKey("GroupId");
+
                     b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Owner")
                         .WithMany("Vehicles")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("OwnerId");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,43 +1,194 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Resources.Chat.Api;
 using LSG.BLL.Dto.Character;
 using LSG.DAL.Database;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Database.Models.ItemModels;
+using LSG.DAL.Enums;
+using LSG.DAL.UnitOfWork;
+using LSG.GM.Entities.Core.Group;
+using LSG.GM.Entities.Core.Item;
+using LSG.GM.Entities.Core.Item.Scripts;
 using LSG.GM.Extensions;
 using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LSG.GM.Entities.Core
 {
-    public static class CharacterEntity
+    public class CharacterEntity
     {
-        public static Character GetCharacterEntity(this IPlayer player)
-        {
-            player.GetData("character:data", out Character character);
+        public AccountEntity AccountEntity { get; private set; }
+        public Character DbModel { get; set; }
+        public GroupEntity OnDutyGroup { get; set; }
+        internal List<ItemEntity> ItemsInUse { get; set; } = new List<ItemEntity>();
+        public bool HasBw { get; set; } = false;
 
-            return character;
+
+        public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
+
+
+        public CharacterEntity(AccountEntity accountEntity, Character dbModel)
+        {
+            AccountEntity = accountEntity;
+            DbModel = dbModel;
+        }
+
+        public async Task Spawn() => await AltAsync.Do(() =>
+        {
+            AccountEntity.Player.Spawn(new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ));
+            AccountEntity.Player.SetHealthAsync((ushort)DbModel.Health);
+            AccountEntity.Player.SetModelAsync(0x705E61F2);
+            //AccountEntity.Player.SetNameAsync(DbModel.Name);
+            AccountEntity.Player.SetSyncedMetaDataAsync("character:hunger", DbModel.Hunger);
+            AccountEntity.Player.SetSyncedMetaDataAsync("character:thirsty", DbModel.Thirsty);
+            Dimension = DbModel.Dimension;
+            UpdateName(FormatName);
+
+
+            SetCharacterDataToClient();
+
+            if (DbModel.Gender)
+            {
+                AccountEntity.Player.SetModelAsync(0x9C9EFFD8);
+            }
+
+            if (AccountEntity.HasPremium)
+                AccountEntity.Player.SendChatMessage("Dziękujemy za wspieranie naszego projektu " + AccountEntity.DbModel.Username + "! Do końca twojego {D1BA0f} premium {ffffff} pozostało " +
+                        Calculation.CalculateTheNumberOfDays(AccountEntity.DbModel.AccountPremium.EndTime, DateTime.Now) + " dni");
+
+            if (DbModel.CharacterLook == null)
+                AccountEntity.Player.Dimension = AccountEntity.DbModel.Id;
+
+
+            List<ItemModel> activeItems = DbModel.Items.Where(item => item.ItemInUse).ToList();
+            foreach (ItemModel item in activeItems)
+            {
+                ItemEntity itemEntity = InventoryScript.ItemFactory.Create(item);
+                itemEntity.UseItem(this);
+            }
+
+            AccountEntity.Player.EmitAsync("character:wearClothes", DbModel.CharacterLook);
+        });
+
+        public Position CharacterPosition
+        {
+            get
+            {
+                return AccountEntity.Player.Position;
+            }
+            set
+            {
+                DbModel.PosX = AccountEntity.Player.Position.X;
+                DbModel.PosY = AccountEntity.Player.Position.Y;
+                DbModel.PosZ = AccountEntity.Player.Position.Z;
+            }
         }
 
 
-        public static void SendCharacterDataToClient(this IPlayer player)
+        public void Save()
         {
-            player.GetData("character:data", out Character character);
 
-            CharacterForListDto characterDto = Singleton.AutoMapper().Map<CharacterForListDto>(character);
-            player.Emit("character:sendDataCharacter", characterDto);
+            if (AccountEntity != null)
+            {
+                CharacterPosition = AccountEntity.Player.Position;
+            }
+
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+            using (UnitOfWork unitOfWork = new UnitOfWork(ctx))
+            {
+                unitOfWork.CharacterRepository.Update(DbModel);
+            }
+            SetCharacterDataToClient();
+
+            Alt.Log($"[CHARACTER-ENTITY]: Zapisałem postać: [{DbModel.Id} | {DbModel.Name} {DbModel.Surname}]");
         }
 
-        public static void UpdateCharacterData(this IPlayer player, Character character)
+        public void UpdateName(string newName)
         {
-            player.SetData("character:data", character);
-
-            Singleton.GetDatabaseInstance().Update(character);
-            Singleton.GetDatabaseInstance().SaveChanges();
-
-            player.SendCharacterDataToClient();
+            AccountEntity.Player.SetSyncedMetaData("character:name", newName);
         }
+
+        public void SetCharacterDataToClient()
+        {
+            CharacterForListDto characterDto = Singleton.AutoMapper().Map<CharacterForListDto>(DbModel);
+            AccountEntity.Player.SetSyncedMetaData("character:dataCharacter", characterDto);
+        }
+
+        public void AddMoney(int amount)
+        {
+            // Do zrobienia
+            DbModel.Money += amount;
+            SetCharacterDataToClient();
+        }
+
+        public void RemoveMoney(int amount)
+        {
+            // Do zrobienia
+            DbModel.Money -= amount;
+            SetCharacterDataToClient();
+        }
+
+        public bool HasEnoughMoney(int amount)
+        {
+            return (DbModel.Money >= amount) ? true : false;
+        }
+
+        public bool HasActiveItem(ItemEntityType itemType)
+        {
+            if (!ItemsInUse.Any(item => item.ItemEntityType == itemType))
+                return false;
+            else
+                return true;
+        }
+
+        public float Hunger
+        {
+            get
+            {
+                return DbModel.Hunger;
+            }
+
+            set
+            {
+                DbModel.Hunger = value;
+                AccountEntity.Player.SetSyncedMetaData("character:hunger", DbModel.Hunger);
+            }
+        }
+
+        public float Thirsty
+        {
+            get
+            {
+                return DbModel.Thirsty;
+            }
+
+            set
+            {
+                DbModel.Thirsty = value;
+                AccountEntity.Player.SetSyncedMetaData("character:thirsty", DbModel.Thirsty);
+            }
+        }
+
+        public int Dimension
+        {
+            get
+            {
+                return AccountEntity.Player.Dimension;
+            }
+            set
+            {
+                AccountEntity.Player.SetSyncedMetaData("player:dimension", value);
+                AccountEntity.Player.Dimension = value;
+                DbModel.Dimension = value;
+            }
+        }
+
     }
 }

@@ -8,6 +8,14 @@ namespace LSG.DAL.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
+        IAccountRepository AccountRepository { get; set; }
         ICharacterRepository CharacterRepository { get; set; }
+        IVehicleRepository VehicleRepository { get; set; }
+        IAtmRepository AtmRepository { get; set; }
+        IBusRepository BusRepository { get; set; }
+        IBuildingRepository BuildingRepository { get; set; }
+        IItemRepository ItemRepository { get; set; }
+        IShopRepository ShopRepository { get; set; }
+        IGroupRepository GroupRepository { get; set; }
     }
 }

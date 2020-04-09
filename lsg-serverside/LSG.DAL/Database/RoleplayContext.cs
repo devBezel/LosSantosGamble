@@ -1,6 +1,12 @@
 ﻿using LSG.DAL.Database.Models;
 using LSG.DAL.Database.Models.AccountModels;
+using LSG.DAL.Database.Models.BankModels;
+using LSG.DAL.Database.Models.BuildingModels;
+using LSG.DAL.Database.Models.BusModels;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Database.Models.GroupModels;
+using LSG.DAL.Database.Models.ItemModels;
+using LSG.DAL.Database.Models.ShopModels;
 using LSG.DAL.Database.Models.VehicleModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -22,5 +28,17 @@ namespace LSG.DAL.Database
         public DbSet<CharacterDescription> CharacterDescriptions { get; set; }
         public DbSet<CharacterLook> CharacterLooks { get; set; }
         public DbSet<AccountPremium> AccountPremiums { get; set; }
+        public DbSet<Atm> Atms { get; set; }
+        public DbSet<BusStop> BusStops { get; set; }
+        public DbSet<BusStopStation> BusStopStations { get; set; }
+        public DbSet<ItemModel> Items { get; set; }
+        public DbSet<BuildingModel> Buildings { get; set; }
+        public DbSet<BuildingTenantModel> BuildingTenants { get; set; }
+        public DbSet<ShopModel> Shops { get; set; }
+        public DbSet<ShopAssortmentModel> ShopAssortments { get; set; }
+        public DbSet<GroupModel> Groups { get; set; }
+        public DbSet<GroupWorkerModel> GroupWorkers { get; set; }
+        public DbSet<GroupRankModel> GroupRanks { get; set; }
+
     }
 }

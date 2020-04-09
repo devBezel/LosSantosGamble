@@ -11,20 +11,39 @@ using LSG.GM.Entities;
 using System.Linq;
 using VehicleDb = LSG.DAL.Database.Models.VehicleModels.Vehicle;
 using LSG.GM.Extensions;
+using LSG.GM.Enums;
+using AltV.Net.Enums;
 
 namespace LSG.GM.Core.Admin
 {
     public class AdminVehicleCommand : IScript
     {
         [Command("createveh")]
-        public void CreateVehicleCMD(IPlayer player)
+        public void CreateGlobalVehicleCMD(IPlayer sender, int id, VehicleModel model)
         {
-            VehicleEntity vehicle = VehicleEntity.Create(player.Position, AltV.Net.Enums.VehicleModel.Infernus, "test", 1, new Color(), new Color(), player.GetCharacterEntity());
-            vehicle.Spawn(player);
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Administrator))
+                return;
+
+            if (!sender.GetAccountEntity().OnAdminDuty)
+            {
+                sender.SendErrorNotify("Wystąpił bląd!", "Aby użyć tej komendy musisz wejść na służbę administratora");
+                return;
+            }
+
+            IPlayer getter = PlayerExtenstion.GetPlayerById(id);
+            if (getter == null)
+            {
+                sender.SendErrorNotify(null, $"Gracz o ID {id} nie jest w grze");
+            }
+
+            if (model == 0) return;
+
+            VehicleEntity vehicle = VehicleEntity.Create(sender.Position, model, new Color(), new Color(), getter.GetAccountEntity().characterEntity.DbModel);
+            vehicle.Spawn(getter);
         }
 
 
-        [Command("tptoveh")]
+        [Command("vtp")]
         public void TeleportToVehicleCMD(IPlayer player, int id)
         {
             VehicleEntity vehicleEntity = EntityHelper.GetSpawnedVehicleById(id);
