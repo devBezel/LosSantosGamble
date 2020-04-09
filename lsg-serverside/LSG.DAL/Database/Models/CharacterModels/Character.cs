@@ -38,6 +38,7 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public float Armor { get; set; }
         public float Thirsty { get; set; }
         public float Hunger { get; set; }
+        public bool Online { get; set; }
         public CharacterLook CharacterLook { get; set; }
 
 

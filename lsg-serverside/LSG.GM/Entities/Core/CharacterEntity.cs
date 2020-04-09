@@ -49,6 +49,7 @@ namespace LSG.GM.Entities.Core
             AccountEntity.Player.SetSyncedMetaDataAsync("character:hunger", DbModel.Hunger);
             AccountEntity.Player.SetSyncedMetaDataAsync("character:thirsty", DbModel.Thirsty);
             Dimension = DbModel.Dimension;
+            DbModel.Online = true;
             UpdateName(FormatName);
 
 

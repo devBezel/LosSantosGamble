@@ -255,6 +255,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<bool>("Online");
+
                     b.Property<string>("PicUrl");
 
                     b.Property<float>("PosX");

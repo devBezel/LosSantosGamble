@@ -128,6 +128,7 @@ namespace LSG.GM.Entities.Core
         public void Dispose()
         {
             EntityHelper.Remove(this);
+            characterEntity.DbModel.Online = false;
             characterEntity.Save();
             Save();
         }

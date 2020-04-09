@@ -12,6 +12,11 @@ namespace LSG.DAL.Database.Models.GroupModels
 {
     public class GroupModel : IWritable
     {
+        //public GroupModel()
+        //{
+        //    Workers = new HashSet<GroupWorkerModel>();
+        //}
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Tag { get; set; }
@@ -30,7 +35,8 @@ namespace LSG.DAL.Database.Models.GroupModels
         public int LeaderId { get; set; }
         public Character Leader { get; set; }
 
-        public List<GroupWorkerModel> Workers { get; set; }
+        public virtual List<GroupWorkerModel> Workers { get; set; }
+        //public List<GroupRankModel> Ranks { get; set; }
         public List<Vehicle> Vehicles { get; set; }
 
         public void OnWrite(IMValueWriter writer)
