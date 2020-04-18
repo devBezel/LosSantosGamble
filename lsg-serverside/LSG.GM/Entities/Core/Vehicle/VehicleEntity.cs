@@ -21,7 +21,7 @@ using LSG.GM.Extensions;
 
 namespace LSG.GM.Entities.Core.Vehicle
 {
-    public class VehicleEntity : GameEntity
+    public class VehicleEntity  /*GameEntity*/
     {
         public IVehicle GameVehicle { get; set; }
         public VehicleDb DbModel { get; set; }
@@ -67,6 +67,14 @@ namespace LSG.GM.Entities.Core.Vehicle
                 _nonDbVehicle = nonDbVehicle
             };
 
+        }
+
+        public bool IsGroupVehicle
+        {
+            get
+            {
+                return DbModel.GroupId != null ? true : false;
+            }
         }
 
         public void ChangeSpawnPosition()
@@ -120,16 +128,17 @@ namespace LSG.GM.Entities.Core.Vehicle
             }
         }
 
-        public override void Dispose()
+        public void Dispose(IPlayer player)
         {
             if (!_nonDbVehicle) Save();
 
             GameVehicle.Remove();
+            player.GetAccountEntity().characterEntity.RespawnVehicleCount--;
         }
-        
-        public override void Spawn(IPlayer player)
+
+        public void Spawn(IPlayer player)
         {
-            IEnumerable<IVehicle> veh = Alt.GetAllVehicles().Where(v => v.GetData("vehicle:data", out VehicleEntity vehicleData) && vehicleData.DbModel.Owner.Id == player.GetAccountEntity().characterEntity.DbModel.Id);
+            CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
             GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(DbModel.RotPitch, DbModel.RotPitch, DbModel.RotYaw));
 
             GameVehicle.PrimaryColorRgb = new Rgba((byte)DbModel.R, (byte)DbModel.G, (byte)DbModel.B, 1);
@@ -140,8 +149,20 @@ namespace LSG.GM.Entities.Core.Vehicle
 
             GameVehicle.SetData("vehicle:data", this);
             GameVehicle.SetData("vehicle:id", DbModel.Id);
-            GameVehicle.SetData("vehicle:incrementId", veh.Count() + 1);
             GameVehicle.SetSyncedMetaData("vehicle:syncedData", DbModel);
+
+            if (!IsGroupVehicle)
+            {
+                characterEntity.RespawnVehicleCount++;
+                //Alt.Log("Nie jest grupowym pojazdem");
+
+                //IEnumerable<IVehicle> veh = Alt.GetAllVehicles().Where(v => v.GetData("vehicle:data", out VehicleEntity vehicleData) && vehicleData.DbModel.Owner.Id == player.GetAccountEntity().characterEntity.DbModel.Id);
+                //Alt.Log($"VEH COUNT: {veh.Count()}");
+                //if(veh != null)
+                //{
+                //    GameVehicle.SetData("vehicle:incrementId", veh.Count() + 1);
+                //}
+            }
 
             //Save();
         }

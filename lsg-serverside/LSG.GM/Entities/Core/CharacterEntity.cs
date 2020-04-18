@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace LSG.GM.Entities.Core
 {
@@ -28,7 +29,12 @@ namespace LSG.GM.Entities.Core
         public Character DbModel { get; set; }
         public GroupEntity OnDutyGroup { get; set; }
         internal List<ItemEntity> ItemsInUse { get; set; } = new List<ItemEntity>();
+
+        public Timer SpentTimer { get; set; }
+        public bool IsAfk { get; set; }
         public bool HasBw { get; set; } = false;
+
+        public int RespawnVehicleCount { get; set; }
 
 
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
@@ -50,6 +56,7 @@ namespace LSG.GM.Entities.Core
             AccountEntity.Player.SetSyncedMetaDataAsync("character:thirsty", DbModel.Thirsty);
             Dimension = DbModel.Dimension;
             DbModel.Online = true;
+            AccountEntity.Player.SetDateTime(DateTime.Now);
             UpdateName(FormatName);
 
 
@@ -74,6 +81,13 @@ namespace LSG.GM.Entities.Core
                 ItemEntity itemEntity = InventoryScript.ItemFactory.Create(item);
                 itemEntity.UseItem(this);
             }
+
+            SpentTimer = new Timer(60000);
+            SpentTimer.Start();
+            SpentTimer.Elapsed += (o, args) =>
+            {
+                DbModel.TimeSpent += 1;
+            };
 
             AccountEntity.Player.EmitAsync("character:wearClothes", DbModel.CharacterLook);
         });

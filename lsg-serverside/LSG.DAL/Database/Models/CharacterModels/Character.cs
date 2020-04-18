@@ -39,6 +39,7 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public float Thirsty { get; set; }
         public float Hunger { get; set; }
         public bool Online { get; set; }
+        public int TimeSpent { get; set; }
         public CharacterLook CharacterLook { get; set; }
 
 
@@ -123,6 +124,12 @@ namespace LSG.DAL.Database.Models.CharacterModels
 
             writer.Name("hunger");
             writer.Value(Hunger);
+
+            writer.Name("online");
+            writer.Value(Online);
+
+            writer.Name("timeSpent");
+            writer.Value(TimeSpent);
 
             //writer.Name("vehicles");
             //writer.Value(JsonConvert.SerializeObject(Vehicles));

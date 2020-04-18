@@ -68,6 +68,9 @@ namespace LSG.GM.Entities.Core.Vehicle
             //int vehicleId = (int)(long)args[0];
    
             VehicleEntity spawnedVehicle = EntityHelper.GetSpawnedVehicleById(vehicleId);
+            CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
+            if (characterEntity == null)
+                return;
 
             //TODO: Zrobić autoryzacje
             //if(spawnedVehicle.DbModel.OwnerId != player.GetAccountEntity().characterEntity.DbModel.Id || spawnedVehicle.DbModel.GroupId != )
@@ -89,7 +92,7 @@ namespace LSG.GM.Entities.Core.Vehicle
                     return;
                 }
 
-                spawnedVehicle.Dispose();
+                spawnedVehicle.Dispose(player);
 
                 player.SendSuccessNotify(null, $"Twój pojazd o ID {spawnedVehicle.DbModel.Id} został odspawniony");
 
@@ -100,12 +103,12 @@ namespace LSG.GM.Entities.Core.Vehicle
             vehicle.Spawn(player);
 
 
-            if (vehicle.IncrementID > 3 && !player.GetAccountEntity().HasPremium)
+            if (characterEntity.RespawnVehicleCount > 3 && !player.GetAccountEntity().HasPremium)
             {
                 if (player.GetAccountEntity().OnAdminDuty) return;
 
                 player.SendErrorNotify(null, $"Aby zrespić więcej niż 3 pojazdy musisz posiadać premium");
-                vehicle.Dispose();
+                vehicle.Dispose(player);
                 return;
             }
 

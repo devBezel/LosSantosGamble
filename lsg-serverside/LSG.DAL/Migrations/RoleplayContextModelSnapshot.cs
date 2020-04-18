@@ -271,6 +271,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float>("Thirsty");
 
+                    b.Property<int>("TimeSpent");
+
                     b.Property<float>("Weight");
 
                     b.HasKey("Id");

@@ -20,7 +20,7 @@ namespace LSG.GM.Core.Description
         {
             player.Emit("description:getCharacterDescription");
         }
-        [ClientEvent("SetCharacterDescritpion")]
+        [ClientEvent("character:setDescription")]
         public void SetCharacterDescritpion(IPlayer player, string contentDescription)
         {
             //string contentDescription = (string)args[0];

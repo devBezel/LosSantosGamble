@@ -65,11 +65,14 @@ namespace LSG.GM.Extensions
                 slot--;
                 List<GroupEntity> groups = EntityHelper.GetPlayerGroups(accountEntity).ToList();
                 Alt.Log($"GROUPS: {groups.Count}");
+                Alt.Log($"groups[slot]: {groups[slot].DbModel.Name}");
+
                 group = slot < groups.Count ? groups[slot] : null;
-                groupWorker = accountEntity.characterEntity.DbModel.GroupWorkers.SingleOrDefault(g => g.Id == groups[slot].Id);
+                Alt.Log($"accountEntity.characterEntity.DbModel.GroupWorkers: {accountEntity.characterEntity.DbModel.GroupWorkers.Count()}");
+                groupWorker = accountEntity.characterEntity.DbModel.GroupWorkers.SingleOrDefault(g => g.GroupId == groups[slot].DbModel.Id);
 
             }
-
+            Alt.Log($"group: {group.DbModel.Name}");
             return group != null && groupWorker != null;
         }
     }
