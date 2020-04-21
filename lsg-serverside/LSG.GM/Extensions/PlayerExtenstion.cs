@@ -1,5 +1,7 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Resources.Chat.Api;
 using LSG.DAL.Database.Models.GroupModels;
 using LSG.GM.Entities;
 using LSG.GM.Entities.Core;
@@ -8,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LSG.GM.Extensions
 {
@@ -27,10 +30,17 @@ namespace LSG.GM.Extensions
            return plr;
         }
 
+
         public static AccountEntity GetPlayerByAccountId(int id)
         {
             IPlayer plr = Alt.GetAllPlayers().SingleOrDefault(c => c.GetData("account:data", out AccountEntity account) && account.DbModel.Id == id);
             return plr.GetAccountEntity();
+        }
+
+        public static CharacterEntity GetPlayerByCharacterId(int? id)
+        {
+            IPlayer plr = Alt.GetAllPlayers().SingleOrDefault(c => c.GetData("account:data", out AccountEntity account) && account.characterEntity.DbModel.Id == id);
+            return plr.GetAccountEntity().characterEntity;
         }
 
         public static void SendSuccessNotify(this IPlayer player, string title = "Wykonano pomyślnie!", string message = "")
@@ -51,6 +61,16 @@ namespace LSG.GM.Extensions
         public static void SendNativeNotify(this IPlayer player, int? backgroundColor, string notifyImage, int iconType, string title, string subtitle,string  message, int durationMult = 1)
         {
             player.Emit("notify:native", backgroundColor, notifyImage, iconType, title, subtitle, message, durationMult);
+        }
+
+        public static void SendChatMessageInfo(this IPlayer player, string message)
+        {
+            player.SendChatMessage("[{0c6b00}INFO{ffffff}] " + message);
+        }
+
+        public static void SendChatMessageError(this IPlayer player, string message)
+        {
+            player.SendChatMessage("[{ba0000}BLĄD{ffffff}] " + message);
         }
 
         public static bool TryGetGroupByUnsafeSlot(this IPlayer player, short slot, out GroupEntity group, out GroupWorkerModel groupWorker)

@@ -10,10 +10,10 @@ namespace LSG.GM.Helpers
 {
     public static class MarkerHelper
     {
-        public static async Task CreateMarker(this IPlayer player, MarkerModel marker) => await AltAsync.Do(() =>
+        public static async Task CreateMarker(this IPlayer player, MarkerModel marker)
         {
-            player.EmitAsync("marker:create", marker);
-        });
+           await player.EmitAsync("marker:create", marker);
+        }
 
         public static async Task CreateGlobalMarker(MarkerModel marker) => await AltAsync.Do(() =>
         {

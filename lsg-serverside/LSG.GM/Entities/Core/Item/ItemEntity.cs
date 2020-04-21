@@ -61,29 +61,45 @@ namespace LSG.GM.Entities.Core.Item
         }
 
         // TODO: przenieść to do osobnego skryptu z ofertami
-        public virtual void Offer(CharacterEntity sender, CharacterEntity getter, int cost)
+        //public virtual void Offer(CharacterEntity sender, CharacterEntity getter, int cost)
+        //{
+        //    if (DbModel.ItemInUse) return;
+
+        //    if(!getter.HasEnoughMoney(cost, false))
+        //    {
+        //        getter.AccountEntity.Player.SendErrorNotify("Brak wystarczającej ilości gotówki", "Nie posiadasz przy sobie tyle gotówki");
+        //        return;
+        //    }
+
+        //    if(cost != 0)
+        //    {
+        //        sender.AddMoney(cost, false);
+        //        getter.RemoveMoney(cost, false);
+        //    }
+
+        //    DbModel.CharacterId = getter.DbModel.Id;
+
+        //    sender.DbModel.Items.Remove(DbModel);
+        //    getter.DbModel.Items.Add(DbModel);
+
+        //    sender.AccountEntity.Player.SendSuccessNotify("Gracz zaakceptował ofertę", "Gracz pomyślnie zaakceptował twoją ofertę");
+        //    getter.AccountEntity.Player.SendSuccessNotify("Zaakceptowałeś ofertę", "Oferta gracza została zaakceptowana pomyślnie");
+
+        //}
+
+        public virtual void Confiscate(CharacterEntity robber, CharacterEntity robbed)
         {
-            if (DbModel.ItemInUse) return;
-
-            if(!getter.HasEnoughMoney(cost))
+            if(DbModel.ItemInUse)
             {
-                getter.AccountEntity.Player.SendErrorNotify("Brak wystarczającej ilości gotówki", "Nie posiadasz przy sobie tyle gotówki");
-                return;
+                // Odużywa item jeśli jest użyty
+                UseItem(robbed);
             }
 
-            if(cost != 0)
-            {
-                sender.AddMoney(cost);
-                getter.RemoveMoney(cost);
-            }
+            DbModel.CharacterId = robber.DbModel.Id;
 
-            DbModel.CharacterId = getter.DbModel.Id;
 
-            sender.DbModel.Items.Remove(DbModel);
-            getter.DbModel.Items.Add(DbModel);
-
-            sender.AccountEntity.Player.SendSuccessNotify("Gracz zaakceptował ofertę", "Gracz pomyślnie zaakceptował twoją ofertę");
-            getter.AccountEntity.Player.SendSuccessNotify("Zaakceptowałeś ofertę", "Oferta gracza została zaakceptowana pomyślnie");
+            robbed.DbModel.Items.Remove(DbModel);
+            robber.DbModel.Items.Add(DbModel);
 
         }
 

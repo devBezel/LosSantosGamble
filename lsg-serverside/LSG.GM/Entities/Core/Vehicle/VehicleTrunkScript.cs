@@ -116,13 +116,13 @@ namespace LSG.GM.Entities.Core.Vehicle
                 vehicleEntity.DbModel.ItemsInVehicle);
         }
 
-        [AsyncClientEvent("vehicle-interaction:closeTrunkRequest")]
-        public async Task CloseVehicleTrunk(IPlayer player, IVehicle vehicle) => await AltAsync.Do(() =>
+        [ClientEvent("vehicle-interaction:closeTrunkRequest")]
+        public void CloseVehicleTrunk(IPlayer player, IVehicle vehicle)
         {
             //IVehicle vehicle = (IVehicle)args[0];
 
             DisposeVehicleTrunk(vehicle, player);
-        });
+        }
         [ClientEvent("trunk:putItemToEquipment")]
         public void PutItemToEquipmentFromTrunk(IPlayer player, int itemID)
         {

@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using BaseServer = LSG.GM.Base;
 
 namespace LSG.GM.Entities.Core
 {
@@ -67,6 +68,9 @@ namespace LSG.GM.Entities.Core
                 AccountEntity.Player.SetModelAsync(0x9C9EFFD8);
             }
 
+            AccountEntity.Player.SendChatMessageInfo($"Witamy na Los Santos Gamble, wersja {BaseServer.FormatServerVersion}");
+            AccountEntity.Player.SendChatMessageInfo($"{DbModel.Account.Username}, ostatnio grałeś u nas {DbModel.RecentlyPlayed} na tej postaci. Dziękujemy i życzymy miłej gry");
+
             if (AccountEntity.HasPremium)
                 AccountEntity.Player.SendChatMessage("Dziękujemy za wspieranie naszego projektu " + AccountEntity.DbModel.Username + "! Do końca twojego {D1BA0f} premium {ffffff} pozostało " +
                         Calculation.CalculateTheNumberOfDays(AccountEntity.DbModel.AccountPremium.EndTime, DateTime.Now) + " dni");
@@ -74,6 +78,7 @@ namespace LSG.GM.Entities.Core
             if (DbModel.CharacterLook == null)
                 AccountEntity.Player.Dimension = AccountEntity.DbModel.Id;
 
+            DbModel.RecentlyPlayed = DateTime.Now;
 
             List<ItemModel> activeItems = DbModel.Items.Where(item => item.ItemInUse).ToList();
             foreach (ItemModel item in activeItems)
@@ -88,6 +93,8 @@ namespace LSG.GM.Entities.Core
             {
                 DbModel.TimeSpent += 1;
             };
+
+            
 
             AccountEntity.Player.EmitAsync("character:wearClothes", DbModel.CharacterLook);
         });
@@ -136,22 +143,40 @@ namespace LSG.GM.Entities.Core
             AccountEntity.Player.SetSyncedMetaData("character:dataCharacter", characterDto);
         }
 
-        public void AddMoney(int amount)
+        public void AddMoney(int amount, bool bank)
         {
             // Do zrobienia
-            DbModel.Money += amount;
+            if(bank)
+            {
+                DbModel.Bank += amount;
+            } else
+            {
+                DbModel.Money += amount;
+            }
+
             SetCharacterDataToClient();
         }
 
-        public void RemoveMoney(int amount)
+        public void RemoveMoney(int amount, bool bank)
         {
+            if(bank)
+            {
+                DbModel.Bank -= amount;
+            }
+            else
+            {
+                DbModel.Money -= amount;
+
+            }
             // Do zrobienia
-            DbModel.Money -= amount;
             SetCharacterDataToClient();
         }
 
-        public bool HasEnoughMoney(int amount)
+        public bool HasEnoughMoney(int amount, bool bank)
         {
+            if (bank)
+                return (DbModel.Bank >= amount) ? true : false;
+
             return (DbModel.Money >= amount) ? true : false;
         }
 

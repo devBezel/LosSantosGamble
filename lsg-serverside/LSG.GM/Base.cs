@@ -32,6 +32,10 @@ namespace LSG.GM
 {
     internal class Base : AsyncResource
     {
+        private static int ServerVersion = 69;
+        private static string Branch = "beta";
+        public static string FormatServerVersion = $"0.0{ServerVersion}_{Branch}";
+
         public override void OnStart()
         {
             AltEntitySync.Init(1, 100,

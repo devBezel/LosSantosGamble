@@ -1,17 +1,23 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
 using LSG.BLL.Validators;
 using LSG.DAL.Database.Models.GroupModels;
+using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
 using LSG.GM.Economy.Groups.Base;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Group;
+using LSG.GM.Entities.Core.Item;
+using LSG.GM.Entities.Core.Item.Scripts;
 using LSG.GM.Extensions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace LSG.GM.Economy.Groups
@@ -191,5 +197,52 @@ namespace LSG.GM.Economy.Groups
 
 
         }
+
+        #region Search Player
+        [Command("przeszukaj")]
+        public async Task SearchPlayer(IPlayer player, int getterId)
+        {
+            CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
+            CharacterEntity getterCharacterEntity = PlayerExtenstion.GetPlayerById(getterId).GetAccountEntity().characterEntity;
+
+            Alt.Log("Przeszło characterEntity");
+
+            if (getterCharacterEntity == null)
+                return;
+
+            Alt.Log("Przeszło getterCharacterEntity");
+            if (characterEntity.OnDutyGroup is Police group)
+            {
+                Alt.Log("Wykonalo sie z policja");
+                Alt.Log($"{group.CanPlayerDoPolice(characterEntity.AccountEntity)}");
+                if (!group.CanPlayerDoPolice(characterEntity.AccountEntity))
+                {
+                    player.SendChatMessageError("Nie posiadasz uprawnień, aby to zrobić.");
+                    return;
+                }
+                getterCharacterEntity.AccountEntity.Player.SendChatMessageInfo($"Jesteś przeszukiwany przez {characterEntity.DbModel.Name} {characterEntity.DbModel.Surname}");
+
+                await player.EmitAsync("group:searchPlayer", getterCharacterEntity.DbModel.Items);
+            }
+
+        }
+
+        [ClientEvent("group:confiscatePlayerItem")]
+        public void ConfiscatePlayerItem(IPlayer robber, string itemJson)
+        {
+            ItemModel itemToConfiskate = JsonConvert.DeserializeObject<ItemModel>(itemJson);
+            CharacterEntity robberCharacterEntity = robber.GetAccountEntity().characterEntity;
+
+            ItemEntity itemEntity = InventoryScript.ItemFactory.Create(itemToConfiskate);
+            CharacterEntity robbedCharacterEntity = PlayerExtenstion.GetPlayerByCharacterId(itemToConfiskate.CharacterId);
+            if (robbedCharacterEntity == null)
+                return;
+
+            itemEntity.Confiscate(robberCharacterEntity, robbedCharacterEntity);
+            robbedCharacterEntity.AccountEntity.Player.SendChatMessageInfo($"{robberCharacterEntity.DbModel.Name} {robberCharacterEntity.DbModel.Surname} zabrał Ci {itemToConfiskate.Name}");
+            
+        }
+
+        #endregion
     }
 }

@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
+using LSG.GM.Economy.Offers;
 using LSG.GM.Enums;
 using LSG.GM.Extensions;
 using Newtonsoft.Json;
@@ -114,31 +115,68 @@ namespace LSG.GM.Entities.Core.Item.Scripts
         }
 
         [ClientEvent("inventory:offerRequestResult")]
-        public void InventoryOfferRequestResult(IPlayer getter, string itemModelJson, int costItem, int senderID, bool accept)
+        public void InventoryOfferRequestResult(IPlayer getter, string itemModelJson, int costItem, int senderID, bool acceptOffer)
         {
             ItemModel itemModel = JsonConvert.DeserializeObject<ItemModel>(itemModelJson);
-            //int costItem = Convert.ToInt32(args[1]);
-            //int senderID = Convert.ToInt32(args[2]);
-            //bool accept = (bool)args[3];
-
             IPlayer sender = PlayerExtenstion.GetPlayerById(senderID);
 
             if (sender == null) 
                 return;
 
-            if(!accept)
+            if (itemModel.ItemInUse)
             {
-                sender.SendWarningNotify("Gracz odrzucił ofertę", "Twoja oferta została odrzucona");
+                sender.SendChatMessageError("Musisz odużyć przedmiot, aby móc go zaoferować");
                 return;
             }
 
-            CharacterEntity senderEntity = sender.GetAccountEntity().characterEntity;
-            CharacterEntity getterEntity = getter.GetAccountEntity().characterEntity;
+            if (acceptOffer)
+            {
+                CharacterEntity senderEntity = sender.GetAccountEntity().characterEntity;
+                CharacterEntity getterEntity = getter.GetAccountEntity().characterEntity;
 
+                Offer offer = new Offer(senderEntity, getterEntity, itemModel, costItem);
+                //TODO: Zrobić mozliwość płacenia kartą
+                offer.Trade(false);
+            }
+            else
+            {
+                sender.SendWarningNotify("Gracz odrzucił ofertę", "Twoja oferta została odrzucona");
+            }
 
-            ItemEntity itemEntity = ItemFactory.Create(itemModel);
+        }
 
-            itemEntity.Offer(senderEntity, getterEntity, costItem);
+        [Command("oitem")]
+        public void OfferItemCMD(IPlayer sender, int getterId, int itemId, int money)
+        {
+            CharacterEntity characterEntitySender = sender.GetAccountEntity().characterEntity;
+            IPlayer getter = PlayerExtenstion.GetPlayerById(getterId);
+            if (getter == null)
+            {
+                sender.SendChatMessageError("Gracza o podanym ID nie ma w grze");
+                return;
+            }
+
+            if(sender == getter)
+            {
+                sender.SendChatMessageError("Nie możesz zaoferować przedmiotu sam sobie");
+                return;
+            }
+
+            CharacterEntity characterEntityGetter = getter.GetAccountEntity().characterEntity;
+            ItemModel itemModel = characterEntitySender.DbModel.Items.First(x => x.Id == itemId);
+
+            if (itemModel == null)
+                return;
+
+            if(itemModel.ItemInUse)
+            {
+                sender.SendChatMessageError("Musisz odużyć przedmiot, aby móc go zaoferować");
+                return;
+            }
+
+            Offer offer = new Offer(characterEntitySender, characterEntityGetter, itemModel, money);
+            offer.Trade(false);
+
         }
 
     }

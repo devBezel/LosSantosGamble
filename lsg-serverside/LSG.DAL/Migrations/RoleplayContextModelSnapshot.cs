@@ -265,6 +265,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float>("PosZ");
 
+                    b.Property<DateTime>("RecentlyPlayed");
+
                     b.Property<float>("Rotation");
 
                     b.Property<string>("Surname");

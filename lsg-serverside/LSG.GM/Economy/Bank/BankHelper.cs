@@ -13,7 +13,7 @@ namespace LSG.GM.Economy.Bank
         {
             CharacterEntity character = player.GetAccountEntity().characterEntity;
 
-            if (!character.HasEnoughMoney(amount)) return;
+            if (!character.HasEnoughMoney(amount, false)) return;
 
             character.DbModel.Money -= amount;
             character.DbModel.Bank += amount;

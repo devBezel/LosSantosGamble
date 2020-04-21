@@ -70,13 +70,13 @@ namespace LSG.GM.Entities.Common.Bus
 
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
 
-            if (!characterEntity.HasEnoughMoney(cost))
+            if (!characterEntity.HasEnoughMoney(cost, false))
             {
                 player.SendNativeNotify(null, NotificationNativeType.Bus, 1, "Kierowca autobusu", "~g~ Transakcja", $"Dałeś mi za mało gotówki, wypłać pieniądze i czekaj na następny autobus");
                 return;
             }
 
-            characterEntity.RemoveMoney(cost);
+            characterEntity.RemoveMoney(cost, false);
             player.SendNativeNotify(null, NotificationNativeType.Bus, 1, "Kierowca autobusu", "~g~ Transakcja", $"Zapłaciłeś {cost}$ za bilet");
             player.EmitAsync("bus:moneyRemovedStartTimer", time, posX, posY, posZ);
 

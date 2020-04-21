@@ -40,6 +40,7 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public float Hunger { get; set; }
         public bool Online { get; set; }
         public int TimeSpent { get; set; }
+        public DateTime RecentlyPlayed { get; set; }
         public CharacterLook CharacterLook { get; set; }
 
 

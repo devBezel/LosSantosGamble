@@ -1,24 +1,25 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LSG.GM.Extensions
 {
-    public class NativeExtenstion : IScript
+    public static class NativeExtenstion
     {
-        public NativeExtenstion()
+
+        #region Player
+        // help: Freezuje gracza
+        public static void FreezePosition(this IPlayer player, bool toggle)
         {
-            //Alt.OnClient("item:weapon-ammo", GetCurrentWeaponAmmo);
+            player.Emit("native-extenstion:freezeEntityPosition", toggle);
         }
 
-        private void GetCurrentWeaponAmmo(IPlayer player, object[] args)
-        {
-            Alt.Log("Wykonuje się getcurrentweaponammo");
-            Alt.Log("Current ammo: " + (int)(long)args[0]);
-            player.SetData("item:weapon-ammo", (int)(long)args[0]);
-            
-        }
+
+        #endregion
+
     }
 }

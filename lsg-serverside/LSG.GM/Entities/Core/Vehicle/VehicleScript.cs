@@ -37,13 +37,13 @@ namespace LSG.GM.Entities.Core.Vehicle
         }
 
         [AsyncScriptEvent(ScriptEventType.PlayerEnterVehicle)]
-        public async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
+        public async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
-            player.EmitAsync("player:enterVehicle", (int)seat);
-        });
+            await player.EmitAsync("player:enterVehicle", (int)seat);
+        }
 
         [AsyncScriptEvent(ScriptEventType.PlayerLeaveVehicle)]
-        public async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat) => await AltAsync.Do(() =>
+        public async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
             VehicleEntity vehicleEntity = vehicle.GetVehicleEntity();
             if (seat == 1)
@@ -53,14 +53,14 @@ namespace LSG.GM.Entities.Core.Vehicle
                 vehicleEntity.Save();
             }
 
-            player.EmitAsync("player:leaveVehicle", seat);
-        });
+           await player.EmitAsync("player:leaveVehicle", seat);
+        }
 
         [Command("v")]
-        public async Task OpenVehicleCEFWindowCMD(IPlayer player) => await AltAsync.Do(() =>
+        public async Task OpenVehicleCEFWindowCMD(IPlayer player)
         {
-            player.EmitAsync("vehicle:openWindow", EntityHelper.GetCharacterVehicleDatabaseList(player.GetAccountEntity().characterEntity.DbModel.Id));
-        });
+            await player.EmitAsync("vehicle:openWindow", EntityHelper.GetCharacterVehicleDatabaseList(player.GetAccountEntity().characterEntity.DbModel.Id));
+        }
 
         [ClientEvent("vehicle:spawnVehicle")]
         public void SpawnOwnVehicle(IPlayer player, int vehicleId)
