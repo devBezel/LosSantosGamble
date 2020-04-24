@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.VehicleModels;
 using LSG.DAL.Enums;
 using Newtonsoft.Json;
@@ -36,8 +37,8 @@ namespace LSG.DAL.Database.Models.GroupModels
         public Character Leader { get; set; }
 
         public virtual List<GroupWorkerModel> Workers { get; set; }
-        //public List<GroupRankModel> Ranks { get; set; }
         public List<Vehicle> Vehicles { get; set; }
+        public List<ItemModel> Magazine { get; set; }
 
         public void OnWrite(IMValueWriter writer)
         {

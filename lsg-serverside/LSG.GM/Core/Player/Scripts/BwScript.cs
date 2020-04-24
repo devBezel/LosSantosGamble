@@ -63,10 +63,7 @@ namespace LSG.GM.Core.Player.Scripts
                 return;
             }
 
-            getter.GetAccountEntity().characterEntity.Hunger = 100;
-            getter.GetAccountEntity().characterEntity.Thirsty = 100;
-
-            getter.Emit("bw:revive");
+            getter.GetAccountEntity().characterEntity.UnBw();
             getter.SendSuccessNotify(null, $"Otrzymałeś UNBW od administratora {sender.GetAccountEntity().DbModel.Username}");
         }
 

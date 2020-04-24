@@ -15,8 +15,8 @@ namespace LSG.GM.Economy.Bank
 
             if (!character.HasEnoughMoney(amount, false)) return;
 
-            character.DbModel.Money -= amount;
-            character.DbModel.Bank += amount;
+            character.RemoveMoney(amount, false);
+            character.AddMoney(amount, true);
         }
 
         public static void WithdrawFromBank(IPlayer player, int amount)
@@ -25,8 +25,8 @@ namespace LSG.GM.Economy.Bank
 
             if (character.DbModel.Bank < amount) return;
 
-            character.DbModel.Bank -= amount;
-            character.DbModel.Money += amount;
+            character.RemoveMoney(amount, true);
+            character.AddMoney(amount, false);
         }
     }
 }

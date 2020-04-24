@@ -13,6 +13,7 @@ namespace LSG.GM.Entities.Core.Group
             switch (groupModel.GroupType)
             {
                 case DAL.Enums.GroupType.Police: return new Police(groupModel);
+                case DAL.Enums.GroupType.Paramedic: return new Paramedic(groupModel);
                 default:
                     throw new NotSupportedException($"Ta grupa ${groupModel.GroupType} nie jest wspierana");
             }

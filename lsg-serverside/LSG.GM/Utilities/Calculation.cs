@@ -51,6 +51,16 @@ namespace LSG.GM.Utilities
             //return ids;
         }
 
+        public static double Distance(Position posOne, Position posTwo)
+        {
+            return Math.Pow(posOne.X - posTwo.X, 2) + Math.Pow(posOne.Y - posTwo.Y, 2) + Math.Pow(posOne.Z - posTwo.Z, 2);
+        }
+
+        public static bool IsPlayerInRange(IPlayer sender, IPlayer getter, int range)
+        {
+            return Distance(sender.Position, getter.Position) <= range ? true : false;
+        }
+
         public static void AssignPlayerServerID(IPlayer player)
         {
             ICollection<IPlayer> players = Alt.GetAllPlayers();

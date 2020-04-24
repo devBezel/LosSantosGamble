@@ -6,6 +6,7 @@ using LSG.DAL.Database.Models.GroupModels;
 using LSG.GM.Entities;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Group;
+using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,6 +72,16 @@ namespace LSG.GM.Extensions
         public static void SendChatMessageError(this IPlayer player, string message)
         {
             player.SendChatMessage("[{ba0000}BLĄD{ffffff}] " + message);
+        }
+
+        public static void SendChatMessageToNearbyPlayers(this IPlayer player, string message)
+        {
+            IEnumerable<IPlayer> players = Alt.GetAllPlayers().Where(x => Calculation.Distance(player.Position, x.Position) <= 5);
+
+            foreach (IPlayer plr in players)
+            {
+                plr.SendChatMessage(message);
+            }
         }
 
         public static bool TryGetGroupByUnsafeSlot(this IPlayer player, short slot, out GroupEntity group, out GroupWorkerModel groupWorker)

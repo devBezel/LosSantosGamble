@@ -26,6 +26,7 @@ namespace LSG.DAL.Repositories
                 .Include(v => v.Vehicles)
                 .Include(w => w.Workers)
                 .ThenInclude(r => r.GroupRank)
+                .Include(m => m.Magazine)
                 .ToListAsync();
 
             return groups;

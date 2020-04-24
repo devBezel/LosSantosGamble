@@ -2,6 +2,7 @@
 using LSG.DAL.Database.Models.AccountModels;
 using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.VehicleModels;
 using LSG.DAL.Enums;
 using System;
@@ -33,6 +34,9 @@ namespace LSG.DAL.Database.Models.ItemModels
 
         public int? BuildingId { get; set; }
         public BuildingModel Building { get; set; }
+
+        public int? GroupId { get; set; }
+        public GroupModel Group { get; set; }
 
         public bool ItemInUse { get; set; }
 
@@ -99,6 +103,12 @@ namespace LSG.DAL.Database.Models.ItemModels
             {
                 writer.Name("buildingId");
                 writer.Value(BuildingId.Value);
+            }
+
+            if(GroupId.HasValue)
+            {
+                writer.Name("groupId");
+                writer.Value(GroupId.Value);
             }
 
             writer.Name("itemInUse");

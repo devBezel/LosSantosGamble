@@ -38,6 +38,10 @@ namespace LSG.GM.Entities.Core
         public int RespawnVehicleCount { get; set; }
 
 
+        public bool IsHandcuffed { get; set; } = false;
+        public bool IsDragged { get; set; } = false;
+
+
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
 
 
@@ -47,17 +51,22 @@ namespace LSG.GM.Entities.Core
             DbModel = dbModel;
         }
 
-        public async Task Spawn() => await AltAsync.Do(() =>
+        public async Task Spawn()
         {
-            AccountEntity.Player.Spawn(new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ));
-            AccountEntity.Player.SetHealthAsync((ushort)DbModel.Health);
-            AccountEntity.Player.SetModelAsync(0x705E61F2);
+            await AltAsync.Do(() =>
+            {
+                AccountEntity.Player.Spawn(new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ));
+                AccountEntity.Player.SetDateTime(DateTime.Now);
+            });
+
+            await AccountEntity.Player.SetHealthAsync((ushort)DbModel.Health);
+            await AccountEntity.Player.SetModelAsync(0x705E61F2);
             //AccountEntity.Player.SetNameAsync(DbModel.Name);
-            AccountEntity.Player.SetSyncedMetaDataAsync("character:hunger", DbModel.Hunger);
-            AccountEntity.Player.SetSyncedMetaDataAsync("character:thirsty", DbModel.Thirsty);
+            await AccountEntity.Player.SetSyncedMetaDataAsync("character:hunger", DbModel.Hunger);
+            await AccountEntity.Player.SetSyncedMetaDataAsync("character:thirsty", DbModel.Thirsty);
+            AccountEntity.Player.SetSyncedMetaData("character:money", DbModel.Money);
             Dimension = DbModel.Dimension;
             DbModel.Online = true;
-            AccountEntity.Player.SetDateTime(DateTime.Now);
             UpdateName(FormatName);
 
 
@@ -65,7 +74,7 @@ namespace LSG.GM.Entities.Core
 
             if (DbModel.Gender)
             {
-                AccountEntity.Player.SetModelAsync(0x9C9EFFD8);
+               await AccountEntity.Player.SetModelAsync(0x9C9EFFD8);
             }
 
             AccountEntity.Player.SendChatMessageInfo($"Witamy na Los Santos Gamble, wersja {BaseServer.FormatServerVersion}");
@@ -96,8 +105,8 @@ namespace LSG.GM.Entities.Core
 
             
 
-            AccountEntity.Player.EmitAsync("character:wearClothes", DbModel.CharacterLook);
-        });
+            await AccountEntity.Player.EmitAsync("character:wearClothes", DbModel.CharacterLook);
+        }
 
         public Position CharacterPosition
         {
@@ -153,8 +162,9 @@ namespace LSG.GM.Entities.Core
             {
                 DbModel.Money += amount;
             }
+            AccountEntity.Player.SetSyncedMetaData("character:money", DbModel.Money);
 
-            SetCharacterDataToClient();
+            //SetCharacterDataToClient();
         }
 
         public void RemoveMoney(int amount, bool bank)
@@ -162,14 +172,13 @@ namespace LSG.GM.Entities.Core
             if(bank)
             {
                 DbModel.Bank -= amount;
+
             }
             else
             {
                 DbModel.Money -= amount;
-
             }
-            // Do zrobienia
-            SetCharacterDataToClient();
+            AccountEntity.Player.SetSyncedMetaData("character:money", DbModel.Money);
         }
 
         public bool HasEnoughMoney(int amount, bool bank)
@@ -186,6 +195,14 @@ namespace LSG.GM.Entities.Core
                 return false;
             else
                 return true;
+        }
+
+        public void UnBw()
+        {
+            Hunger = 100;
+            Thirsty = 100;
+
+            AccountEntity.Player.Emit("bw:revive");
         }
 
         public float Hunger

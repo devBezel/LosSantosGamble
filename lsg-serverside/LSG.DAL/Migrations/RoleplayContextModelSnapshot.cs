@@ -546,6 +546,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<double?>("FourthParameter");
 
+                    b.Property<int?>("GroupId");
+
                     b.Property<int>("ItemEntityType");
 
                     b.Property<bool>("ItemInUse");
@@ -565,6 +567,8 @@ namespace LSG.DAL.Migrations
                     b.HasIndex("CharacterId");
 
                     b.HasIndex("CreatorId");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("VehicleId");
 
@@ -804,6 +808,10 @@ namespace LSG.DAL.Migrations
                     b.HasOne("LSG.DAL.Database.Models.AccountModels.Account", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId");
+
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
+                        .WithMany("Magazine")
+                        .HasForeignKey("GroupId");
 
                     b.HasOne("LSG.DAL.Database.Models.VehicleModels.Vehicle", "Vehicle")
                         .WithMany("ItemsInVehicle")
