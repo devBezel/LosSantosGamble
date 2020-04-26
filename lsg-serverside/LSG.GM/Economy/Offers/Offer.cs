@@ -33,6 +33,14 @@ namespace LSG.GM.Economy.Offers
             Money = money;
         }
 
+        public Offer(CharacterEntity sender, CharacterEntity getter, Action<CharacterEntity> action, bool moneyToGroup)
+        {
+            _action = action;
+            _moneyToGroup = moneyToGroup;
+            sender = Sender;
+            getter = Getter;
+        }
+
         private bool _moneyToGroup;
         private Action<CharacterEntity> _action;
 
@@ -59,6 +67,11 @@ namespace LSG.GM.Economy.Offers
 
                     Alt.Log($"[OFFER] Gracz {Sender.DbModel.Name} {Sender.DbModel.Surname} przekazał graczowi {Getter.DbModel.Name} {Getter.DbModel.Surname}  ITEM: {Item.Name} CENA: {Money}");
                 }
+                else if(Vehicle != null)
+                {
+
+                }
+
 
                 if(_moneyToGroup)
                 {
@@ -74,6 +87,11 @@ namespace LSG.GM.Economy.Offers
                 Getter.AccountEntity.Player.SendChatMessageError("Nie masz wystarczająco pieniędzy, aby wykonać tą transakcje");
                 Sender.AccountEntity.Player.SendChatMessageError("Wymiana została przerwana, gracz nie ma środków na koncie");
             }
+        }
+
+        public void Dispose()
+        {
+            Getter.PendingOffer = false;
         }
     }
 }

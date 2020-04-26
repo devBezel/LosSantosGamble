@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using AltV.Net;
 
 namespace LSG.GM.Entities.Core.Group
 {
@@ -59,6 +61,11 @@ namespace LSG.GM.Entities.Core.Group
         public bool CanPlayerManageWorkers(GroupWorkerModel worker)
         {
             return worker.Rights.HasFlag(GroupRights.Recruitment) || IsGroupOwner(worker) ? true : false;
+        }
+
+        public bool CanPlayerVehicle(GroupWorkerModel worker)
+        {
+            return worker.Rights.HasFlag(GroupRights.Vehicle) || IsGroupOwner(worker) ? true : false;
         }
 
         //public bool CanPlayerOpenGroupPanel(GroupWorkerModel worker)

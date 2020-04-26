@@ -39,7 +39,7 @@ namespace LSG.GM.Core.Admin
             if (model == 0) return;
 
             VehicleEntity vehicle = VehicleEntity.Create(sender.Position, model, new Color(), new Color(), getter.GetAccountEntity().characterEntity.DbModel);
-            vehicle.Spawn(getter);
+            vehicle.Spawn();
         }
 
 

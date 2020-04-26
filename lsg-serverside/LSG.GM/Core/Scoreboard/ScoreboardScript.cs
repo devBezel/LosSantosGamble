@@ -22,7 +22,9 @@ namespace LSG.GM.Core.Scoreboard
                 foreach (IPlayer plr in Alt.GetAllPlayers())
                 {
                     CharacterEntity character = plr.GetAccountEntity().characterEntity;
-                    playerList.Add(new ScoreboardModel { Id = character.AccountEntity.ServerID, FormatName = $"{character.DbModel.Name} {character.DbModel.Surname}", GamblePoints = 0, Ping = plr.Ping });
+                    if (character == null)
+                        return;
+                    playerList.Add(new ScoreboardModel { Id = character.AccountEntity.ServerID, FormatName = $"{character.DbModel.Name} {character.DbModel.Surname}", GamblePoints = character.DbModel.GamblePoints, Ping = plr.Ping });
                 }
             });
 

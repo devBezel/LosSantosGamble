@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LSG.DAL.Database.Models.GroupModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
@@ -28,5 +29,6 @@ namespace LSG.DAL.Database
 
             return new RoleplayContext(options.Options);
         }
+
     }
 }

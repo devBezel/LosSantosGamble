@@ -95,55 +95,6 @@ namespace LSG.GM.Entities.Core.Item.Scripts
             itemEntity.Create(getter.GetAccountEntity().characterEntity);
         }
 
-        [ClientEvent("inventory:offerPlayerItem")]
-        public void InventoryOfferPlayerItem(IPlayer sender, string itemModelJson, IPlayer getter, int costItem)
-        {
-            ItemModel itemModel = JsonConvert.DeserializeObject<ItemModel>(itemModelJson);
-            Alt.Log($"itemModel: {itemModel.Name}");
-            //IPlayer getter = (IPlayer)args[1];
-            //int costItem = Convert.ToInt32(args[2]);
-
-            if (getter == null) return;
-
-            if(sender == getter)
-            {
-                sender.SendErrorNotify("Wystąpił bląd", "Nie możesz zaoferować przedmiotu sam sobie");
-                return;
-            }
-
-            getter.Emit("inventory:sendRequestOffer", itemModel, costItem, sender.GetAccountEntity().ServerID);
-        }
-
-        [ClientEvent("inventory:offerRequestResult")]
-        public void InventoryOfferRequestResult(IPlayer getter, string itemModelJson, int costItem, int senderID, bool acceptOffer)
-        {
-            ItemModel itemModel = JsonConvert.DeserializeObject<ItemModel>(itemModelJson);
-            IPlayer sender = PlayerExtenstion.GetPlayerById(senderID);
-
-            if (sender == null) 
-                return;
-
-            if (itemModel.ItemInUse)
-            {
-                sender.SendChatMessageError("Musisz odużyć przedmiot, aby móc go zaoferować");
-                return;
-            }
-
-            if (acceptOffer)
-            {
-                CharacterEntity senderEntity = sender.GetAccountEntity().characterEntity;
-                CharacterEntity getterEntity = getter.GetAccountEntity().characterEntity;
-
-                Offer offer = new Offer(senderEntity, getterEntity, itemModel, costItem);
-                //TODO: Zrobić mozliwość płacenia kartą
-                offer.Trade(false);
-            }
-            else
-            {
-                sender.SendWarningNotify("Gracz odrzucił ofertę", "Twoja oferta została odrzucona");
-            }
-
-        }
 
         [Command("oitem")]
         public void OfferItemCMD(IPlayer sender, int getterId, int itemId, int money)

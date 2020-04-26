@@ -24,6 +24,7 @@ namespace LSG.DAL.Repositories
                 .Include(w => w.Workers)
                 .ThenInclude(c => c.Character)
                 .Include(v => v.Vehicles)
+                .Include(r => r.Ranks)
                 .Include(w => w.Workers)
                 .ThenInclude(r => r.GroupRank)
                 .Include(m => m.Magazine)

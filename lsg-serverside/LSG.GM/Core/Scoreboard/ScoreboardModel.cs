@@ -10,7 +10,7 @@ namespace LSG.GM.Core.Scoreboard
     {
         public int Id { get; set; }
         public string FormatName { get; set; }
-        public int GamblePoints { get; set; }
+        public float GamblePoints { get; set; }
         public uint Ping { get; set; }
 
         public void OnWrite(IMValueWriter writer)

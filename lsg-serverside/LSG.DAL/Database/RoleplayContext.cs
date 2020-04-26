@@ -40,5 +40,20 @@ namespace LSG.DAL.Database
         public DbSet<GroupWorkerModel> GroupWorkers { get; set; }
         public DbSet<GroupRankModel> GroupRanks { get; set; }
 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<GroupModel>()
+                .HasOne(group => group.DefaultRank)
+                .WithOne(rank => rank.DefaultForGroup)
+                .HasForeignKey<GroupRankModel>(groupRank => groupRank.DefaultForGroupId);
+
+
+            modelBuilder.Entity<GroupModel>()
+                .HasMany(group => group.Ranks)
+                .WithOne(rank => rank.Group)
+                .HasForeignKey(rank => rank.GroupId);
+        }
+
     }
 }

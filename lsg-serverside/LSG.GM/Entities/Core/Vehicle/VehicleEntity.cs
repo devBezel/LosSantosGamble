@@ -18,6 +18,8 @@ using Newtonsoft.Json;
 using System.Linq;
 //using LSG.GM.Entities.Admin;
 using LSG.GM.Extensions;
+using LSG.DAL.Database.Models.GroupModels;
+using LSG.GM.Entities.Core.Group;
 
 namespace LSG.GM.Entities.Core.Vehicle
 {
@@ -28,6 +30,7 @@ namespace LSG.GM.Entities.Core.Vehicle
         private bool _nonDbVehicle;
 
         public bool TrunkOpen { get; set; } = false;
+        public GroupEntity GroupOwner { get; set; }
 
         public VehicleEntity(VehicleDb model)
         {
@@ -128,17 +131,18 @@ namespace LSG.GM.Entities.Core.Vehicle
             }
         }
 
-        public void Dispose(IPlayer player)
+        public void Dispose()
         {
             if (!_nonDbVehicle) Save();
 
+
             GameVehicle.Remove();
-            player.GetAccountEntity().characterEntity.RespawnVehicleCount--;
+
         }
 
-        public void Spawn(IPlayer player)
+        public void Spawn()
         {
-            CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
+
             GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(DbModel.RotPitch, DbModel.RotPitch, DbModel.RotYaw));
 
             GameVehicle.PrimaryColorRgb = new Rgba((byte)DbModel.R, (byte)DbModel.G, (byte)DbModel.B, 1);
@@ -151,18 +155,6 @@ namespace LSG.GM.Entities.Core.Vehicle
             GameVehicle.SetData("vehicle:id", DbModel.Id);
             GameVehicle.SetSyncedMetaData("vehicle:syncedData", DbModel);
 
-            if (!IsGroupVehicle)
-            {
-                characterEntity.RespawnVehicleCount++;
-                //Alt.Log("Nie jest grupowym pojazdem");
-
-                //IEnumerable<IVehicle> veh = Alt.GetAllVehicles().Where(v => v.GetData("vehicle:data", out VehicleEntity vehicleData) && vehicleData.DbModel.Owner.Id == player.GetAccountEntity().characterEntity.DbModel.Id);
-                //Alt.Log($"VEH COUNT: {veh.Count()}");
-                //if(veh != null)
-                //{
-                //    GameVehicle.SetData("vehicle:incrementId", veh.Count() + 1);
-                //}
-            }
 
             //Save();
         }

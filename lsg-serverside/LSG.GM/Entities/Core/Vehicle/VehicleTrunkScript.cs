@@ -3,7 +3,9 @@ using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
+using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.ItemModels;
+using LSG.GM.Entities.Core.Group;
 using LSG.GM.Extensions;
 using LSG.GM.Helpers;
 using LSG.GM.Helpers.Models;
@@ -104,12 +106,44 @@ namespace LSG.GM.Entities.Core.Vehicle
             if (vehicleEntity == null) return;
 
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
-            if(vehicleEntity.DbModel.OwnerId != characterEntity.DbModel.Id)
+
+
+            if(vehicleEntity.IsGroupVehicle)
             {
-                //TODO: Dorobić że typ grupy police może przeszukiwać bagażniki
-                player.SendErrorNotify("Nie masz uprawnień", "Nie jesteś właścicielem tego pojazdu");
-                return;
+                GroupEntity vehicleGroupOwner = vehicleEntity.GroupOwner;
+                if (vehicleGroupOwner == null) 
+                    return;
+
+                if(characterEntity.OnDutyGroup == null)
+                {
+                    player.SendErrorNotify("Musisz być na służbie grupy, aby otworzyć bagażnik");
+                    return;
+                }
+
+                if (vehicleGroupOwner != characterEntity.OnDutyGroup)
+                {
+                    player.SendChatMessageError("Ten pojazd nie należy do twojej grupy");
+                    return;
+                }
+
+                GroupWorkerModel worker = characterEntity.OnDutyGroup.DbModel.Workers.First(c => c.CharacterId == characterEntity.DbModel.Id);
+                if(!vehicleGroupOwner.CanPlayerVehicle(worker))
+                {
+                    player.SendChatMessageError("Nie masz uprawnień do tego, aby otworzyć bagażnik pojazdu");
+                    return;
+                }
+
             }
+            else
+            {
+                if (vehicleEntity.DbModel.OwnerId != characterEntity.DbModel.Id)
+                {
+                    //TODO: Dorobić że typ grupy police może przeszukiwać bagażniki
+                    player.SendErrorNotify("Nie masz uprawnień", "Nie jesteś właścicielem tego pojazdu");
+                    return;
+                }
+            }
+
 
             player.Emit("vehicle-trunk:data",
                 characterEntity.DbModel.Items,

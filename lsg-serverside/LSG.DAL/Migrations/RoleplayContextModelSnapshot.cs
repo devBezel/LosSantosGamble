@@ -241,6 +241,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float>("DirtyMoney");
 
+                    b.Property<float>("GamblePoints");
+
                     b.Property<bool>("Gender");
 
                     b.Property<float>("Health");
@@ -454,6 +456,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int>("CreatorId");
 
+                    b.Property<int>("DefaultRankId");
+
                     b.Property<int>("Grant");
 
                     b.Property<int>("GroupType");
@@ -482,7 +486,7 @@ namespace LSG.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("DefaultForGroupId");
+                    b.Property<int?>("DefaultForGroupId");
 
                     b.Property<int>("GroupId");
 
@@ -494,7 +498,8 @@ namespace LSG.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DefaultForGroupId");
+                    b.HasIndex("DefaultForGroupId")
+                        .IsUnique();
 
                     b.HasIndex("GroupId");
 
@@ -767,12 +772,11 @@ namespace LSG.DAL.Migrations
             modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupRankModel", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "DefaultForGroup")
-                        .WithMany()
-                        .HasForeignKey("DefaultForGroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithOne("DefaultRank")
+                        .HasForeignKey("LSG.DAL.Database.Models.GroupModels.GroupRankModel", "DefaultForGroupId");
 
                     b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
-                        .WithMany()
+                        .WithMany("Ranks")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

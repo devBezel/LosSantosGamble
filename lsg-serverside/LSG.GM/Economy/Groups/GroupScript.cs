@@ -64,20 +64,67 @@ namespace LSG.GM.Economy.Groups
 
             if(sender.TryGetGroupByUnsafeSlot((short)slot, out GroupEntity group, out GroupWorkerModel worker))
             {
-                Alt.Log($" group.CanPlayerManageWorkers {group.CanPlayerManageWorkers(worker)}");
                 if(!group.CanPlayerManageWorkers(worker))
                 {
                     sender.SendErrorNotify("Wystąpił bląd", "Nie masz uprawnień do zarządzania członkami");
                     return;
                 }
-                Alt.Log("Wczytalo sie grupy");
+
+                GroupRights convertedRights = (GroupRights)Enum.Parse(typeof(GroupRights), rights.ToString());
+                if((convertedRights.HasFlag(GroupRights.DepositWithdrawMoney) || convertedRights.HasFlag(GroupRights.Recruitment)) && !group.IsGroupOwner(worker))
+                {
+                    Alt.Log($"[MEMORY-ALERT] {accountEntity.DbModel.Username} zmienił dane w UI i wysłał emit do serwera z niepoprawnymi danymi");
+                    return;
+                }
 
                 GroupWorkerModel workerToUpdate = group.DbModel.Workers.FirstOrDefault(c => c.CharacterId == characterId);
-                workerToUpdate.Rights = (GroupRights)rights;
+                workerToUpdate.Rights = convertedRights;
 
                 group.Save();
 
                 sender.SendSuccessNotify("Wykonano pomyśnie!", $"Zmieniłeś uprawnienia członkowi {workerToUpdate.Character.Name} {workerToUpdate.Character.Surname}");
+            }
+        }
+
+        [ClientEvent("group:changeWorkerRank")]
+        public void ChangeGroupWorkerRank(IPlayer sender, int characterId, int rankToChange, int groupSlot)
+        {
+            AccountEntity accountEntity = sender.GetAccountEntity();
+            GroupSlotValidator slotValidator = new GroupSlotValidator();
+
+            if(!slotValidator.IsValid((byte)groupSlot))
+            {
+                sender.SendErrorNotify("Ten slot jest niepoprawny!", "Wybierz inny slot, aby wejść na służbę podanej grupy");
+                return;
+            }
+
+            if (accountEntity.characterEntity.OnDutyGroup == null)
+            {
+                sender.SendErrorNotify("Musisz być na służbie", "Wejdź na służbę, aby uruchomić panel grupy");
+                return;
+            }
+
+            if(sender.TryGetGroupByUnsafeSlot((short)groupSlot, out GroupEntity group, out GroupWorkerModel worker))
+            {
+                if(!group.CanPlayerManageWorkers(worker))
+                {
+                    sender.SendErrorNotify("Wystąpił bląd", "Nie masz uprawnień do zarządzania członkami");
+                    return;
+                }
+
+                GroupWorkerModel workerToUpdate = group.DbModel.Workers.SingleOrDefault(c => c.CharacterId == characterId);
+                GroupRankModel rankToChangeModel = group.DbModel.Ranks.First(r => r.Id == rankToChange);
+
+                if (worker.GroupRank.Rights < rankToChangeModel.Rights || !group.IsGroupOwner(worker))
+                {
+                    Alt.Log($"[MEMORY-ALERT] {accountEntity.DbModel.Username} zmienił dane w UI i wysłał emit do serwera z niepoprawnymi danymi");
+                    return;
+                }
+
+                workerToUpdate.GroupRank = rankToChangeModel;
+
+                group.Save();
+                sender.SendChatMessageInfo("Ranga pracownika została zaktualizowana pomyślnie!");
             }
         }
 
@@ -99,6 +146,8 @@ namespace LSG.GM.Economy.Groups
                 dutyTimer.Dispose();
 
                 player.SetData("group:dutyTimer", null);
+                player.SetSyncedMetaData("group:dutyWorkerData", null);
+                player.SetSyncedMetaData("group:dutyGroupData", null);
             } else
             {
                 GroupSlotValidator slotValidator = new GroupSlotValidator();
@@ -118,8 +167,10 @@ namespace LSG.GM.Economy.Groups
                     };
 
                     player.SetData("group:dutyTimer", dutyTimer);
+                    player.SetSyncedMetaData("group:dutyWorkerData", worker);
+                    player.SetSyncedMetaData("group:dutyGroupData", group.DbModel);
 
-                    accountEntity.characterEntity.UpdateName($"(~b~{group.DbModel.Tag}~w~) {accountEntity.characterEntity.FormatName}");
+                    accountEntity.characterEntity.UpdateName($"~w~(~b~{group.DbModel.Tag}~w~) {accountEntity.characterEntity.FormatName}");
                     accountEntity.characterEntity.OnDutyGroup = group;
                     accountEntity.characterEntity.OnDutyGroup.PlayersOnDuty.Add(accountEntity);
                     player.SendSuccessNotify("Wszedłeś na służbę", $"Wszedłeś na służbę {group.DbModel.Name}");
@@ -156,6 +207,7 @@ namespace LSG.GM.Economy.Groups
                 player.Emit("group-general:openGroupPanel", 
                     group.DbModel, 
                     group.GetWorkers().Where(c => c.Character.Online).ToList(),
+                    group.DbModel.Ranks,
                     group.DbModel.Vehicles, 
                     worker, 
                     slot);
@@ -202,15 +254,22 @@ namespace LSG.GM.Economy.Groups
 
         #region Search Player
         [Command("przeszukaj")]
-        public async Task SearchPlayer(IPlayer player, int getterId)
+        public async Task SearchPlayer(IPlayer sender, int getterId)
         {
-            CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
+            CharacterEntity characterEntity = sender.GetAccountEntity().characterEntity;
             CharacterEntity getterCharacterEntity = PlayerExtenstion.GetPlayerById(getterId).GetAccountEntity().characterEntity;
 
             Alt.Log("Przeszło characterEntity");
 
             if (getterCharacterEntity == null)
                 return;
+
+            if (!Calculation.IsPlayerInRange(sender, getterCharacterEntity.AccountEntity.Player, 2))
+            {
+                sender.SendChatMessageError("Gracz którego chcesz zakuć jest zbyt daleko");
+                return;
+            }
+
 
             Alt.Log("Przeszło getterCharacterEntity");
             if (characterEntity.OnDutyGroup is Police group)
@@ -219,12 +278,12 @@ namespace LSG.GM.Economy.Groups
                 Alt.Log($"{group.CanPlayerDoPolice(characterEntity.AccountEntity)}");
                 if (!group.CanPlayerDoPolice(characterEntity.AccountEntity))
                 {
-                    player.SendChatMessageError("Nie posiadasz uprawnień, aby to zrobić.");
+                    sender.SendChatMessageError("Nie posiadasz uprawnień, aby to zrobić.");
                     return;
                 }
                 getterCharacterEntity.AccountEntity.Player.SendChatMessageInfo($"Jesteś przeszukiwany przez {characterEntity.DbModel.Name} {characterEntity.DbModel.Surname}");
 
-                await player.EmitAsync("group:searchPlayer", getterCharacterEntity.DbModel.Items);
+                await sender.EmitAsync("group:searchPlayer", getterCharacterEntity.DbModel.Items);
             }
 
         }

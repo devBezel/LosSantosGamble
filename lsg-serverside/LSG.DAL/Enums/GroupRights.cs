@@ -23,6 +23,6 @@ namespace LSG.DAL.Enums
         Seventh = 1 << 12,
         Eight = 1 << 13,
         Ninth = 1 << 14,
-        AllBasic = DepositWithdrawMoney | Doors | Recruitment | Offers | Orders,
+        AllBasic = DepositWithdrawMoney | Doors | Recruitment | Offers | Orders | Vehicle,
     }
 }

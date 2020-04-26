@@ -41,6 +41,8 @@ namespace LSG.GM.Entities.Core
         public bool IsHandcuffed { get; set; } = false;
         public bool IsDragged { get; set; } = false;
 
+        public bool PendingOffer { get; set; } = false;
+
 
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
 
@@ -101,6 +103,15 @@ namespace LSG.GM.Entities.Core
             SpentTimer.Elapsed += (o, args) =>
             {
                 DbModel.TimeSpent += 1;
+
+                if (AccountEntity.HasPremium)
+                {
+                    DbModel.GamblePoints += 0.2f;
+                }
+                else
+                {
+                    DbModel.GamblePoints += 0.1f;
+                }
             };
 
             
