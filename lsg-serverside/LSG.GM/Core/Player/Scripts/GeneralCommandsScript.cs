@@ -2,6 +2,7 @@
 using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
 using LSG.GM.Entities.Core;
+using LSG.GM.Enums;
 using LSG.GM.Extensions;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,13 @@ namespace LSG.GM.Core.Player.Scripts
         [Command("me", true)]
         public void MessageMeCMD(IPlayer player, string message)
         {
-            CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
-            player.SendChatMessageToNearbyPlayers("{de59d1}** " + characterEntity.DbModel.Name + " " + characterEntity.DbModel.Surname + " " + message + ".");
+            player.SendChatMessageToNearbyPlayers(message, ChatType.Me);
         }
 
         [Command("do", true)]
         public void MessageDoCMD(IPlayer player, string message)
         {
-            CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
-            player.SendChatMessageToNearbyPlayers("{877485}** " + message + ". " + "(( " + characterEntity.DbModel.Name + " " + characterEntity.DbModel.Surname + " ))**");
+            player.SendChatMessageToNearbyPlayers(message, ChatType.Do);
         }
 
         [Command("pm", false, new string[] { "pw", "w", "msg" })]

@@ -21,10 +21,17 @@ namespace LSG.GM.Core.Scoreboard
             {
                 foreach (IPlayer plr in Alt.GetAllPlayers())
                 {
-                    CharacterEntity character = plr.GetAccountEntity().characterEntity;
-                    if (character == null)
-                        return;
-                    playerList.Add(new ScoreboardModel { Id = character.AccountEntity.ServerID, FormatName = $"{character.DbModel.Name} {character.DbModel.Surname}", GamblePoints = character.DbModel.GamblePoints, Ping = plr.Ping });
+                    AccountEntity account = plr.GetAccountEntity();
+                    if (account == null || account.characterEntity == null)
+                    {
+                        playerList.Add(new ScoreboardModel { Id = -1, FormatName = $"Niezalogowany {plr.Name}", GamblePoints = 0, Ping = plr.Ping });
+                    }
+                    else
+                    {
+                        playerList.Add(new ScoreboardModel { Id = account.characterEntity.AccountEntity.ServerID, FormatName = $"{account.characterEntity.DbModel.Name} " +
+                                                           $"{account.characterEntity.DbModel.Surname}", GamblePoints = account.characterEntity.DbModel.GamblePoints, Ping = plr.Ping });
+                    }
+                    
                 }
             });
 

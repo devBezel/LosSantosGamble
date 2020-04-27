@@ -6,6 +6,7 @@ using LSG.DAL.Database.Models.GroupModels;
 using LSG.GM.Entities;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Group;
+using LSG.GM.Enums;
 using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
@@ -74,13 +75,27 @@ namespace LSG.GM.Extensions
             player.SendChatMessage("[{ba0000}BLĄD{ffffff}] " + message);
         }
 
-        public static void SendChatMessageToNearbyPlayers(this IPlayer player, string message)
+        public static void SendChatMessageToNearbyPlayers(this IPlayer player, string message, ChatType type = ChatType.Normal)
         {
+            CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
             IEnumerable<IPlayer> players = Alt.GetAllPlayers().Where(x => Calculation.Distance(player.Position, x.Position) <= 5);
 
             foreach (IPlayer plr in players)
             {
-                plr.SendChatMessage(message);
+                switch (type)
+                {
+                    case ChatType.Normal: 
+                        plr.SendChatMessage(message);
+                        return;
+                    case ChatType.Me:
+                        plr.SendChatMessage("{de59d1}** " + characterEntity.DbModel.Name + " " + characterEntity.DbModel.Surname + " " + message + ".");
+                        return;
+                    case ChatType.Do:
+                        plr.SendChatMessage("{877485}** " + message + ". " + "(( " + characterEntity.DbModel.Name + " " + characterEntity.DbModel.Surname + " ))**");
+                        return;
+                    default:
+                        break;
+                }
             }
         }
 

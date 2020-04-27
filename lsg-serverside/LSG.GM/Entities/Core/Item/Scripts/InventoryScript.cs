@@ -31,7 +31,7 @@ namespace LSG.GM.Entities.Core.Item.Scripts
         public void InventoryGetItems(IPlayer player)
         {
             List<ItemModel> items = player.GetAccountEntity().characterEntity.DbModel.Items.ToList();
-            List<ItemEntity> usedItems = player.GetAccountEntity().characterEntity.ItemsInUse.ToList();
+            //List<ItemEntity> usedItems = player.GetAccountEntity().characterEntity.ItemsInUse.ToList();
 
             //TODO: Wywala nulla przez co crashuje serwer, do naprawy
             player.Emit("inventory:items", items);
@@ -95,40 +95,6 @@ namespace LSG.GM.Entities.Core.Item.Scripts
             itemEntity.Create(getter.GetAccountEntity().characterEntity);
         }
 
-
-        [Command("oitem")]
-        public void OfferItemCMD(IPlayer sender, int getterId, int itemId, int money)
-        {
-            CharacterEntity characterEntitySender = sender.GetAccountEntity().characterEntity;
-            IPlayer getter = PlayerExtenstion.GetPlayerById(getterId);
-            if (getter == null)
-            {
-                sender.SendChatMessageError("Gracza o podanym ID nie ma w grze");
-                return;
-            }
-
-            if(sender == getter)
-            {
-                sender.SendChatMessageError("Nie możesz zaoferować przedmiotu sam sobie");
-                return;
-            }
-
-            CharacterEntity characterEntityGetter = getter.GetAccountEntity().characterEntity;
-            ItemModel itemModel = characterEntitySender.DbModel.Items.First(x => x.Id == itemId);
-
-            if (itemModel == null)
-                return;
-
-            if(itemModel.ItemInUse)
-            {
-                sender.SendChatMessageError("Musisz odużyć przedmiot, aby móc go zaoferować");
-                return;
-            }
-
-            Offer offer = new Offer(characterEntitySender, characterEntityGetter, itemModel, money);
-            offer.Trade(false);
-
-        }
 
     }
 }

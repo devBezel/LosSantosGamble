@@ -58,7 +58,10 @@ namespace LSG.GM.Economy.Offers
                 {
                     // TODO: Dorobić /me podaje przedmiot jakiś tam
                     // TODO: Sprawdzić czy usuwa przedmioty z ekwipunku
+
                     Item.Character = Getter.DbModel;
+
+
                     RoleplayContext ctx = Singleton.GetDatabaseInstance();
                     using (UnitOfWork unitOfWork = new UnitOfWork(ctx))
                     {

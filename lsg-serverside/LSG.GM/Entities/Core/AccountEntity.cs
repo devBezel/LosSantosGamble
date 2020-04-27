@@ -26,6 +26,8 @@ namespace LSG.GM.Entities.Core
         public CharacterEntity characterEntity;
         public IPlayer Player { get; set; }
 
+        public bool IsLogged { get; set; } = false;
+
         public AccountEntity(Account dbModel, IPlayer player)
         {
             DbModel = dbModel;
@@ -34,6 +36,12 @@ namespace LSG.GM.Entities.Core
 
         public async void Login(Character character)
         {
+            if (IsLogged)
+            {
+                Player.SendChatMessageError("Ktoś jest już zalogowany na tym koncie");
+                return;
+            }
+
             Player.SetData("account:data", this);
             SetAccountDataToClient();
 
@@ -41,6 +49,7 @@ namespace LSG.GM.Entities.Core
             EntityHelper.Add(this);
 
             AltAsync.Log($"{DbModel.Rank}");
+            IsLogged = true;
             await characterEntity.Spawn();
         }
 
@@ -132,6 +141,7 @@ namespace LSG.GM.Entities.Core
             characterEntity.SpentTimer.Stop();
             characterEntity.SpentTimer.Dispose();
 
+            IsLogged = false;
 
             characterEntity.Save();
             Save();
