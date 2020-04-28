@@ -53,7 +53,13 @@ namespace LSG.GM.Core.Login
             .ThenInclude(p => p.AccountPremium)
             .FirstOrDefault(c => c.Id == characterId);
 
-            Alt.Log("ilosc rzeczy z ekwipunku " + characterDatabase.Items.Count().ToString());
+            
+            if(EntityHelper.AccountLogged(characterDatabase.Account.Id))
+            {
+                player.SendChatMessageError("Ktoś już jest zalogowany na tym koncie!");
+                return;
+            }
+
             AccountEntity accountEntity = new AccountEntity(characterDatabase.Account, player);
             accountEntity.Login(characterDatabase);
         });

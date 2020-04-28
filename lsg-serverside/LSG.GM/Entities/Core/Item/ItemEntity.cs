@@ -89,17 +89,17 @@ namespace LSG.GM.Entities.Core.Item
 
         public virtual void Confiscate(CharacterEntity robber, CharacterEntity robbed)
         {
+            Alt.Log("ItemInUse: " + DbModel.ItemInUse);
             if(DbModel.ItemInUse)
             {
                 // Odużywa item jeśli jest użyty
                 UseItem(robbed);
             }
 
-            DbModel.CharacterId = robber.DbModel.Id;
-
-
-            robbed.DbModel.Items.Remove(DbModel);
-            robber.DbModel.Items.Add(DbModel);
+            DbModel.Character = robber.DbModel;
+            Save();
+            //robbed.DbModel.Items.Remove(DbModel);
+            //robber.DbModel.Items.Add(DbModel);
 
         }
 

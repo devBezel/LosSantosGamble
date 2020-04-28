@@ -21,7 +21,7 @@ namespace LSG.GM.Core.Admin
         [Command("createveh")]
         public void CreateGlobalVehicleCMD(IPlayer sender, int id, VehicleModel model)
         {
-            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Administrator))
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.CommunityManager))
                 return;
 
             if (!sender.GetAccountEntity().OnAdminDuty)

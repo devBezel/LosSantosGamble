@@ -36,11 +36,6 @@ namespace LSG.GM.Entities.Core
 
         public async void Login(Character character)
         {
-            if (IsLogged)
-            {
-                Player.SendChatMessageError("Ktoś jest już zalogowany na tym koncie");
-                return;
-            }
 
             Player.SetData("account:data", this);
             SetAccountDataToClient();
@@ -48,7 +43,6 @@ namespace LSG.GM.Entities.Core
             characterEntity = new CharacterEntity(this, character);
             EntityHelper.Add(this);
 
-            AltAsync.Log($"{DbModel.Rank}");
             IsLogged = true;
             await characterEntity.Spawn();
         }
@@ -142,7 +136,6 @@ namespace LSG.GM.Entities.Core
             characterEntity.SpentTimer.Dispose();
 
             IsLogged = false;
-
             characterEntity.Save();
             Save();
         }

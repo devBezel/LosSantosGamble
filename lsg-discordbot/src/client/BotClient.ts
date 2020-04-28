@@ -19,14 +19,19 @@ interface BotOptions {
 }
 
 export default class BotClient extends AkairoClient {
+    public listenerHandler: ListenerHandler = new ListenerHandler(this, {
+        directory: join(__dirname, '..', 'listeners'),
+    });
+
     public commandHandler: CommandHandler = new CommandHandler(this, {
         directory: join(__dirname, "..", "commands"),
         prefix: prefix,
         ignorePermissions: owners,
+        allowMention: true,
         handleEdits: true,
         commandUtil: true,
         commandUtilLifetime: 3e5,
-        defaultCooldown: 1e4,
+        defaultCooldown: 6e4,
         argumentDefaults: {
             prompt: {
                 modifyStart: (_, str): string => `${str}\n\n Typ \`cancel\` aby przerwać komende`,
@@ -37,19 +42,15 @@ export default class BotClient extends AkairoClient {
                 time: 3e4
             },
             otherwise: ""
-        }
-    });
-
-    public listerHandler: ListenerHandler = new ListenerHandler(this, {
-        directory: join(__dirname, '..', 'listeners'),
+        },
     });
 
     public constructor(config: BotOptions) {
         super({
-            ownerID: owners,
-            disabledEvents: ['TYPING_START'],
-            shardCount: 1,
-            disableEveryone: true
+            ownerID: config.owners,
+            // disabledEvents: ['TYPING_START'],
+            // shardCount: 1,
+            // disableEveryone: true
         });
 
         this.config = config;
@@ -60,7 +61,7 @@ export default class BotClient extends AkairoClient {
         this.listenerHandler.setEmitters({
             commandHandler: this.commandHandler,
             listenerHandler: this.listenerHandler,
-            proccess: process
+            process
         });
 
         this.commandHandler.loadAll();

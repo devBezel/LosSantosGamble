@@ -72,6 +72,19 @@ namespace LSG.GM.Entities
 
         }
 
+        public static bool AccountLogged(int id)
+        {
+            AccountEntity account = Accounts.Find(x => x.DbModel.Id == id);
+            if (account == null)
+            {
+                return false;
+            }
+            else
+            {
+                return account.IsLogged;
+            }
+        }
+
         public static void Add(AtmEntity atmEntity)
         {
             if (Atms.Any(a => a.DbModel.Id == atmEntity.DbModel.Id)) return;
@@ -92,7 +105,11 @@ namespace LSG.GM.Entities
         public static void Add(GroupEntity groupEntity) => Groups.Add(groupEntity);
 
         public static void Add(DrawTextModel drawTextModel) => VehicleTrunkDrawsText.Add(drawTextModel);
-        public static void Remove(DrawTextModel drawTextModel) => VehicleTrunkDrawsText.Remove(drawTextModel);
+        public static void RemoveVehicleTrunkDrawText(string uniqueID)
+        {
+            DrawTextModel trunkDrawTextToRemove = VehicleTrunkDrawsText.Find(x => x.UniqueID == uniqueID);
+            VehicleTrunkDrawsText.Remove(trunkDrawTextToRemove);
+        }
 
         public static void Add(DynamicObject dynamicObject) => WorldDynamicObjects.Add(dynamicObject);
         public static void Remove(DynamicObject dynamicObject) => WorldDynamicObjects.Remove(dynamicObject);

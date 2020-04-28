@@ -42,7 +42,7 @@ namespace LSG.GM.Core.Player.Scripts
         public void UnBwKilledPlayer(IPlayer sender, int id)
         {
             if (sender.GetAccountEntity() == null) return;
-            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Administrator))
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Supporter))
                 return;
 
             if (!sender.GetAccountEntity().OnAdminDuty)

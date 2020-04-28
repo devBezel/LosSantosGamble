@@ -289,15 +289,27 @@ namespace LSG.GM.Economy.Groups
         }
 
         [ClientEvent("group:confiscatePlayerItem")]
-        public void ConfiscatePlayerItem(IPlayer robber, string itemJson)
+        public void ConfiscatePlayerItem(IPlayer robber, int itemID, int getterID)
         {
-            ItemModel itemToConfiskate = JsonConvert.DeserializeObject<ItemModel>(itemJson);
-            CharacterEntity robberCharacterEntity = robber.GetAccountEntity().characterEntity;
-
-            ItemEntity itemEntity = InventoryScript.ItemFactory.Create(itemToConfiskate);
-            CharacterEntity robbedCharacterEntity = PlayerExtenstion.GetPlayerByCharacterId(itemToConfiskate.CharacterId);
+            CharacterEntity robbedCharacterEntity = PlayerExtenstion.GetPlayerByCharacterId(getterID);
             if (robbedCharacterEntity == null)
                 return;
+
+            ItemModel itemToConfiskate = robbedCharacterEntity.DbModel.Items.First(x => x.Id == itemID);
+            CharacterEntity robberCharacterEntity = robber.GetAccountEntity().characterEntity;
+
+            ItemEntity itemEntity = null;
+
+            if(robbedCharacterEntity.ItemsInUse.FirstOrDefault(x => x.Id == itemID) == null)
+            {
+                itemEntity = InventoryScript.ItemFactory.Create(itemToConfiskate);
+            }
+            else
+            {
+                itemEntity = robbedCharacterEntity.ItemsInUse.First(x => x.Id == itemID);
+            }
+            
+
 
             itemEntity.Confiscate(robberCharacterEntity, robbedCharacterEntity);
             robbedCharacterEntity.AccountEntity.Player.SendChatMessageInfo($"{robberCharacterEntity.DbModel.Name} {robberCharacterEntity.DbModel.Surname} zabrał Ci {itemToConfiskate.Name}");

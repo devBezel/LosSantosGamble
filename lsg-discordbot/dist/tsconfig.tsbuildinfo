@@ -162,19 +162,19 @@
         "signature": "fbc7d228c629cd41e9b4754d7aaee762ec676e1e222a54dddca1f87584381b08"
       },
       "../src/client/botclient.ts": {
-        "version": "465cd2ebdf37d4d2f4d88e6453d3116d8868666a9d2f51fd0468dee1dbe89a00",
-        "signature": "739939907f9c9ded4170edfda43b3cdc138df54e66267c95b50ceb2fe9a1b5ad"
+        "version": "73093e5caad6b466a1862706320fe298d268e96de120bf2d0ad6957ed028238a",
+        "signature": "c19a43fceca55d76eeaedc06ca69983920d153895f5d8128731771b017278c30"
       },
       "../src/app.ts": {
         "version": "127bca9ab7a5ed8f85a3aa5e3d0e1a5321b6469f8af2c0ce59cb5cf0c82b0eab",
         "signature": "f761c91419d0a89422a0004ef1a92929dd4d2d5e5c16758654d8b0467d1998c6"
       },
-      "../src/commands/base/ping.ts": {
-        "version": "daba8b21deda2f135594c1fb2cb0238bab02a5dc07c2a41dce7f8405021790da",
-        "signature": "642797e7218ff3889c4afb4dcc949b8cbc3faf367ffb31b79036f6f94d171e80"
+      "../src/commands/base/upcommand.ts": {
+        "version": "268f66e5561e3bca16f44cbb64ca55f092b84eb0b35e2ffb70e955fa55728ad5",
+        "signature": "20bdd38f3aac1b496e59bbb1cd4e8d6e62599169015a6ff2a240470a56848c49"
       },
       "../src/listeners/client/ready.ts": {
-        "version": "315d57897d67d5b2f984e3d388a1627a001461ff019c8c63aff15fe83b8f4c88",
+        "version": "471a2cb908b644301ff0a52d96d3d17c49f20fc7ed0fd20b979905593a418a9c",
         "signature": "bd2920baf262c77aadba47b82c10ff4cd062c69cf39e843f8b4c2ecf9bcde99f"
       },
       "../node_modules/@types/node/globals.d.ts": {
@@ -648,7 +648,7 @@
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/@types/node/ts3.5/util.d.ts"
       ],
-      "../src/commands/base/ping.ts": [
+      "../src/commands/base/upcommand.ts": [
         "../node_modules/discord-akairo/src/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
@@ -1276,7 +1276,7 @@
       "../src/client/botclient.ts": [
         "../node_modules/discord-akairo/src/index.d.ts"
       ],
-      "../src/commands/base/ping.ts": [
+      "../src/commands/base/upcommand.ts": [
         "../node_modules/discord.js/typings/index.d.ts",
         "../node_modules/discord-akairo/src/index.d.ts"
       ],
@@ -1692,9 +1692,9 @@
       "../node_modules/@discordjs/collection/dist/index.d.ts",
       "../node_modules/discord.js/typings/index.d.ts",
       "../node_modules/discord-akairo/src/index.d.ts",
+      "../src/client/botclient.ts",
       "../src/app.ts",
-      "../src/commands/base/ping.ts",
-      "../src/listeners/client/ready.ts",
+      "../src/commands/base/upcommand.ts",
       "../node_modules/@types/node/globals.d.ts",
       "../node_modules/@types/node/assert.d.ts",
       "../node_modules/@types/node/async_hooks.d.ts",
@@ -1741,29 +1741,7 @@
       "../node_modules/@types/node/ts3.5/globals.d.ts",
       "../node_modules/@types/node/ts3.5/wasi.d.ts",
       "../node_modules/@types/node/ts3.5/index.d.ts",
-      [
-        "../src/client/botclient.ts",
-        [
-          {
-            "file": "../src/client/botclient.ts",
-            "start": 1669,
-            "length": 10,
-            "code": 2322,
-            "category": 1,
-            "messageText": "Type 'true' is not assignable to type 'number'.",
-            "relatedInformation": [
-              {
-                "file": "../node_modules/discord.js/typings/index.d.ts",
-                "start": 90273,
-                "length": 10,
-                "messageText": "The expected type comes from property 'shardCount' which is declared here on type 'AkairoOptions & ClientOptions'",
-                "category": 3,
-                "code": 6500
-              }
-            ]
-          }
-        ]
-      ]
+      "../src/listeners/client/ready.ts"
     ]
   },
   "version": "3.7.5"
