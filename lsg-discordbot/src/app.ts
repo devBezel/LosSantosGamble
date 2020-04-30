@@ -1,4 +1,4 @@
-import BotClient from './client/BotClient';
+import BotClient from './Client/BotClient';
 import { token } from './Config';
 
 

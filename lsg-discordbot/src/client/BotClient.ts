@@ -1,14 +1,16 @@
 import { CommandHandler, ListenerHandler, AkairoClient } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { join } from 'path';
-import { prefix, owners } from '../Config'; 
-
+import { prefix, owners, databaseName } from '../Config'; 
+import { Connection } from 'typeorm';
+import Database from '../Structures/Database'
 
 declare module 'discord-akairo' {
     interface AkairoClient {
         commandHandler: CommandHandler;
         listenerHandler: ListenerHandler;
         config: BotOptions;
+        db: Connection;
     }
 }
 
@@ -19,12 +21,14 @@ interface BotOptions {
 }
 
 export default class BotClient extends AkairoClient {
+
+    public db!: Connection;
     public listenerHandler: ListenerHandler = new ListenerHandler(this, {
-        directory: join(__dirname, '..', 'listeners'),
+        directory: join(__dirname, '..', 'Listeners'),
     });
 
     public commandHandler: CommandHandler = new CommandHandler(this, {
-        directory: join(__dirname, "..", "commands"),
+        directory: join(__dirname, "..", "Commands"),
         prefix: prefix,
         ignorePermissions: owners,
         allowMention: true,
@@ -34,9 +38,9 @@ export default class BotClient extends AkairoClient {
         defaultCooldown: 6e4,
         argumentDefaults: {
             prompt: {
-                modifyStart: (_, str): string => `${str}\n\n Typ \`cancel\` aby przerwać komende`,
-                modifyRetry: (_, str): string => `${str}\n\n Typ \`cancel\` aby przerwać komende`,
-                timeout: 'Czekasz za długo, komenda została anulowana...',
+                modifyStart: (_, str): string => `${str}\n\n Wpisz \`cancel\` aby przerwać komende`,
+                modifyRetry: (_, str): string => `${str}\n\n Wpisz \`cancel\` aby przerwać komende`,
+                timeout: 'Czekam za długo, komenda została anulowana...',
                 ended: 'Przekroczyłeś maksimum prób, ta komenda została anulowana...',
                 retries: 3,
                 time: 3e4
@@ -66,6 +70,10 @@ export default class BotClient extends AkairoClient {
 
         this.commandHandler.loadAll();
         this.listenerHandler.loadAll();
+
+        this.db = Database.get(databaseName);
+        await this.db.connect();
+        await this.db.synchronize();
     }
 
     public async start(): Promise<string> {

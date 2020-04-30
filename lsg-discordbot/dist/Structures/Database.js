@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const typeorm_1 = require("typeorm");
+const Config_1 = require("../Config");
+const UserDataModel_1 = require("../Models/UserDataModel");
+const connectionManager = new typeorm_1.ConnectionManager();
+connectionManager.create({
+    name: Config_1.databaseName,
+    type: 'sqlite',
+    database: '../Data/db.sqlite',
+    entities: [
+        UserDataModel_1.Users
+    ]
+});
+exports.default = connectionManager;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRGF0YWJhc2UuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvU3RydWN0dXJlcy9EYXRhYmFzZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLHFDQUE0QztBQUM1QyxzQ0FBeUM7QUFFekMsMkRBQWdEO0FBR2hELE1BQU0saUJBQWlCLEdBQXNCLElBQUksMkJBQWlCLEVBQUUsQ0FBQztBQUNyRSxpQkFBaUIsQ0FBQyxNQUFNLENBQUM7SUFDckIsSUFBSSxFQUFFLHFCQUFZO0lBQ2xCLElBQUksRUFBRSxRQUFRO0lBQ2QsUUFBUSxFQUFFLG1CQUFtQjtJQUM3QixRQUFRLEVBQUU7UUFDTixxQkFBSztLQUNSO0NBQ0osQ0FBQyxDQUFDO0FBRUgsa0JBQWUsaUJBQWlCLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBDb25uZWN0aW9uTWFuYWdlciB9IGZyb20gJ3R5cGVvcm0nO1xyXG5pbXBvcnQgeyBkYXRhYmFzZU5hbWUgfSBmcm9tICcuLi9Db25maWcnO1xyXG5cclxuaW1wb3J0IHsgVXNlcnMgfSBmcm9tICcuLi9Nb2RlbHMvVXNlckRhdGFNb2RlbCc7XHJcblxyXG5cclxuY29uc3QgY29ubmVjdGlvbk1hbmFnZXI6IENvbm5lY3Rpb25NYW5hZ2VyID0gbmV3IENvbm5lY3Rpb25NYW5hZ2VyKCk7XHJcbmNvbm5lY3Rpb25NYW5hZ2VyLmNyZWF0ZSh7XHJcbiAgICBuYW1lOiBkYXRhYmFzZU5hbWUsXHJcbiAgICB0eXBlOiAnc3FsaXRlJyxcclxuICAgIGRhdGFiYXNlOiAnLi4vRGF0YS9kYi5zcWxpdGUnLFxyXG4gICAgZW50aXRpZXM6IFtcclxuICAgICAgICBVc2Vyc1xyXG4gICAgXVxyXG59KTtcclxuXHJcbmV4cG9ydCBkZWZhdWx0IGNvbm5lY3Rpb25NYW5hZ2VyOyJdfQ==
