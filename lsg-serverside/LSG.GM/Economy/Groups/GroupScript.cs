@@ -7,6 +7,7 @@ using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
 using LSG.GM.Economy.Groups.Base;
+using LSG.GM.Economy.Offers;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Group;
 using LSG.GM.Entities.Core.Item;
@@ -460,12 +461,14 @@ namespace LSG.GM.Economy.Groups
                     return;
                 }
 
-                sender.PlayAnimation("mini@cpr@char_a@cpr_str", "cpr_pumpchest", 6000);
-                await Task.Delay(6000);
+                //sender.PlayAnimation("mini@cpr@char_a@cpr_str", "cpr_pumpchest", 6000);
+                //await Task.Delay(6000);
 
-                getterCharacterEntity.UnBw();
-                getterCharacterEntity.AccountEntity.Player.SendChatMessageInfo($"Zostałeś uleczony przez {senderCharacterEntity.DbModel.Name} {senderCharacterEntity.DbModel.Surname}.");
+                //getterCharacterEntity.UnBw();
+                //getterCharacterEntity.AccountEntity.Player.SendChatMessageInfo($"Zostałeś uleczony przez {senderCharacterEntity.DbModel.Name} {senderCharacterEntity.DbModel.Surname}.");
 
+                //Alt.Emit("offer:playerSend", sender, "Pomoc medyczna", getterId, OfferType.ResuscitationPlayer, 0, 120);
+                OfferScript.OfferPlayer(sender, "Pomoc medyczna", getterId, OfferType.ResuscitationPlayer, 0, 120);
             }
 
 

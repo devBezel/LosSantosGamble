@@ -21,7 +21,6 @@ namespace LSG.GM.Core.Player.Scripts
             // Pobieranie rzeczy, które chcemy wstrzymać
             player.GetData("group:dutyTimer", out Timer dutyTimer);
 
-
             if(IsAfk)
             {
                 // Wylączanie rzeczy podczas gdy ktoś jest afk

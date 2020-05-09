@@ -33,16 +33,17 @@ namespace LSG.GM.Economy.Offers
             Money = money;
         }
 
-        public Offer(CharacterEntity sender, CharacterEntity getter, Action<CharacterEntity> action, bool moneyToGroup)
+        public Offer(CharacterEntity sender, CharacterEntity getter, Action<CharacterEntity, CharacterEntity> action, int money, bool moneyToGroup)
         {
+            Sender = sender;
+            Getter = getter;
             _action = action;
+            Money = money;
             _moneyToGroup = moneyToGroup;
-            sender = Sender;
-            getter = Getter;
         }
 
         private bool _moneyToGroup;
-        private Action<CharacterEntity> _action;
+        private Action<CharacterEntity, CharacterEntity> _action;
 
         public void Trade(bool bankAccount)
         {
@@ -84,6 +85,10 @@ namespace LSG.GM.Economy.Offers
                 {
                     Sender.AddMoney(Money, bankAccount);
                 }
+
+                _action?.Invoke(Sender, Getter);
+                Getter.RemoveMoney(Money, bankAccount);
+
             }
             else
             {
