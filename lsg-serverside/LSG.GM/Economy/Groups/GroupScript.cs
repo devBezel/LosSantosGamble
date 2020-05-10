@@ -431,7 +431,7 @@ namespace LSG.GM.Economy.Groups
         #region Resuscitation Player
         // TODO: Zrobić to jako oferte od grupy
         [Command("reanimuj")]
-        public async Task ResuscitationPlayer(IPlayer sender, int getterId)
+        public void ResuscitationPlayer(IPlayer sender, int getterId)
         {
             CharacterEntity senderCharacterEntity = sender.GetAccountEntity().characterEntity;
             CharacterEntity getterCharacterEntity = PlayerExtenstion.GetPlayerById(getterId).GetAccountEntity().characterEntity;
@@ -461,13 +461,6 @@ namespace LSG.GM.Economy.Groups
                     return;
                 }
 
-                //sender.PlayAnimation("mini@cpr@char_a@cpr_str", "cpr_pumpchest", 6000);
-                //await Task.Delay(6000);
-
-                //getterCharacterEntity.UnBw();
-                //getterCharacterEntity.AccountEntity.Player.SendChatMessageInfo($"Zostałeś uleczony przez {senderCharacterEntity.DbModel.Name} {senderCharacterEntity.DbModel.Surname}.");
-
-                //Alt.Emit("offer:playerSend", sender, "Pomoc medyczna", getterId, OfferType.ResuscitationPlayer, 0, 120);
                 OfferScript.OfferPlayer(sender, "Pomoc medyczna", getterId, OfferType.ResuscitationPlayer, 0, 120);
             }
 

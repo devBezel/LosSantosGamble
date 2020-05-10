@@ -143,7 +143,7 @@ namespace LSG.GM.Entities
 
         public static VehicleDb GetVehicleDatabaseById(int id)
         {
-            VehicleDb vehicle = Singleton.GetDatabaseInstance().Vehicles.Include(item => item.ItemsInVehicle).SingleOrDefault(v => v.Id == id);
+            VehicleDb vehicle = Singleton.GetDatabaseInstance().Vehicles.Include(item => item.ItemsInVehicle).Include(upgrade => upgrade.VehicleUpgrades).SingleOrDefault(v => v.Id == id);
 
             return vehicle;
         }

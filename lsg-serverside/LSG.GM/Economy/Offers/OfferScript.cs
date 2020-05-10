@@ -4,6 +4,7 @@ using AltV.Net.Resources.Chat.Api;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
 using LSG.GM.Entities.Core;
+using LSG.GM.Entities.Core.Vehicle;
 using LSG.GM.Extensions;
 using LSG.GM.Utilities;
 using Newtonsoft.Json;
@@ -53,7 +54,6 @@ namespace LSG.GM.Economy.Offers
         //}
 
         [ClientEvent("offer:playerSend")]
-        [ServerEvent("offer:playerSend")]
         public static void OfferPlayer(IPlayer sender, string titleOffer, int getterId, OfferType offerType, int index, int cost)
         {
 
@@ -96,8 +96,6 @@ namespace LSG.GM.Economy.Offers
             CharacterEntity getterEntity = getter.GetAccountEntity().characterEntity;
 
 
-            Alt.Log($"offerType: {offerType}");
-
             Offer offer = null;
             switch ((OfferType)offerType)
             {
@@ -121,8 +119,19 @@ namespace LSG.GM.Economy.Offers
                     break;
                 case OfferType.RepairVehicle:
                     break;
+                case OfferType.TuningVehicle:
+
+                    ItemModel itemToUpgradeVehicle = sender.GetAccountEntity().characterEntity.DbModel.Items.FirstOrDefault(x => x.Id == index);
+                    if (itemToUpgradeVehicle == null) 
+                        return;
+
+                    VehicleEntity vehicleToUpgrade = sender.Vehicle.GetVehicleEntity();
+
+                    offer = new Offer(senderEntity, getterEntity, OfferActions.TuningPlayerVehicle, new Object[] { vehicleToUpgrade, itemToUpgradeVehicle }, cost, true);
+
+                    break;
                 case OfferType.ResuscitationPlayer:
-                    offer = new Offer(senderEntity, getterEntity, OfferActions.ResuscitationPlayerAction, cost, true);
+                    offer = new Offer(senderEntity, getterEntity, OfferActions.ResuscitationPlayerAction, null, cost, true);
                     break;
                 default:
                     break;

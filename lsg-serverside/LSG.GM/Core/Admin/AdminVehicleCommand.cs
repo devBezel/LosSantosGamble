@@ -57,5 +57,16 @@ namespace LSG.GM.Core.Admin
             player.Position = vehicleEntity.GameVehicle.Position;
             player.SendSuccessNotify(null, $"Przeteleportowałeś się do pojazdu o ID: {vehicleEntity.DbModel.Id}");
         }
+
+        [Command("atuning")]
+        public void AdminTuningVehicleTemporary(IPlayer player, int category, int index)
+        {
+            IVehicle vehicle = player.Vehicle;
+            if (vehicle == null)
+                return;
+
+            vehicle.ModKit = 1;
+            vehicle.SetMod((byte)category, (byte)index);
+        }
     }
 }

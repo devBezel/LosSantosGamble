@@ -64,6 +64,19 @@ namespace LSG.GM.Entities.Core.Vehicle
             await player.EmitAsync("vehicle:openWindow", EntityHelper.GetCharacterVehicleDatabaseList(player.GetAccountEntity().characterEntity.DbModel.Id));
         }
 
+        [ClientEvent("vehicle-interaction:getVehicleInfo")]
+        public void GetVehicleInfo(IPlayer player)
+        {
+            if (player.Vehicle == null)
+                return;
+
+            VehicleEntity vehicleEntity = player.Vehicle.GetVehicleEntity();
+            if (vehicleEntity == null)
+                return;
+
+            player.Emit("vehicle-script:vehicleInfo", vehicleEntity.DbModel.VehicleUpgrades);
+        }
+
         [ClientEvent("vehicle:spawnVehicle")]
         public void SpawnOwnVehicle(IPlayer player, int vehicleId)
         {
@@ -142,7 +155,7 @@ namespace LSG.GM.Entities.Core.Vehicle
                     return;
                 }
 
-                GroupWorkerModel worker = characterEntity.OnDutyGroup.DbModel.Workers.First(c => c.CharacterId == characterEntity.DbModel.Id);
+                GroupWorkerModel worker = characterEntity.OnDutyGroup.DbModel.Workers.FirstOrDefault(c => c.CharacterId == characterEntity.DbModel.Id);
                 if (!characterEntity.OnDutyGroup.CanPlayerVehicle(worker))
                 {
                     player.SendChatMessageError("Nie masz uprawnień do respienia pojazdów w tej grupie");

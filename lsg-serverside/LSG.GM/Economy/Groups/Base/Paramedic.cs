@@ -25,7 +25,8 @@ namespace LSG.GM.Economy.Groups.Base
 
         public bool CanPlayerResuscitation(AccountEntity accountEntity)
         {
-            if (!ContainsWorker(accountEntity)) return false;
+            if (!ContainsWorker(accountEntity)) 
+                return false;
 
             GroupWorkerModel groupWorker = DbModel.Workers.First(w => w.CharacterId == accountEntity.characterEntity.DbModel.Id);
             return groupWorker.GroupRank.Rights.HasFlag(GroupRights.First);
@@ -33,7 +34,8 @@ namespace LSG.GM.Economy.Groups.Base
 
         public bool CanPlayerCuff(AccountEntity accountEntity)
         {
-            if (!ContainsWorker(accountEntity)) return false;
+            if (!ContainsWorker(accountEntity))
+                return false;
 
             GroupWorkerModel groupWorker = DbModel.Workers.First(w => w.CharacterId == accountEntity.characterEntity.DbModel.Id);
             return groupWorker.GroupRank.Rights.HasFlag(GroupRights.Second);
@@ -41,7 +43,8 @@ namespace LSG.GM.Economy.Groups.Base
 
         public bool CanPlayerMoveOtherPlayer(AccountEntity accountEntity)
         {
-            if (!ContainsWorker(accountEntity)) return false;
+            if (!ContainsWorker(accountEntity)) 
+                return false;
 
             GroupWorkerModel groupWorker = DbModel.Workers.First(w => w.CharacterId == accountEntity.characterEntity.DbModel.Id);
             return groupWorker.GroupRank.Rights.HasFlag(GroupRights.Third);

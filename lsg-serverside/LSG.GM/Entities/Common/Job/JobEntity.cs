@@ -7,7 +7,7 @@ namespace LSG.GM.Entities.Common.Job
 {
     public class JobEntity
     {
-        public JobEntity(CharacterEntity worker, )
+        public JobEntity(CharacterEntity worker)
         {
 
         }

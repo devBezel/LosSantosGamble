@@ -565,6 +565,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int?>("VehicleId");
 
+                    b.Property<int?>("VehicleUpgradeId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BuildingId");
@@ -576,6 +578,8 @@ namespace LSG.DAL.Migrations
                     b.HasIndex("GroupId");
 
                     b.HasIndex("VehicleId");
+
+                    b.HasIndex("VehicleUpgradeId");
 
                     b.ToTable("Items");
                 });
@@ -820,6 +824,10 @@ namespace LSG.DAL.Migrations
                     b.HasOne("LSG.DAL.Database.Models.VehicleModels.Vehicle", "Vehicle")
                         .WithMany("ItemsInVehicle")
                         .HasForeignKey("VehicleId");
+
+                    b.HasOne("LSG.DAL.Database.Models.VehicleModels.Vehicle", "VehicleUpgrade")
+                        .WithMany("VehicleUpgrades")
+                        .HasForeignKey("VehicleUpgradeId");
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.ShopModels.ShopAssortmentModel", b =>

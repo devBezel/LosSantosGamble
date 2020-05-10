@@ -20,6 +20,7 @@ using System.Linq;
 using LSG.GM.Extensions;
 using LSG.DAL.Database.Models.GroupModels;
 using LSG.GM.Entities.Core.Group;
+using LSG.DAL.Database.Models.ItemModels;
 
 namespace LSG.GM.Entities.Core.Vehicle
 {
@@ -146,14 +147,19 @@ namespace LSG.GM.Entities.Core.Vehicle
             GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(DbModel.RotPitch, DbModel.RotPitch, DbModel.RotYaw));
 
             GameVehicle.PrimaryColorRgb = new Rgba((byte)DbModel.R, (byte)DbModel.G, (byte)DbModel.B, 1);
-            GameVehicle.SetWheels(1, 2);
             GameVehicle.NumberplateText = $"LS {DbModel.Id}";
             GameVehicle.EngineOn = false;
             GameVehicle.ManualEngineControl = true;
+            GameVehicle.ModKit = 1;
 
             GameVehicle.SetData("vehicle:data", this);
             GameVehicle.SetData("vehicle:id", DbModel.Id);
             GameVehicle.SetSyncedMetaData("vehicle:syncedData", DbModel);
+
+            foreach (ItemModel upgrade in DbModel.VehicleUpgrades)
+            {
+                GameVehicle.SetMod((VehicleModType)upgrade.FirstParameter, (byte)upgrade.SecondParameter);
+            }
 
 
             //Save();

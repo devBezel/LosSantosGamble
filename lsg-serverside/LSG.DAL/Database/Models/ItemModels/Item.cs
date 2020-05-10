@@ -38,6 +38,9 @@ namespace LSG.DAL.Database.Models.ItemModels
         public int? GroupId { get; set; }
         public GroupModel Group { get; set; }
 
+        public int? VehicleUpgradeId { get; set; }
+        public Vehicle VehicleUpgrade { get; set; }
+
         public bool ItemInUse { get; set; }
 
 
@@ -109,6 +112,12 @@ namespace LSG.DAL.Database.Models.ItemModels
             {
                 writer.Name("groupId");
                 writer.Value(GroupId.Value);
+            }
+
+            if(VehicleUpgradeId.HasValue)
+            {
+                writer.Name("vehicleUpgradeId");
+                writer.Value(VehicleUpgradeId.Value);
             }
 
             writer.Name("itemInUse");

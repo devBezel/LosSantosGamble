@@ -18,7 +18,8 @@ namespace LSG.GM.Entities.Core.Item
                 case DAL.Enums.ItemEntityType.Mask: return new Mask(item);
                 case DAL.Enums.ItemEntityType.Clothes: return new Clothes(item);
                 case DAL.Enums.ItemEntityType.Water: return new Water(item);
-                case DAL.Enums.ItemEntityType.Obiect: return new Object(item);
+                case DAL.Enums.ItemEntityType.Object: return new Object(item);
+                case DAL.Enums.ItemEntityType.CarPart: return new CarPart(item);
                 //case DAL.Enums.ItemEntityType.WeaponClip:
                 //case DAL.Enums.ItemEntityType.Food:
                 default:
