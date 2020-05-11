@@ -121,13 +121,22 @@ namespace LSG.GM.Economy.Offers
                     break;
                 case OfferType.TuningVehicle:
 
-                    ItemModel itemToUpgradeVehicle = sender.GetAccountEntity().characterEntity.DbModel.Items.FirstOrDefault(x => x.Id == index);
-                    if (itemToUpgradeVehicle == null) 
-                        return;
-
+                    ItemModel itemCharacterToUpgradeVehicle = sender.GetAccountEntity().characterEntity.DbModel.Items.FirstOrDefault(x => x.Id == index);
                     VehicleEntity vehicleToUpgrade = sender.Vehicle.GetVehicleEntity();
 
-                    offer = new Offer(senderEntity, getterEntity, OfferActions.TuningPlayerVehicle, new Object[] { vehicleToUpgrade, itemToUpgradeVehicle }, cost, true);
+                    ItemModel upgradeToOffer = null;
+                    bool IsStunned = false;
+                    if (itemCharacterToUpgradeVehicle == null)
+                    {
+                        upgradeToOffer = vehicleToUpgrade.DbModel.VehicleUpgrades.FirstOrDefault(x => x.Id == index);
+                        IsStunned = true;
+                    }
+                    else
+                    {
+                        upgradeToOffer = itemCharacterToUpgradeVehicle;
+                    }
+
+                    offer = new Offer(senderEntity, getterEntity, OfferActions.TuningPlayerVehicle, new Object[] { vehicleToUpgrade, upgradeToOffer, IsStunned }, cost, true);
 
                     break;
                 case OfferType.ResuscitationPlayer:

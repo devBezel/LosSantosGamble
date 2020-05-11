@@ -12,6 +12,7 @@ using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Group;
 using LSG.GM.Entities.Core.Item;
 using LSG.GM.Entities.Core.Item.Scripts;
+using LSG.GM.Entities.Core.Vehicle;
 using LSG.GM.Extensions;
 using LSG.GM.Utilities;
 using LSG.GM.Wrapper;
@@ -63,16 +64,16 @@ namespace LSG.GM.Economy.Groups
                 return;
             }
 
-            if(sender.TryGetGroupByUnsafeSlot((short)slot, out GroupEntity group, out GroupWorkerModel worker))
+            if (sender.TryGetGroupByUnsafeSlot((short)slot, out GroupEntity group, out GroupWorkerModel worker))
             {
-                if(!group.CanPlayerManageWorkers(worker))
+                if (!group.CanPlayerManageWorkers(worker))
                 {
                     sender.SendErrorNotify("Wystąpił bląd", "Nie masz uprawnień do zarządzania członkami");
                     return;
                 }
 
                 GroupRights convertedRights = (GroupRights)Enum.Parse(typeof(GroupRights), rights.ToString());
-                if((convertedRights.HasFlag(GroupRights.DepositWithdrawMoney) || convertedRights.HasFlag(GroupRights.Recruitment)) && !group.IsGroupOwner(worker))
+                if ((convertedRights.HasFlag(GroupRights.DepositWithdrawMoney) || convertedRights.HasFlag(GroupRights.Recruitment)) && !group.IsGroupOwner(worker))
                 {
                     Alt.Log($"[MEMORY-ALERT] {accountEntity.DbModel.Username} zmienił dane w UI i wysłał emit do serwera z niepoprawnymi danymi");
                     return;
@@ -93,7 +94,7 @@ namespace LSG.GM.Economy.Groups
             AccountEntity accountEntity = sender.GetAccountEntity();
             GroupSlotValidator slotValidator = new GroupSlotValidator();
 
-            if(!slotValidator.IsValid((byte)groupSlot))
+            if (!slotValidator.IsValid((byte)groupSlot))
             {
                 sender.SendErrorNotify("Ten slot jest niepoprawny!", "Wybierz inny slot, aby wejść na służbę podanej grupy");
                 return;
@@ -105,9 +106,9 @@ namespace LSG.GM.Economy.Groups
                 return;
             }
 
-            if(sender.TryGetGroupByUnsafeSlot((short)groupSlot, out GroupEntity group, out GroupWorkerModel worker))
+            if (sender.TryGetGroupByUnsafeSlot((short)groupSlot, out GroupEntity group, out GroupWorkerModel worker))
             {
-                if(!group.CanPlayerManageWorkers(worker))
+                if (!group.CanPlayerManageWorkers(worker))
                 {
                     sender.SendErrorNotify("Wystąpił bląd", "Nie masz uprawnień do zarządzania członkami");
                     return;
@@ -136,7 +137,7 @@ namespace LSG.GM.Economy.Groups
             Timer dutyTimer = new Timer(60000);
 
             AccountEntity accountEntity = player.GetAccountEntity();
-            if(accountEntity.characterEntity.OnDutyGroup != null)
+            if (accountEntity.characterEntity.OnDutyGroup != null)
             {
                 player.SendSuccessNotify("Zszedłeś ze służby", "Twoja postać zszedła ze służby");
                 accountEntity.characterEntity.OnDutyGroup.PlayersOnDuty.Remove(accountEntity);
@@ -152,13 +153,13 @@ namespace LSG.GM.Economy.Groups
             } else
             {
                 GroupSlotValidator slotValidator = new GroupSlotValidator();
-                if(!slotValidator.IsValid((byte)slot))
+                if (!slotValidator.IsValid((byte)slot))
                 {
                     player.SendErrorNotify("Ten slot jest niepoprawny!", "Wybierz inny slot, aby wejść na służbę podanej grupy");
-                    return; 
+                    return;
                 }
 
-                if(player.TryGetGroupByUnsafeSlot(Convert.ToInt16(slot), out GroupEntity group, out GroupWorkerModel worker))
+                if (player.TryGetGroupByUnsafeSlot(Convert.ToInt16(slot), out GroupEntity group, out GroupWorkerModel worker))
                 {
                     dutyTimer.Start();
                     dutyTimer.Elapsed += (o, args) =>
@@ -191,26 +192,26 @@ namespace LSG.GM.Economy.Groups
             AccountEntity accountEntity = player.GetAccountEntity();
 
             GroupSlotValidator slotValidator = new GroupSlotValidator();
-            if(!slotValidator.IsValid((byte)slot))
+            if (!slotValidator.IsValid((byte)slot))
             {
                 player.SendErrorNotify("Ten slot jest niepoprawny!", "Wybierz inny slot, aby wejść na służbę podanej grupy");
                 return;
             }
 
-            if(accountEntity.characterEntity.OnDutyGroup == null)
+            if (accountEntity.characterEntity.OnDutyGroup == null)
             {
                 player.SendErrorNotify("Musisz być na służbie", "Wejdź na służbę, aby uruchomić panel grupy");
                 return;
             }
             // Naprawić wyświetlanie użytkowników online
-            if(player.TryGetGroupByUnsafeSlot(Convert.ToInt16(slot), out GroupEntity group, out GroupWorkerModel worker))
+            if (player.TryGetGroupByUnsafeSlot(Convert.ToInt16(slot), out GroupEntity group, out GroupWorkerModel worker))
             {
-                player.Emit("group-general:openGroupPanel", 
-                    group.DbModel, 
+                player.Emit("group-general:openGroupPanel",
+                    group.DbModel,
                     group.GetWorkers().Where(c => c.Character.Online).ToList(),
                     group.DbModel.Ranks,
-                    group.DbModel.Vehicles, 
-                    worker, 
+                    group.DbModel.Vehicles,
+                    worker,
                     slot);
             }
         }
@@ -219,28 +220,28 @@ namespace LSG.GM.Economy.Groups
         public void InvitePlayerToGroup(IPlayer sender, int groupSlot, int getterId)
         {
             IPlayer getter = PlayerExtenstion.GetPlayerById(getterId);
-            if(getter == null)
+            if (getter == null)
             {
                 sender.SendErrorNotify("Wystąpił bląd!", "Nie ma gracza o podanym ID na serwerze");
                 return;
             }
 
             GroupSlotValidator slotValidator = new GroupSlotValidator();
-            if(!slotValidator.IsValid((byte)groupSlot))
+            if (!slotValidator.IsValid((byte)groupSlot))
             {
                 sender.SendErrorNotify("Ten slot jest niepoprawny!", "Wybierz inny slot, aby zaprosić gracza do grupy");
                 return;
             }
 
-            if(sender.TryGetGroupByUnsafeSlot((short)groupSlot, out GroupEntity group, out GroupWorkerModel groupWorker))
+            if (sender.TryGetGroupByUnsafeSlot((short)groupSlot, out GroupEntity group, out GroupWorkerModel groupWorker))
             {
-                if(!group.CanPlayerManageWorkers(groupWorker))
+                if (!group.CanPlayerManageWorkers(groupWorker))
                 {
                     sender.SendErrorNotify("Nie masz uprawnień", "Nie masz uprawnień, aby zaprosić gracza do grupy");
                     return;
                 }
 
-                if(group.ContainsWorker(getter.GetAccountEntity()))
+                if (group.ContainsWorker(getter.GetAccountEntity()))
                 {
                     sender.SendErrorNotify("Wystąpił bląd", "Gracz znajduje się już w grupie");
                     return;
@@ -301,7 +302,7 @@ namespace LSG.GM.Economy.Groups
 
             ItemEntity itemEntity = null;
 
-            if(robbedCharacterEntity.ItemsInUse.FirstOrDefault(x => x.Id == itemID) == null)
+            if (robbedCharacterEntity.ItemsInUse.FirstOrDefault(x => x.Id == itemID) == null)
             {
                 itemEntity = InventoryScript.ItemFactory.Create(itemToConfiskate);
             }
@@ -309,12 +310,12 @@ namespace LSG.GM.Economy.Groups
             {
                 itemEntity = robbedCharacterEntity.ItemsInUse.First(x => x.Id == itemID);
             }
-            
+
 
 
             itemEntity.Confiscate(robberCharacterEntity, robbedCharacterEntity);
             robbedCharacterEntity.AccountEntity.Player.SendChatMessageInfo($"{robberCharacterEntity.DbModel.Name} {robberCharacterEntity.DbModel.Surname} zabrał Ci {itemToConfiskate.Name}");
-            
+
         }
 
         #endregion
@@ -326,28 +327,28 @@ namespace LSG.GM.Economy.Groups
             GroupEntity group = sender.GetAccountEntity().characterEntity.OnDutyGroup;
             if (group == null) return;
 
-            if(group.DbModel.GroupType != GroupType.Police || !((Police)group).CanPlayerDoPolice(sender.GetAccountEntity()))
+            if (group.DbModel.GroupType != GroupType.Police || !((Police)group).CanPlayerDoPolice(sender.GetAccountEntity()))
             {
                 sender.SendChatMessageError("Nie masz uprawnień do używania kajdanek");
                 return;
             }
 
             IPlayer getter = PlayerExtenstion.GetPlayerById(getterId);
-            if(getter == null)
+            if (getter == null)
             {
                 sender.SendChatMessageError("Gracza o podanym ID nie ma w grze");
                 return;
             }
 
-            if(!Calculation.IsPlayerInRange(sender, getter, 2))
+            if (!Calculation.IsPlayerInRange(sender, getter, 2))
             {
                 sender.SendChatMessageError("Gracz którego chcesz zakuć jest zbyt daleko");
                 return;
             }
 
             CharacterEntity getterCharacterEntity = getter.GetAccountEntity().characterEntity;
-            
-            if(getterCharacterEntity.IsHandcuffed)
+
+            if (getterCharacterEntity.IsHandcuffed)
             {
                 sender.PlayAnimation("arrest", "arrest_fallback_high_cop", 3000);
 
@@ -359,7 +360,7 @@ namespace LSG.GM.Economy.Groups
 
                 getterCharacterEntity.IsHandcuffed = false;
                 await getter.EmitAsync("group:uncuffPlayer");
-            } 
+            }
             else
             {
                 sender.PlayAnimation("arrest", "arrest_fallback_high_cop", 3000);
@@ -372,7 +373,7 @@ namespace LSG.GM.Economy.Groups
                 //getter.FreezePosition(true);
                 getterCharacterEntity.IsHandcuffed = true;
                 await getter.EmitAsync("group:cuffPlayer");
-                
+
             }
 
         }
@@ -408,7 +409,7 @@ namespace LSG.GM.Economy.Groups
 
             CharacterEntity getterCharacterEntity = getter.GetAccountEntity().characterEntity;
 
-            if(!getterCharacterEntity.IsHandcuffed)
+            if (!getterCharacterEntity.IsHandcuffed)
             {
                 sender.SendChatMessageError("Gracz musi być zakuty w kajdanki jeśli chcesz go przenieść");
                 return;
@@ -420,7 +421,7 @@ namespace LSG.GM.Economy.Groups
                 getterCharacterEntity.IsDragged = false;
                 await sender.EmitAsync("group:undragPlayer");
             }
-             else
+            else
             {
                 getterCharacterEntity.IsDragged = true;
                 await sender.EmitAsync("group:dragPlayer", getter.Id);
@@ -441,13 +442,13 @@ namespace LSG.GM.Economy.Groups
             if (getterCharacterEntity == null)
                 return;
 
-            if(!Calculation.IsPlayerInRange(sender, getterCharacterEntity.AccountEntity.Player, 2))
+            if (!Calculation.IsPlayerInRange(sender, getterCharacterEntity.AccountEntity.Player, 2))
             {
                 sender.SendChatMessageError("Tego gracza nie ma w pobliżu");
                 return;
             }
 
-            if(!getterCharacterEntity.HasBw)
+            if (!getterCharacterEntity.HasBw)
             {
                 sender.SendChatMessageError("Ten gracz żyje, nie możesz go reanimować");
                 return;
@@ -455,7 +456,7 @@ namespace LSG.GM.Economy.Groups
 
             if (senderCharacterEntity.OnDutyGroup is Paramedic group)
             {
-                if(group.CanPlayerResuscitation(senderCharacterEntity.AccountEntity))
+                if (group.CanPlayerResuscitation(senderCharacterEntity.AccountEntity))
                 {
                     senderCharacterEntity.AccountEntity.Player.SendChatMessageError("Nie masz uprawnień do użycia tej komendy");
                     return;
@@ -467,5 +468,36 @@ namespace LSG.GM.Economy.Groups
 
         }
         #endregion
+
+        [ClientEvent("vehicle-script:removeUpgrade")]
+        public void RemoveVehicleUpgrade(IPlayer sender, int itemID)
+        {
+            CharacterEntity senderCharacterEntity = sender.GetAccountEntity().characterEntity;
+            if(senderCharacterEntity.OnDutyGroup is Mechanic group)
+            {
+                if(!group.CanPlayerTuningVehicle(senderCharacterEntity.AccountEntity))
+                {
+                    sender.SendChatMessageError("Nie masz uprawnień, aby demontować części w samochodach");
+                    return;
+                }
+
+                VehicleEntity vehicleToRemoveUpgrade = sender.Vehicle.GetVehicleEntity();
+                if (vehicleToRemoveUpgrade == null)
+                    return;
+
+                CharacterEntity ownerVehicle = PlayerExtenstion.GetPlayerByCharacterId(vehicleToRemoveUpgrade.DbModel.OwnerId);
+                if (ownerVehicle == null || !ownerVehicle.DbModel.Online)
+                {
+                    sender.SendChatMessageError("Ten gracz musi być w grze, abyś mógł zamontować część do jego pojazdu");
+                    return;
+                }
+
+                OfferScript.OfferPlayer(sender, "Demontaż części", ownerVehicle.AccountEntity.ServerID, OfferType.TuningVehicle, itemID, 100);
+            }
+            else
+            {
+                sender.SendChatMessageError("Nie masz uprawnień do demontowania części w samochodzie");
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using LSG.DAL.Database;
 using LSG.DAL.Database.Models.ItemModels;
+using LSG.DAL.Enums;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Vehicle;
@@ -48,17 +49,35 @@ namespace LSG.GM.Economy.Offers
         {
             VehicleEntity vehicleToUpgrade = (VehicleEntity)args[0];
             ItemModel itemUpgrade = (ItemModel)args[1];
+            bool IsStunned = (bool)args[2];
 
-            itemUpgrade.VehicleUpgradeId = vehicleToUpgrade.DbModel.Id;
-            itemUpgrade.CharacterId = null;
+            Alt.Log($"{IsStunned} isStunned");
+            byte category = 0;
+            byte variation = 0;
+
+            if (IsStunned)
+            {
+                itemUpgrade.VehicleUpgradeId = null;
+                itemUpgrade.CharacterId = getter.DbModel.Id;
+            }
+            else
+            {
+                category = (byte)itemUpgrade.SecondParameter;
+                variation = (byte)itemUpgrade.ThirdParameter;
+
+                itemUpgrade.VehicleUpgradeId = vehicleToUpgrade.DbModel.Id;
+                itemUpgrade.CharacterId = null;
+            }
 
             RoleplayContext ctx = Singleton.GetDatabaseInstance();
-            using(UnitOfWork unit = new UnitOfWork(ctx))
+            using (UnitOfWork unit = new UnitOfWork(ctx))
             {
                 unit.ItemRepository.Update(itemUpgrade);
             }
 
-            sender.AccountEntity.Player.SendChatMessageInfo("Cześć jest montowana, odczekaj chwile...");
+            string actionInProgress = IsStunned ? "demontowana" : "montowana";
+            sender.AccountEntity.Player.SendChatMessageInfo($"Część jest {actionInProgress}, odczekaj chwile...");
+
             Task.Run(async () =>
             {
                 //TODO: zrobić animacje
@@ -68,10 +87,19 @@ namespace LSG.GM.Economy.Offers
                 await AltAsync.Do(() =>
                 {
                     vehicleToUpgrade.GameVehicle.ModKit = 1;
-                    vehicleToUpgrade.GameVehicle.SetMod((byte)itemUpgrade.FirstParameter, (byte)itemUpgrade.SecondParameter);
-                });
 
-                sender.AccountEntity.Player.SendChatMessageInfo("Część została zamontowana");
+                    if ((TuningType)itemUpgrade.FirstParameter == TuningType.Wheels)
+                    {
+                        vehicleToUpgrade.GameVehicle.SetWheels(category, variation);
+                    }
+                    else
+                    {
+                        vehicleToUpgrade.GameVehicle.SetMod(category, variation);
+                    }
+                    
+                });
+                string actionFinished = IsStunned ? "zdemontowana" : "zamontowana";
+                sender.AccountEntity.Player.SendChatMessageInfo($"Część została {actionFinished}");
             });
         }
 

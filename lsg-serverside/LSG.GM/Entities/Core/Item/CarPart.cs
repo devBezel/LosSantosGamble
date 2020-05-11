@@ -1,4 +1,5 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
@@ -15,14 +16,17 @@ namespace LSG.GM.Entities.Core.Item
 {
     internal class CarPart : ItemEntity 
     {
-        public VehicleModType VehicleModType => (VehicleModType)DbModel.FirstParameter;
-        public int Index => (int)DbModel.SecondParameter;
+        public TuningType TuningType => (TuningType)DbModel.FirstParameter;
+        public int VehicleModCategory => (int)DbModel.SecondParameter;
+        public int Index => (int)DbModel.ThirdParameter;
+        public uint VehicleModel => (uint)DbModel.FourthParameter;
+
 
         public CarPart(ItemModel item) : base(item)
         {
 
         }
-
+        //TODO: Dorobić, że osoba zarządzająca grupą może akceptować oferte tuningu pojazdu
         public override void UseItem(CharacterEntity characterEntity)
         {
             IPlayer player = characterEntity.AccountEntity.Player;
@@ -45,31 +49,49 @@ namespace LSG.GM.Entities.Core.Item
                         return;
                     }
 
-                    VehicleEntity vehicleToUpgrade = player.Vehicle.GetVehicleEntity();
-                    if(vehicleToUpgrade == null)
+                    if(player.Vehicle.Model == VehicleModel)
                     {
-                        player.SendChatMessageError("Do tego pojazdu nie możesz zamontować części");
-                        return;
-                    }
+                        VehicleEntity vehicleToUpgrade = player.Vehicle.GetVehicleEntity();
+                        if (vehicleToUpgrade == null)
+                        {
+                            player.SendChatMessageError("Do tego pojazdu nie możesz zamontować części");
+                            return;
+                        }
+                        if (TuningType == TuningType.Wheels)
+                        {
+                            Alt.Log("vehicleToUpgrade.GameVehicle.WheelVariation: " + vehicleToUpgrade.GameVehicle.WheelVariation);
+                            if (vehicleToUpgrade.GameVehicle.WheelVariation != 0)
+                            {
+                                player.SendChatMessageError("Część z tej kategorii jest już zamontowana w tym pojeździe, odmontuj ją, aby móc wykonać tą akcje");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if (vehicleToUpgrade.GameVehicle.GetMod((byte)VehicleModCategory) != 0)
+                            {
+                                player.SendChatMessageError("Część z tej kategorii jest już zamontowana w tym pojeździe, odmontuj ją, aby móc wykonać tą akcje");
+                                return;
+                            }
+                        }
 
-                    if(vehicleToUpgrade.GameVehicle.GetMod((byte)VehicleModType) != 0)
+                        CharacterEntity ownerVehicle = PlayerExtenstion.GetPlayerByCharacterId(vehicleToUpgrade.DbModel.OwnerId);
+                        if (ownerVehicle == null || !ownerVehicle.DbModel.Online)
+                        {
+                            player.SendChatMessageError("Ten gracz musi być w grze, abyś mógł zamontować część do jego pojazdu");
+                            return;
+                        }
+
+                        OfferScript.OfferPlayer(player, "Montowanie części", ownerVehicle.AccountEntity.ServerID, OfferType.TuningVehicle, DbModel.Id, 100);
+                    }
+                    else
                     {
-                        player.SendChatMessageError("Część z tej kategorii jest już zamontowana w tym pojeździe, odmontuj ją, aby móc wykonać tą akcje");
-                        return;
+                        player.SendChatMessageError("Ta część nie pasuje do tego pojazdu!");
                     }
-
-                    CharacterEntity ownerVehicle = PlayerExtenstion.GetPlayerByCharacterId(vehicleToUpgrade.DbModel.OwnerId);
-                    if(ownerVehicle == null || !ownerVehicle.DbModel.Online)
-                    {
-                        player.SendChatMessageError("Ten gracz musi być w grze, abyś mógł zamontować część do jego pojazdu");
-                        return;
-                    }
-
-                    OfferScript.OfferPlayer(player, "Montowanie części", ownerVehicle.AccountEntity.ServerID, OfferType.TuningVehicle, DbModel.Id, 100);
                 }
                 else
                 {
-
+                    player.SendChatMessageError("Ta część jest już zamontowana do pojazdu");
                 }
             } 
             else

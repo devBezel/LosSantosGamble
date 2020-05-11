@@ -74,7 +74,7 @@ namespace LSG.GM.Entities.Core.Vehicle
             if (vehicleEntity == null)
                 return;
 
-            player.Emit("vehicle-script:vehicleInfo", vehicleEntity.DbModel.VehicleUpgrades);
+            player.Emit("vehicle-script:vehicleInfo", vehicleEntity.DbModel, vehicleEntity.DbModel.VehicleUpgrades);
         }
 
         [ClientEvent("vehicle:spawnVehicle")]

@@ -11,6 +11,6 @@ namespace LSG.DAL.Enums
         Building,
         RepairVehicle,
         ResuscitationPlayer,
-        TuningVehicle
+        TuningVehicle,
     }
 }

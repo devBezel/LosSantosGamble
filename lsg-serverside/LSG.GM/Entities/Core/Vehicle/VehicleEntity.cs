@@ -21,6 +21,7 @@ using LSG.GM.Extensions;
 using LSG.DAL.Database.Models.GroupModels;
 using LSG.GM.Entities.Core.Group;
 using LSG.DAL.Database.Models.ItemModels;
+using LSG.DAL.Enums;
 
 namespace LSG.GM.Entities.Core.Vehicle
 {
@@ -158,7 +159,15 @@ namespace LSG.GM.Entities.Core.Vehicle
 
             foreach (ItemModel upgrade in DbModel.VehicleUpgrades)
             {
-                GameVehicle.SetMod((VehicleModType)upgrade.FirstParameter, (byte)upgrade.SecondParameter);
+                if((TuningType)upgrade.FirstParameter == TuningType.Wheels)
+                {
+                    GameVehicle.SetWheels((byte)upgrade.SecondParameter, (byte)upgrade.ThirdParameter);
+                }
+                else
+                {
+                    GameVehicle.SetMod((VehicleModType)upgrade.SecondParameter, (byte)upgrade.ThirdParameter);
+                }
+                
             }
 
 
