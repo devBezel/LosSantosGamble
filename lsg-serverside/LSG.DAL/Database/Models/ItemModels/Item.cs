@@ -4,6 +4,7 @@ using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.VehicleModels;
+using LSG.DAL.Database.Models.WarehouseModels;
 using LSG.DAL.Enums;
 using System;
 using System.Collections.Generic;
@@ -35,8 +36,8 @@ namespace LSG.DAL.Database.Models.ItemModels
         public int? BuildingId { get; set; }
         public BuildingModel Building { get; set; }
 
-        public int? GroupId { get; set; }
-        public GroupModel Group { get; set; }
+        public int? WarehouseId { get; set; }
+        public WarehouseModel Warehouse { get; set; }
 
         public int? VehicleUpgradeId { get; set; }
         public Vehicle VehicleUpgrade { get; set; }
@@ -108,10 +109,10 @@ namespace LSG.DAL.Database.Models.ItemModels
                 writer.Value(BuildingId.Value);
             }
 
-            if(GroupId.HasValue)
+            if(WarehouseId.HasValue)
             {
-                writer.Name("groupId");
-                writer.Value(GroupId.Value);
+                writer.Name("warehouseId");
+                writer.Value(WarehouseId.Value);
             }
 
             if(VehicleUpgradeId.HasValue)

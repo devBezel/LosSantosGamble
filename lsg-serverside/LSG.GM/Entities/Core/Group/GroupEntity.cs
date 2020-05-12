@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AltV.Net;
+using LSG.DAL.Database.Models.WarehouseModels;
+using LSG.GM.Entities.Core.Warehouse;
 
 namespace LSG.GM.Entities.Core.Group
 {
@@ -120,13 +122,22 @@ namespace LSG.GM.Entities.Core.Group
             }
         }
 
-        public static async Task LoadGroupsAsync(UnitOfWork unitOfWork) => await AltAsync.Do(async () =>
+        public static async Task LoadGroupsAsync(UnitOfWork unitOfWork)
         {
             GroupEntityFactory factory = new GroupEntityFactory();
             foreach (GroupModel group in await unitOfWork.GroupRepository.GetAll())
             {
-                factory.Create(group);
+                GroupEntity groupEntity = factory.Create(group);
+
+                foreach (WarehouseModel warehouse in await unitOfWork.WarehouseRepository.GetAll())
+                {
+                    if(groupEntity.DbModel.Id == warehouse.GroupId)
+                    {
+                        WarehouseEntity warehouseEntity = new WarehouseEntity(groupEntity, warehouse);
+                        warehouseEntity.Spawn();
+                    }
+                }
             }
-        });
+        }
     }
 }

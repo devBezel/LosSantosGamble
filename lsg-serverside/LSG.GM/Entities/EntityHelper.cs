@@ -7,6 +7,7 @@ using LSG.DAL.Database.Models.BankModels;
 using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.BusModels;
 using LSG.DAL.Database.Models.ShopModels;
+using LSG.DAL.Database.Models.WarehouseModels;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Core.Streamers.ObjectStreamer;
 using LSG.GM.Entities.Common.Atm;
@@ -17,6 +18,7 @@ using LSG.GM.Entities.Core.Buidling;
 using LSG.GM.Entities.Core.Group;
 using LSG.GM.Entities.Core.Item;
 using LSG.GM.Entities.Core.Vehicle;
+using LSG.GM.Entities.Core.Warehouse;
 using LSG.GM.Helpers;
 using LSG.GM.Helpers.Models;
 using LSG.GM.Utilities;
@@ -42,6 +44,7 @@ namespace LSG.GM.Entities
         private static readonly List<BuildingEntity> Buildings = new List<BuildingEntity>();
         private static readonly List<ShopEntity> Shops = new List<ShopEntity>();
         private static readonly List<GroupEntity> Groups = new List<GroupEntity>();
+        private static readonly List<WarehouseEntity> Warehouses = new List<WarehouseEntity>();
 
         private static readonly List<ItemInWorldModel> ItemInWorld = new List<ItemInWorldModel>();
 
@@ -120,6 +123,8 @@ namespace LSG.GM.Entities
             return dynamicObject;
         }
 
+        public static void Add(WarehouseEntity warehouseModel) => Warehouses.Add(warehouseModel);
+
         public static VehicleEntity GetSpawnedVehicleById(int id)
         {
             IVehicle veh = Alt.GetAllVehicles().SingleOrDefault(v => v.GetData("vehicle:id", out int vehicleId) && vehicleId == id);
@@ -160,7 +165,7 @@ namespace LSG.GM.Entities
         public static void Remove(BuildingEntity buildingEntity) => Buildings.Remove(buildingEntity);
 
         // Tworzenie blipów, markerów itp (wszystko co jest lokalnie dla gracza gdy wchodzi na serwer)
-        public static async Task LoadClientEntity(IPlayer player) => await AltAsync.Do(async () =>
+        public static async Task LoadClientEntity(IPlayer player)
         {
             Alt.Log("[LoadClientEntity]");
             foreach (AtmEntity atm in Atms)
@@ -198,9 +203,9 @@ namespace LSG.GM.Entities
             {
                 player.CreateDrawText(drawText);
             }
-        });
+        }
 
-        public static async Task LoadServerEntity() => await AltAsync.Do(async () =>
+        public static async Task LoadServerEntity()
         {
             Alt.Log("[LoadServerEntity]");
             RoleplayContext ctx = Singleton.GetDatabaseInstance();
@@ -213,7 +218,6 @@ namespace LSG.GM.Entities
                 await ShopEntity.LoadShopAsync(unit);
                 await GroupEntity.LoadGroupsAsync(unit);
             }
-        });
-
+        }
     }
 }

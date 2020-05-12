@@ -8,6 +8,7 @@ using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.ShopModels;
 using LSG.DAL.Database.Models.VehicleModels;
+using LSG.DAL.Database.Models.WarehouseModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
@@ -39,6 +40,7 @@ namespace LSG.DAL.Database
         public DbSet<GroupModel> Groups { get; set; }
         public DbSet<GroupWorkerModel> GroupWorkers { get; set; }
         public DbSet<GroupRankModel> GroupRanks { get; set; }
+        public DbSet<WarehouseModel> Warehouses { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
