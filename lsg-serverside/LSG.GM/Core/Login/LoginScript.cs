@@ -39,7 +39,7 @@ namespace LSG.GM.Core.Login
 
 
         [AsyncClientEvent("login:characterDetail")]
-        public async Task SetCharacterSettings(IPlayer player, int characterId) => await AltAsync.Do(() =>
+        public void SetCharacterSettings(IPlayer player, int characterId)
         {
             //Character characterClient = JsonConvert.DeserializeObject<Character>((string)args[0]);
 
@@ -62,7 +62,7 @@ namespace LSG.GM.Core.Login
 
             AccountEntity accountEntity = new AccountEntity(characterDatabase.Account, player);
             accountEntity.Login(characterDatabase);
-        });
+        }
         
         [ClientEvent("login:successWearChangeWorld")]
         public void ChangeCharacterWorld(IPlayer player)
@@ -82,14 +82,14 @@ namespace LSG.GM.Core.Login
 
 
         [AsyncScriptEvent(ScriptEventType.PlayerConnect)]
-        public async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(async () =>
+        public async Task OnPlayerConnect(IPlayer player, string reason)
         {
             await EntityHelper.LoadClientEntity(player);
             Calculation.AssignPlayerServerID(player);
 
 
             await player.EmitAsync("other:first-connect");
-        });
+        }
 
 
     }

@@ -42,7 +42,7 @@ namespace LSG.GM.Entities.Core.Buidling
             DbModel = model;
         }
 
-        public async Task Spawn() => await AltAsync.Do(async () =>
+        public async Task Spawn()
         {
             InteriorColshape = Alt.CreateColShapeCylinder(new Position(DbModel.InternalPickupPositionX, DbModel.InternalPickupPositionY, DbModel.InternalPickupPositionZ - 0.9f), 1f, 2f);
             ExteriorColshape = Alt.CreateColShapeCylinder(new Position(DbModel.ExternalPickupPositionX, DbModel.ExternalPickupPositionY, DbModel.ExternalPickupPositionZ - 0.9f), 1f, 2f);
@@ -140,7 +140,7 @@ namespace LSG.GM.Entities.Core.Buidling
             InteriorColshape.SetData("building:data", this);
             ExteriorColshape.SetData("building:data", this);
 
-        });
+        }
 
         public BuildingEntity Create(Account creator, string name, BuildingType buildingType, Position internalPosition, Position externalPosition)
         {
@@ -272,7 +272,7 @@ namespace LSG.GM.Entities.Core.Buidling
             // Zrobić zapisów budynków
         }
 
-        public static async Task LoadBuildingsAsync(UnitOfWork unit) => await AltAsync.Do(async () =>
+        public static async Task LoadBuildingsAsync(UnitOfWork unit)
         {
             RoleplayContext ctx = Singleton.GetDatabaseInstance();
             foreach (BuildingModel building in await unit.BuildingRepository.GetAll())
@@ -281,14 +281,14 @@ namespace LSG.GM.Entities.Core.Buidling
                 BuildingEntity buildingEntity = new BuildingEntity(building);
                 await buildingEntity.Spawn();
             }
-        });
+        }
 
-        public async Task Dispose() => await AltAsync.Do(async () =>
+        public async Task Dispose()
         {
             InteriorColshape.Remove();
             ExteriorColshape.Remove();
             await BlipHelper.DeleteGlobalBlip(Blip.UniqueID);
             //Dorobić usuwanie z bazy danych i usuwanie markerów
-        });
+        }
     }
 }

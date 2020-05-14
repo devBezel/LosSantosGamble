@@ -9,9 +9,11 @@ using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
 using LSG.DAL.UnitOfWork;
+using LSG.GM.Economy.Base.Jobs;
 using LSG.GM.Entities.Core.Group;
 using LSG.GM.Entities.Core.Item;
 using LSG.GM.Entities.Core.Item.Scripts;
+using LSG.GM.Entities.Job;
 using LSG.GM.Extensions;
 using LSG.GM.Utilities;
 using System;
@@ -40,9 +42,11 @@ namespace LSG.GM.Entities.Core
 
         public bool IsHandcuffed { get; set; } = false;
         public bool IsDragged { get; set; } = false;
-
         public bool PendingOffer { get; set; } = false;
 
+
+        public JobEntity CasualJob { get; set; }
+        public JobVehicleEntity CasualJobVehicle { get; set; }
 
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
 

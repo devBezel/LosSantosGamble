@@ -253,6 +253,12 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float>("Hunger");
 
+                    b.Property<DateTime>("JobEnded");
+
+                    b.Property<float>("JobSpent");
+
+                    b.Property<int>("JobType");
+
                     b.Property<float>("Money");
 
                     b.Property<string>("Name");

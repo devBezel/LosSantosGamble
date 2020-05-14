@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using AltV.Net;
@@ -7,6 +8,7 @@ using LSG.DAL.Database.Models.AccountModels;
 using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.VehicleModels;
+using LSG.DAL.Enums;
 using Newtonsoft.Json;
 
 namespace LSG.DAL.Database.Models.CharacterModels
@@ -41,6 +43,12 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public bool Online { get; set; }
         public int TimeSpent { get; set; }
         public float GamblePoints { get; set; }
+
+        [EnumDataType(typeof(JobType))]
+        public JobType JobType { get; set; }
+        public float JobSpent { get; set; }
+        public DateTime JobEnded { get; set; }
+
         public DateTime RecentlyPlayed { get; set; }
         public CharacterLook CharacterLook { get; set; }
 

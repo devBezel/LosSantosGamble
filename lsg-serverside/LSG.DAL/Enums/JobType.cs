@@ -6,6 +6,7 @@ namespace LSG.DAL.Enums
 {
     public enum JobType
     {
-        Magazine
+        None,
+        Courier
     }
 }

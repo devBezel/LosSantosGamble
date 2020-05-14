@@ -9,7 +9,7 @@ using System.Drawing;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities;
 using System.Linq;
-using VehicleDb = LSG.DAL.Database.Models.VehicleModels.Vehicle;
+using VehicleDataModel = LSG.DAL.Database.Models.VehicleModels.Vehicle;
 using LSG.GM.Extensions;
 using LSG.GM.Enums;
 using AltV.Net.Enums;
@@ -38,7 +38,26 @@ namespace LSG.GM.Core.Admin
 
             if (model == 0) return;
 
-            VehicleEntity vehicle = VehicleEntity.Create(sender.Position, model, new Color(), new Color(), getter.GetAccountEntity().characterEntity.DbModel);
+            VehicleEntity vehicle = new VehicleEntity(new VehicleDataModel()
+            {
+                Id = 600,
+                Model = model.ToString(),
+                Owner = null,
+                Group = null,
+                PosX = sender.Position.X,
+                PosY = sender.Position.Y,
+                PosZ = sender.Position.Z,
+                RotPitch = sender.Rotation.Pitch,
+                RotRoll = sender.Rotation.Roll,
+                RotYaw = sender.Rotation.Yaw,
+                R = 255,
+                G = 255,
+                B = 255,
+                State = true,
+                Health = 1000
+            });
+
+            vehicle.Create();
             vehicle.Spawn();
         }
 

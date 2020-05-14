@@ -19,6 +19,7 @@ using LSG.GM.Entities.Core.Group;
 using LSG.GM.Entities.Core.Item;
 using LSG.GM.Entities.Core.Vehicle;
 using LSG.GM.Entities.Core.Warehouse;
+using LSG.GM.Entities.Job;
 using LSG.GM.Helpers;
 using LSG.GM.Helpers.Models;
 using LSG.GM.Utilities;
@@ -47,6 +48,8 @@ namespace LSG.GM.Entities
         private static readonly List<WarehouseEntity> Warehouses = new List<WarehouseEntity>();
 
         private static readonly List<ItemInWorldModel> ItemInWorld = new List<ItemInWorldModel>();
+
+        private static readonly List<JobEntity> Jobs = new List<JobEntity>();
 
         private static readonly List<DrawTextModel> VehicleTrunkDrawsText = new List<DrawTextModel>();
         
@@ -125,6 +128,8 @@ namespace LSG.GM.Entities
 
         public static void Add(WarehouseEntity warehouseModel) => Warehouses.Add(warehouseModel);
 
+        public static void Add(JobEntity jobEntity) => Jobs.Add(jobEntity);
+
         public static VehicleEntity GetSpawnedVehicleById(int id)
         {
             IVehicle veh = Alt.GetAllVehicles().SingleOrDefault(v => v.GetData("vehicle:id", out int vehicleId) && vehicleId == id);
@@ -202,6 +207,18 @@ namespace LSG.GM.Entities
             foreach (DrawTextModel drawText in VehicleTrunkDrawsText)
             {
                 player.CreateDrawText(drawText);
+            }
+
+            //Do testów później tego nie będzie
+            foreach (WarehouseEntity warehouse in Warehouses)
+            {
+                await player.CreateMarker(warehouse.Marker);
+            }
+
+            foreach (JobEntity job in Jobs)
+            {
+                await player.CreateMarker(job.Marker);
+                await player.CreateBlip(job.Blip);
             }
         }
 

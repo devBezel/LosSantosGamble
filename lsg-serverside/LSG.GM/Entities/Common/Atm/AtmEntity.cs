@@ -99,7 +99,7 @@ namespace LSG.GM.Entities.Common.Atm
             }
         }
 
-        public static async Task LoadAtmsAsync(UnitOfWork unit) => await AltAsync.Do(async () =>
+        public static async Task LoadAtmsAsync(UnitOfWork unit)
         {
             foreach (AtmModel atm in await unit.AtmRepository.GetAll())
             {
@@ -107,7 +107,7 @@ namespace LSG.GM.Entities.Common.Atm
                 AtmEntity atmEntity = new AtmEntity(atm);
                 await atmEntity.Spawn();
             }
-        });
+        }
 
 
     }

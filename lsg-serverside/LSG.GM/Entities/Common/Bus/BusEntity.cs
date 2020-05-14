@@ -112,7 +112,7 @@ namespace LSG.GM.Entities.Common.Bus
             }
         }
 
-        public static async Task LoadBusAsync(UnitOfWork unit) => await AltAsync.Do(async () =>
+        public static async Task LoadBusAsync(UnitOfWork unit)
         {
             foreach (BusStop busStop in await unit.BusRepository.GetAll())
             {
@@ -120,6 +120,6 @@ namespace LSG.GM.Entities.Common.Bus
                 BusEntity busEntity = new BusEntity(busStop);
                 await busEntity.Spawn();
             }
-        });
+        }
     }
 }

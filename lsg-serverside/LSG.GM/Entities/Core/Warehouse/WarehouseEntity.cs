@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using LSG.DAL.Database.Models.WarehouseModels;
@@ -62,7 +63,8 @@ namespace LSG.GM.Entities.Core.Warehouse
                 UniqueID = $"WAREHOUSE_MARKER{DbModel.Id}"
             };
 
-            Task.Run(async () =>
+            // Do testów później nie będzie
+            AltAsync.Do(async () =>
             {
                 await MarkerHelper.CreateGlobalMarker(Marker);
             });

@@ -137,6 +137,7 @@ namespace LSG.GM.Economy.Groups
             Timer dutyTimer = new Timer(60000);
 
             AccountEntity accountEntity = player.GetAccountEntity();
+
             if (accountEntity.characterEntity.OnDutyGroup != null)
             {
                 player.SendSuccessNotify("Zszedłeś ze służby", "Twoja postać zszedła ze służby");
@@ -150,7 +151,8 @@ namespace LSG.GM.Economy.Groups
                 player.SetData("group:dutyTimer", null);
                 player.SetSyncedMetaData("group:dutyWorkerData", null);
                 player.SetSyncedMetaData("group:dutyGroupData", null);
-            } else
+            } 
+            else
             {
                 GroupSlotValidator slotValidator = new GroupSlotValidator();
                 if (!slotValidator.IsValid((byte)slot))

@@ -10,29 +10,24 @@ namespace LSG.GM.Economy.Warehouses
     public class WarehouseScript : IScript
     {
         [ScriptEvent(ScriptEventType.ColShape)]
-        public void OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state)
+        public void OnEnterColshape(IColShape colShape, IEntity entity, bool state)
         {
-            IPlayer player = targetEntity as IPlayer;
             if (!state) return;
 
-            //TODO: Zobaczyć czemu coś tu nie działa
-            Alt.Log($"{colShape.HasData("warehouse:data")} warehouse:data");
-            if (colShape == null || !colShape.Exists)
+            if (colShape.HasData("warehouse:data"))
             {
-                if (targetEntity.Type == BaseObjectType.Player)
+                Alt.Log("Przechodze po HasData");
+                if (entity is IPlayer player)
                 {
-                    Alt.Log("Wchodze do colshape");
-                    if(colShape.HasData("warehouse:data"))
-                    {
-                        Alt.Log("Colshape ma dane warehouse");
-                        colShape.GetData("warehouse:data", out WarehouseEntity warehouseEntity);
+                    Alt.Log("Colshape ma dane warehouse");
+                    colShape.GetData("warehouse:data", out WarehouseEntity warehouseEntity);
 
-                        if (warehouseEntity == null)
-                            return;
+                    if (warehouseEntity == null)
+                        return;
 
-                        Alt.Log($"Wszedłem w colshape magazynu: ${warehouseEntity.DbModel.Id}");
-                    }
+                    Alt.Log($"Wszedłem w colshape magazynu: ${warehouseEntity.DbModel.Id}");
                 }
+
             }
         }
     }

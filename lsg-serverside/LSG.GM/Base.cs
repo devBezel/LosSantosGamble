@@ -49,9 +49,8 @@ namespace LSG.GM
             CreateObjects();
 
             //Alt.OnPlayerDisconnect += OnPlayerDisconnect;
-            AltAsync.Do(async () =>
+            Task.Run(async () =>
             {
-                //AltAsync.OnPlayerConnect += OnPlayerConnect;
                 await EntityHelper.LoadServerEntity();
             });
 
