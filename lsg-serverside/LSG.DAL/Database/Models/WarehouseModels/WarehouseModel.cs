@@ -17,6 +17,7 @@ namespace LSG.DAL.Database.Models.WarehouseModels
         public int GroupId { get; set; }
         public GroupModel Group { get; set; }
 
-        public List<ItemModel> ItemsInWarehouse { get; set; }
+        public List<WarehouseItemModel> Items { get; set; }
+        public List<WarehouseOrderModel> WarehouseOrders { get; set; }
     }
 }

@@ -45,7 +45,8 @@ namespace LSG.GM.Entities
         private static readonly List<BuildingEntity> Buildings = new List<BuildingEntity>();
         private static readonly List<ShopEntity> Shops = new List<ShopEntity>();
         private static readonly List<GroupEntity> Groups = new List<GroupEntity>();
-        private static readonly List<WarehouseEntity> Warehouses = new List<WarehouseEntity>();
+        private static readonly List<WarehouseEntityOrder> Warehouses = new List<WarehouseEntityOrder>();
+        private static readonly List<WarehouseOrderEntity> WarehouseOrders = new List<WarehouseOrderEntity>();
 
         private static readonly List<ItemInWorldModel> ItemInWorld = new List<ItemInWorldModel>();
 
@@ -126,7 +127,7 @@ namespace LSG.GM.Entities
             return dynamicObject;
         }
 
-        public static void Add(WarehouseEntity warehouseModel) => Warehouses.Add(warehouseModel);
+        public static void Add(WarehouseEntityOrder warehouseModel) => Warehouses.Add(warehouseModel);
 
         public static void Add(JobEntity jobEntity) => Jobs.Add(jobEntity);
 
@@ -169,6 +170,16 @@ namespace LSG.GM.Entities
 
         public static void Remove(BuildingEntity buildingEntity) => Buildings.Remove(buildingEntity);
 
+        public static void Add(WarehouseOrderEntity warehouseOrderEntity) => WarehouseOrders.Add(warehouseOrderEntity);
+        public static void Remove(WarehouseOrderEntity warehouseOrderEntity) => WarehouseOrders.Remove(warehouseOrderEntity);
+        public static WarehouseOrderEntity GetWarehouseOrderById(int id) => WarehouseOrders.SingleOrDefault(o => o.DbModel.Id == id);
+
+
+        public static List<WarehouseOrderEntity> GetAllWarehouseOrders()
+        {
+            return WarehouseOrders;
+        }
+
         // Tworzenie blipów, markerów itp (wszystko co jest lokalnie dla gracza gdy wchodzi na serwer)
         public static async Task LoadClientEntity(IPlayer player)
         {
@@ -210,7 +221,7 @@ namespace LSG.GM.Entities
             }
 
             //Do testów później tego nie będzie
-            foreach (WarehouseEntity warehouse in Warehouses)
+            foreach (WarehouseEntityOrder warehouse in Warehouses)
             {
                 await player.CreateMarker(warehouse.Marker);
             }
@@ -234,6 +245,7 @@ namespace LSG.GM.Entities
                 await BusEntity.LoadBusAsync(unit);
                 await ShopEntity.LoadShopAsync(unit);
                 await GroupEntity.LoadGroupsAsync(unit);
+                await WarehouseOrderEntity.LoadWarehouseOrdersAsync();
             }
         }
     }

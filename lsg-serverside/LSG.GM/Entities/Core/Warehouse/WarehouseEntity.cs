@@ -2,9 +2,12 @@
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using LSG.DAL.Database;
 using LSG.DAL.Database.Models.WarehouseModels;
+using LSG.DAL.UnitOfWork;
 using LSG.GM.Entities.Core.Group;
 using LSG.GM.Helpers;
+using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,14 +15,14 @@ using System.Threading.Tasks;
 
 namespace LSG.GM.Entities.Core.Warehouse
 {
-    public class WarehouseEntity
+    public class WarehouseEntityOrder
     {
         public GroupEntity GroupEntity { get; set; }
         public WarehouseModel DbModel { get; set; }
         public IColShape ColShape { get; set; }
         public MarkerModel Marker { get; set; }
 
-        public WarehouseEntity(GroupEntity group, WarehouseModel dbModel)
+        public WarehouseEntityOrder(GroupEntity group, WarehouseModel dbModel)
         {
             GroupEntity = group;
             DbModel = dbModel;
@@ -70,6 +73,15 @@ namespace LSG.GM.Entities.Core.Warehouse
             });
 
             EntityHelper.Add(this);
+        }
+
+        public void Save()
+        {
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+            using (UnitOfWork unitOfWork = new UnitOfWork(ctx))
+            {
+                unitOfWork.WarehouseRepository.Update(DbModel);
+            }
         }
     }
 }

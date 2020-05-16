@@ -7,12 +7,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Timers;
 using VehicleDataModel = LSG.DAL.Database.Models.VehicleModels.Vehicle;
 
 namespace LSG.GM.Economy.Base.Jobs
 {
     public class JobVehicleEntity
     {
+        public Timer OutOfTheVehicleTimer { get; set; }
         public VehicleEntity VehicleEntity { get; set; }
         public CharacterEntity Worker { get; set; }
 

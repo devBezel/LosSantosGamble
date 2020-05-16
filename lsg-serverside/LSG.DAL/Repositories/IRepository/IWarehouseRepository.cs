@@ -9,5 +9,6 @@ namespace LSG.DAL.Repositories.IRepository
     public interface IWarehouseRepository : IGenericRepository
     {
         Task<List<WarehouseModel>> GetAll();
+        Task<List<WarehouseOrderModel>> GetAllOrders();
     }
 }

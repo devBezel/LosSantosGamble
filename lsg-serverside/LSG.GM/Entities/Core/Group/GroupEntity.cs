@@ -133,7 +133,7 @@ namespace LSG.GM.Entities.Core.Group
                 {
                     if(groupEntity.DbModel.Id == warehouse.GroupId)
                     {
-                        WarehouseEntity warehouseEntity = new WarehouseEntity(groupEntity, warehouse);
+                        WarehouseEntityOrder warehouseEntity = new WarehouseEntityOrder(groupEntity, warehouse);
                         warehouseEntity.Spawn();
                     }
                 }

@@ -41,6 +41,8 @@ namespace LSG.DAL.Database
         public DbSet<GroupWorkerModel> GroupWorkers { get; set; }
         public DbSet<GroupRankModel> GroupRanks { get; set; }
         public DbSet<WarehouseModel> Warehouses { get; set; }
+        public DbSet<WarehouseOrderModel> WarehouseOrders { get; set; }
+        public DbSet<WarehouseItemModel> WarehouseItems { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

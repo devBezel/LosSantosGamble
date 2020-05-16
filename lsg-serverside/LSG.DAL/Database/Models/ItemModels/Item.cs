@@ -36,8 +36,8 @@ namespace LSG.DAL.Database.Models.ItemModels
         public int? BuildingId { get; set; }
         public BuildingModel Building { get; set; }
 
-        public int? WarehouseId { get; set; }
-        public WarehouseModel Warehouse { get; set; }
+        //public int? WarehouseId { get; set; }
+        //public WarehouseModel Warehouse { get; set; }
 
         public int? VehicleUpgradeId { get; set; }
         public Vehicle VehicleUpgrade { get; set; }
@@ -109,11 +109,11 @@ namespace LSG.DAL.Database.Models.ItemModels
                 writer.Value(BuildingId.Value);
             }
 
-            if(WarehouseId.HasValue)
-            {
-                writer.Name("warehouseId");
-                writer.Value(WarehouseId.Value);
-            }
+            //if(WarehouseId.HasValue)
+            //{
+            //    writer.Name("warehouseId");
+            //    writer.Value(WarehouseId.Value);
+            //}
 
             if(VehicleUpgradeId.HasValue)
             {

@@ -17,6 +17,11 @@ namespace LSG.GM.Helpers
             player.EmitAsync("drawText:create", drawTextModel);
         }
 
+        public static void RemoveDrawText(this IPlayer player, string uniqueID)
+        {
+            player.Emit("drawText:remove", uniqueID);
+        }
+
         public static void CreateGlobalDrawText(DrawTextModel drawTextModel)
         {
             EntityHelper.Add(drawTextModel);

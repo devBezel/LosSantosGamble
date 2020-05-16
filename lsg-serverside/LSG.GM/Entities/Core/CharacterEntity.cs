@@ -13,6 +13,7 @@ using LSG.GM.Economy.Base.Jobs;
 using LSG.GM.Entities.Core.Group;
 using LSG.GM.Entities.Core.Item;
 using LSG.GM.Entities.Core.Item.Scripts;
+using LSG.GM.Entities.Core.Warehouse;
 using LSG.GM.Entities.Job;
 using LSG.GM.Extensions;
 using LSG.GM.Utilities;
@@ -47,6 +48,9 @@ namespace LSG.GM.Entities.Core
 
         public JobEntity CasualJob { get; set; }
         public JobVehicleEntity CasualJobVehicle { get; set; }
+
+        // Kurier
+        public WarehouseOrderEntity CurrentDeliveryOrder { get; set; }
 
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
 

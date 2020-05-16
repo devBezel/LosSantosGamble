@@ -253,9 +253,9 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float>("Hunger");
 
-                    b.Property<DateTime>("JobEnded");
+                    b.Property<int>("JobEarned");
 
-                    b.Property<float>("JobSpent");
+                    b.Property<DateTime>("JobEnded");
 
                     b.Property<int>("JobType");
 
@@ -571,8 +571,6 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int?>("VehicleUpgradeId");
 
-                    b.Property<int?>("WarehouseId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BuildingId");
@@ -584,8 +582,6 @@ namespace LSG.DAL.Migrations
                     b.HasIndex("VehicleId");
 
                     b.HasIndex("VehicleUpgradeId");
-
-                    b.HasIndex("WarehouseId");
 
                     b.ToTable("Items");
                 });
@@ -680,6 +676,36 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Vehicles");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseItemModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Cost");
+
+                    b.Property<int>("Count");
+
+                    b.Property<double?>("FirstParameter");
+
+                    b.Property<double?>("FourthParameter");
+
+                    b.Property<int>("ItemEntityType");
+
+                    b.Property<string>("Name");
+
+                    b.Property<double?>("SecondParameter");
+
+                    b.Property<double?>("ThirdParameter");
+
+                    b.Property<int>("WarehouseId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("WarehouseItems");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseModel", b =>
                 {
                     b.Property<int>("Id")
@@ -698,6 +724,34 @@ namespace LSG.DAL.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("Warehouses");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseOrderModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Count");
+
+                    b.Property<double?>("FirstParameter");
+
+                    b.Property<double?>("FourthParameter");
+
+                    b.Property<int>("ItemEntityType");
+
+                    b.Property<string>("Name");
+
+                    b.Property<double?>("SecondParameter");
+
+                    b.Property<double?>("ThirdParameter");
+
+                    b.Property<int>("WarehouseId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("WarehouseOrders");
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.AccountModels.AccountPremium", b =>
@@ -850,10 +904,6 @@ namespace LSG.DAL.Migrations
                     b.HasOne("LSG.DAL.Database.Models.VehicleModels.Vehicle", "VehicleUpgrade")
                         .WithMany("VehicleUpgrades")
                         .HasForeignKey("VehicleUpgradeId");
-
-                    b.HasOne("LSG.DAL.Database.Models.WarehouseModels.WarehouseModel", "Warehouse")
-                        .WithMany("ItemsInWarehouse")
-                        .HasForeignKey("WarehouseId");
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.ShopModels.ShopAssortmentModel", b =>
@@ -875,11 +925,27 @@ namespace LSG.DAL.Migrations
                         .HasForeignKey("OwnerId");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseItemModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.WarehouseModels.WarehouseModel", "Warehouse")
+                        .WithMany("Items")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseModel", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseOrderModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.WarehouseModels.WarehouseModel", "Warehouse")
+                        .WithMany("WarehouseOrders")
+                        .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

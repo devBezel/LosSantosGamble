@@ -46,7 +46,7 @@ namespace LSG.DAL.Database.Models.CharacterModels
 
         [EnumDataType(typeof(JobType))]
         public JobType JobType { get; set; }
-        public float JobSpent { get; set; }
+        public int JobEarned { get; set; }
         public DateTime JobEnded { get; set; }
 
         public DateTime RecentlyPlayed { get; set; }

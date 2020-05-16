@@ -1,6 +1,10 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Warehouse;
+using LSG.GM.Extensions;
+using LSG.GM.Helpers;
+using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,12 +24,17 @@ namespace LSG.GM.Economy.Warehouses
                 if (entity is IPlayer player)
                 {
                     Alt.Log("Colshape ma dane warehouse");
-                    colShape.GetData("warehouse:data", out WarehouseEntity warehouseEntity);
+                    colShape.GetData("warehouse:data", out WarehouseEntityOrder warehouseEntity);
 
                     if (warehouseEntity == null)
                         return;
 
-                    Alt.Log($"Wszedłem w colshape magazynu: ${warehouseEntity.DbModel.Id}");
+                    CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
+
+                    if(characterEntity.CurrentDeliveryOrder != null)
+                    {
+                        new Interaction(player, "warehouse:deliverOrder", "aby dostarczyć paczkę");                   
+                    }
                 }
 
             }
