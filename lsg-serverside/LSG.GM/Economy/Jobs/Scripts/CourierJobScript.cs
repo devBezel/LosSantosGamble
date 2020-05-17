@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
 using LSG.GM.Economy.Jobs.Base.Courier;
@@ -6,12 +7,15 @@ using LSG.GM.Entities;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Warehouse;
 using LSG.GM.Entities.Job;
+using LSG.GM.Enums;
 using LSG.GM.Extensions;
 using LSG.GM.Helpers;
 using LSG.GM.Helpers.Models;
+using LSG.GM.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LSG.GM.Economy.Jobs.Scripts
 {
@@ -47,6 +51,12 @@ namespace LSG.GM.Economy.Jobs.Scripts
             WarehouseOrderEntity orderEntity = EntityHelper.GetWarehouseOrderById(orderId);
             if (orderEntity == null)
                 return;
+
+            if(worker.DbModel.JobEarned >= worker.CasualJob.JobEntityModel.MaxSalary)
+            {
+                player.SendChatMessageInfo("Zarobiłeś już maksymalną ilość pieniędzy. Przyjedź jutro");
+                return;
+            }
             
             if(!orderEntity.IsDelivered)
             {
@@ -64,6 +74,27 @@ namespace LSG.GM.Economy.Jobs.Scripts
                         Dimension = 0,
                         UniqueID = $"WAREHOUSE_ORDER_DRAW_TEXT{orderEntity.DbModel.Id}"
                     });
+
+                    Task.Run(async () =>
+                    {
+                        await player.CreateBlip(new BlipModel()
+                        {
+                            Name = $"Paczka ({orderEntity.DbModel.Name})",
+                            Blip = 478,
+                            Color = 76,
+                            PosX = orderEntity.DbModel.Warehouse.PosX,
+                            PosY = orderEntity.DbModel.Warehouse.PosY,
+                            PosZ = orderEntity.DbModel.Warehouse.PosZ,
+                            ShortRange = false, 
+                            Size = EBlipSize.Medium,
+                            UniqueID = $"WAREHOUSE_ORDER_BLIP{orderEntity.DbModel.Id}"
+                        });
+                    });
+
+                    player.CallNative("addPointToGpsCustomRoute", new object[] { orderEntity.DbModel.Warehouse.PosX, orderEntity.DbModel.Warehouse.PosY, orderEntity.DbModel.Warehouse.PosZ });
+                    player.CallNative("setGpsMultiRouteRender", new object[] { true });
+
+                    player.SendChatMessageInfo("Twoja paczka została zapakowana do wozu, miejsce dostarczenia zostało oznaczone na mapie.");
                 }
                 else
                 {
@@ -87,11 +118,16 @@ namespace LSG.GM.Economy.Jobs.Scripts
                 WarehouseOrderEntity entityOrder = characterEntity.CurrentDeliveryOrder;
 
                 player.RemoveDrawText($"WAREHOUSE_ORDER_DRAW_TEXT{entityOrder.DbModel.Id}");
+                Task.Run(async () =>
+                {
+                    await player.DeleteBlip($"WAREHOUSE_ORDER_BLIP{entityOrder.DbModel.Id}");
+                });
+                player.CallNative("clearGpsMultiRoute");
+
                 entityOrder.Delivier(characterEntity);
 
-
                 player.SendChatMessageInfo("Dostarczyłeś paczkę pomyślnie!");
-
+                
                 characterEntity.CasualJob.ChargeMoney(characterEntity, 20);
                 player.SendChatMessageInfo("Otrzymałeś 20$ za dostarczoną przesyłkę");
             }

@@ -25,6 +25,11 @@ namespace LSG.GM.Economy.Jobs.Base.Courier
 {
     public class CourierJob : JobEntity
     {
+        JobClothe JobClothe = new JobClothe()
+        {
+
+        };
+
 
         public CourierJob(JobEntityModel jobEnityModel) : base(jobEnityModel)
         {

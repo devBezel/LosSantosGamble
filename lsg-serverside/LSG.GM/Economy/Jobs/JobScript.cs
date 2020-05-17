@@ -27,7 +27,8 @@ namespace LSG.GM.Economy.Jobs
                 Position = new Position(26.1626f, -1300.59f, 29.2124f),
                 RespawnVehiclePosition = new Position(36.9495f, -1283.84f, 29.2799f),
                 RespawnVehicleRotation = new Rotation(0, 0, 1.53369f),
-                JobType = DAL.Enums.JobType.Courier
+                JobType = DAL.Enums.JobType.Courier,
+                MaxSalary = 400
             });
             courierJob.Create();
         }
@@ -97,6 +98,11 @@ namespace LSG.GM.Economy.Jobs
                 player.GetData("current:startJobColshape", out JobEntity currentCasualWork);
                 if (worker.CasualJob == null)
                 {
+                    if(worker.DbModel.JobEnded <= DateTime.Now)
+                    {
+                        worker.DbModel.JobEarned = 0;
+                    }
+
                     currentCasualWork.Start(worker);
                 }
                 else

@@ -10,9 +10,11 @@ using LSG.GM.Enums;
 using LSG.GM.Extensions;
 using LSG.GM.Helpers;
 using LSG.GM.Helpers.Models;
+using LSG.GM.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LSG.GM.Entities.Job
 {
@@ -118,9 +120,22 @@ namespace LSG.GM.Entities.Job
                 DisposeJobVehicle(worker);
             }
 
+            if(worker.CurrentDeliveryOrder != null)
+            {
+                worker.AccountEntity.Player.RemoveDrawText($"WAREHOUSE_ORDER_DRAW_TEXT{worker.CurrentDeliveryOrder.DbModel.Id}");
+                Task.Run(async () =>
+                {
+                    await worker.AccountEntity.Player.DeleteBlip($"WAREHOUSE_ORDER_BLIP{worker.CurrentDeliveryOrder.DbModel.Id}");
+                });
+                worker.AccountEntity.Player.CallNative("clearGpsMultiRoute");
+
+                worker.CurrentDeliveryOrder.CurrentCourier = null;
+                worker.CurrentDeliveryOrder.IsDelivered = false;
+            }
+
             worker.AccountEntity.Player.SendChatMessageInfo($"Zarobiłeś {worker.DbModel.JobEarned}$ z pracy dorywczej.");
 
-            worker.DbModel.JobEnded = DateTime.Now;
+            
         }
 
         public void RespawnJobVehicle(CharacterEntity worker)
@@ -134,6 +149,11 @@ namespace LSG.GM.Entities.Job
         {
             worker.AddMoney(money, false);
             worker.DbModel.JobEarned += money;
+
+            if(worker.DbModel.JobEarned >= JobEntityModel.MaxSalary)
+            {
+                worker.DbModel.JobEnded = DateTime.Now;
+            }
         }
 
         public void DisposeJobVehicle(CharacterEntity worker)
