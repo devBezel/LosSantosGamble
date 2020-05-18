@@ -7,6 +7,7 @@ namespace LSG.DAL.Enums
     public enum JobType
     {
         None,
-        Courier
+        Courier,
+        Junker
     }
 }

@@ -24,7 +24,7 @@ namespace LSG.GM.Economy.Warehouses
                 if (entity is IPlayer player)
                 {
                     Alt.Log("Colshape ma dane warehouse");
-                    colShape.GetData("warehouse:data", out WarehouseEntityOrder warehouseEntity);
+                    colShape.GetData("warehouse:data", out WarehouseEntity warehouseEntity);
 
                     if (warehouseEntity == null)
                         return;

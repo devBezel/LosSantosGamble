@@ -45,23 +45,13 @@ namespace LSG.GM
                (threadId) => new LimitedGrid3(50_000, 50_000, 100, 10_000, 10_000, 600),
                new IdProvider());
 
-
-            CreateObjects();
-
-            //Alt.OnPlayerDisconnect += OnPlayerDisconnect;
+            // Ładowanie zasobów serwera
             Task.Run(async () =>
             {
                 await EntityHelper.LoadServerEntity();
             });
 
-        }
 
-        private void CreateObjects()
-        {
-            // Create some objects
-            ObjectStreamer.CreateDynamicObject("port_xr_lifeboat", new Vector3(-859.655f, -803.499f, 25.566f), new Vector3(0, 0, 0), 0, null, true, null, null, null, null, true, 400);
-            ObjectStreamer.CreateDynamicObject("bkr_prop_biker_bowlpin_stand", new Vector3(-959.655f, -903.499f, 25.566f), new Vector3(0, 0, 0), 0, null, true, null, null, null, null, true, 400);
-            ObjectStreamer.CreateDynamicObject("bkr_prop_biker_tube_crn", new Vector3(-909.655f, -953.499f, 25.566f), new Vector3(0, 0, 0), 0, null, true, null, null, null, null, true, 400);
         }
 
 

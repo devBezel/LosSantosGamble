@@ -64,7 +64,7 @@ namespace LSG.GM.Economy.Jobs.Scripts
                 {
                     orderEntity.StartDeliviery(worker);
 
-                    player.Emit("job-courier:drawDeliveryGps", orderEntity.DbModel.Warehouse.PosX, orderEntity.DbModel.Warehouse.PosY, orderEntity.DbModel.Warehouse.PosZ);
+                    
                     player.CreateDrawText(new DrawTextModel()
                     {
                         Text = "Kliknij ~g~E ~w~ aby odlożyć paczkę",

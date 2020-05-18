@@ -7,7 +7,7 @@ using System.Text;
 
 namespace LSG.DAL.Database.Models.WarehouseModels
 {
-    public class WarehouseItemModel
+    public class WarehouseItemModel : IWritable
     {
         public int Id { get; set; }
         public string Name { get; set; }

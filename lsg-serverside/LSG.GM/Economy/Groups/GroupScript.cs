@@ -8,6 +8,7 @@ using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
 using LSG.GM.Economy.Groups.Base;
 using LSG.GM.Economy.Offers;
+using LSG.GM.Entities;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Group;
 using LSG.GM.Entities.Core.Item;
@@ -213,6 +214,7 @@ namespace LSG.GM.Economy.Groups
                     group.GetWorkers().Where(c => c.Character.Online).ToList(),
                     group.DbModel.Ranks,
                     group.DbModel.Vehicles,
+                    EntityHelper.GetWarehouseByGroupId(group.DbModel.Id).DbModel.Items,
                     worker,
                     slot);
             }

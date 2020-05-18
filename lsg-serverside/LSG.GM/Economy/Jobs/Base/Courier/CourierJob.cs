@@ -15,7 +15,9 @@ using LSG.GM.Entities.Core.Warehouse;
 using LSG.GM.Entities.Job;
 using LSG.GM.Enums;
 using LSG.GM.Extensions;
+using LSG.GM.Helpers;
 using LSG.GM.Utilities;
+using LSG.GM.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,7 +27,7 @@ namespace LSG.GM.Economy.Jobs.Base.Courier
 {
     public class CourierJob : JobEntity
     {
-        JobClothe JobClothe = new JobClothe()
+        JobClotheModel JobClothe = new JobClotheModel()
         {
 
         };
@@ -50,6 +52,24 @@ namespace LSG.GM.Economy.Jobs.Base.Courier
             }
 
             return warehouseOrders;
+        }
+
+        public void Dispose(CharacterEntity worker)
+        {
+            if (worker.CurrentDeliveryOrder != null)
+            {
+                worker.AccountEntity.Player.RemoveDrawText($"WAREHOUSE_ORDER_DRAW_TEXT{worker.CurrentDeliveryOrder.DbModel.Id}");
+                Task.Run(async () =>
+                {
+                    await worker.AccountEntity.Player.DeleteBlip($"WAREHOUSE_ORDER_BLIP{worker.CurrentDeliveryOrder.DbModel.Id}");
+                });
+                worker.AccountEntity.Player.CallNative("clearGpsMultiRoute");
+
+                worker.CurrentDeliveryOrder.CurrentCourier = null;
+                worker.CurrentDeliveryOrder.IsDelivered = false;
+
+                worker.CurrentDeliveryOrder = null;
+            }
         }
     }
 }

@@ -2,7 +2,9 @@
 using AltV.Net.ColShape;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using LSG.DAL.Enums;
 using LSG.GM.Economy.Jobs.Base.Courier;
+using LSG.GM.Entities;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Job;
 using LSG.GM.Extensions;
@@ -17,21 +19,6 @@ namespace LSG.GM.Economy.Jobs
 {
     public class JobScript : IScript
     {
-        public JobScript()
-        {
-            JobEntity courierJob = new JobEntity(new JobEntityModel()
-            {
-                JobName = "Kurier",
-                VehicleModel = AltV.Net.Enums.VehicleModel.Boxville2,
-                RespawnVehicle = true,
-                Position = new Position(26.1626f, -1300.59f, 29.2124f),
-                RespawnVehiclePosition = new Position(36.9495f, -1283.84f, 29.2799f),
-                RespawnVehicleRotation = new Rotation(0, 0, 1.53369f),
-                JobType = DAL.Enums.JobType.Courier,
-                MaxSalary = 400
-            });
-            courierJob.Create();
-        }
 
         [ScriptEvent(ScriptEventType.ColShape)]
         public void OnPlayerEnterColshape(IColShape colShape, IEntity entity, bool state)
@@ -98,11 +85,6 @@ namespace LSG.GM.Economy.Jobs
                 player.GetData("current:startJobColshape", out JobEntity currentCasualWork);
                 if (worker.CasualJob == null)
                 {
-                    if(worker.DbModel.JobEnded <= DateTime.Now)
-                    {
-                        worker.DbModel.JobEarned = 0;
-                    }
-
                     currentCasualWork.Start(worker);
                 }
                 else

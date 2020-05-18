@@ -4,12 +4,15 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using LSG.DAL.Enums;
 using LSG.GM.Economy.Base.Jobs;
+using LSG.GM.Economy.Jobs.Base.Courier;
+using LSG.GM.Economy.Jobs.Base.Junker;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Core.Group;
 using LSG.GM.Enums;
 using LSG.GM.Extensions;
 using LSG.GM.Helpers;
 using LSG.GM.Helpers.Models;
+using LSG.GM.Utilities;
 using LSG.GM.Wrapper;
 using System;
 using System.Collections.Generic;
@@ -66,35 +69,38 @@ namespace LSG.GM.Entities.Job
                 UniqueID = $"JOB_MARKER{JobEntityModel.JobType}"
             };
 
-            Blip = new BlipModel()
-            {
-                PosX = JobEntityModel.Position.X,
-                PosY = JobEntityModel.Position.Y,
-                PosZ = JobEntityModel.Position.Z,
-                Blip = 616,
-                Color = 52, // Kolor pózniej do zmiany jak budynek będzie kupiony
-                Size = EBlipSize.Medium,
-                Name = "LS Kurier (Praca dorywcza)",
-                ShortRange = true,
-                UniqueID = $"JOB_BLIP{JobEntityModel.JobType}"
-            };
-
             ColShape = Alt.CreateColShapeCylinder(new Position(JobEntityModel.Position.X, JobEntityModel.Position.Y, JobEntityModel.Position.Z - 0.9f), 1f, 2f);
 
             JobEntityFactory entityFactory = new JobEntityFactory();
             Job = entityFactory.Create(JobEntityModel);
 
+            Blip = new BlipModel()
+            {
+                PosX = JobEntityModel.Position.X,
+                PosY = JobEntityModel.Position.Y,
+                PosZ = JobEntityModel.Position.Z,
+                Blip = entityFactory.CreateBlip(JobEntityModel.JobType),
+                Color = entityFactory.CreateColor(JobEntityModel.JobType), 
+                Size = EBlipSize.Medium,
+                Name = $"{JobEntityModel.JobName} (Praca dorywcza)",
+                ShortRange = true,
+                UniqueID = $"JOB_BLIP{JobEntityModel.JobType}"
+            };
+
             ColShape.SetData("job:data", this);
             EntityHelper.Add(this);
 
-            
         }
 
         //TODO: Zrobić jeżeli minie dzień, że usuwa się JobEarned
         public void Start(CharacterEntity worker)
         {
+            if (Calculation.CalculateTheNumberOfDays(DateTime.Now, worker.DbModel.JobEnded) >= 1)
+            {
+                worker.DbModel.JobEarned = 0;
+            }
 
-            if (worker.DbModel.JobEarned <= JobEntityModel.MaxSalary)
+            if (worker.DbModel.JobEarned < JobEntityModel.MaxSalary)
             {
                 if(JobEntityModel.RespawnVehicle)
                 {
@@ -113,26 +119,24 @@ namespace LSG.GM.Entities.Job
 
         public void Stop(CharacterEntity worker)
         {
-            worker.CasualJob = null;
-
             if (worker.CasualJobVehicle != null)
             {
                 DisposeJobVehicle(worker);
             }
 
-            if(worker.CurrentDeliveryOrder != null)
+            // Kończenie kuriera
+            if(worker.CasualJob is CourierJob courierJob)
             {
-                worker.AccountEntity.Player.RemoveDrawText($"WAREHOUSE_ORDER_DRAW_TEXT{worker.CurrentDeliveryOrder.DbModel.Id}");
-                Task.Run(async () =>
-                {
-                    await worker.AccountEntity.Player.DeleteBlip($"WAREHOUSE_ORDER_BLIP{worker.CurrentDeliveryOrder.DbModel.Id}");
-                });
-                worker.AccountEntity.Player.CallNative("clearGpsMultiRoute");
-
-                worker.CurrentDeliveryOrder.CurrentCourier = null;
-                worker.CurrentDeliveryOrder.IsDelivered = false;
+                courierJob.Dispose(worker);
             }
 
+            // Kończenie śmieciarza
+            if(worker.CasualJob is JunkerJob junkerJob)
+            {
+                junkerJob.Dispose(worker);
+            }
+
+            worker.CasualJob = null;
             worker.AccountEntity.Player.SendChatMessageInfo($"Zarobiłeś {worker.DbModel.JobEarned}$ z pracy dorywczej.");
 
             

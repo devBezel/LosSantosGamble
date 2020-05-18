@@ -46,6 +46,7 @@ namespace LSG.DAL.Database.Models.GroupModels
         public List<GroupWorkerModel> Workers { get; set; }
         public List<GroupRankModel> Ranks { get; set; }
         public List<Vehicle> Vehicles { get; set; }
+        public List<WarehouseModel> Warehouses { get; set; }
 
         public void OnWrite(IMValueWriter writer)
         {

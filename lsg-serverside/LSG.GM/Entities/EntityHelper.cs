@@ -8,6 +8,7 @@ using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.BusModels;
 using LSG.DAL.Database.Models.ShopModels;
 using LSG.DAL.Database.Models.WarehouseModels;
+using LSG.DAL.Enums;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Core.Streamers.ObjectStreamer;
 using LSG.GM.Entities.Common.Atm;
@@ -45,11 +46,12 @@ namespace LSG.GM.Entities
         private static readonly List<BuildingEntity> Buildings = new List<BuildingEntity>();
         private static readonly List<ShopEntity> Shops = new List<ShopEntity>();
         private static readonly List<GroupEntity> Groups = new List<GroupEntity>();
-        private static readonly List<WarehouseEntityOrder> Warehouses = new List<WarehouseEntityOrder>();
+        private static readonly List<WarehouseEntity> Warehouses = new List<WarehouseEntity>();
         private static readonly List<WarehouseOrderEntity> WarehouseOrders = new List<WarehouseOrderEntity>();
 
         private static readonly List<ItemInWorldModel> ItemInWorld = new List<ItemInWorldModel>();
 
+        private static readonly List<JobCenterEntity> JobCenters = new List<JobCenterEntity>();
         private static readonly List<JobEntity> Jobs = new List<JobEntity>();
 
         private static readonly List<DrawTextModel> VehicleTrunkDrawsText = new List<DrawTextModel>();
@@ -127,7 +129,8 @@ namespace LSG.GM.Entities
             return dynamicObject;
         }
 
-        public static void Add(WarehouseEntityOrder warehouseModel) => Warehouses.Add(warehouseModel);
+        public static void Add(WarehouseEntity warehouseModel) => Warehouses.Add(warehouseModel);
+        public static WarehouseEntity GetWarehouseByGroupId(int id) => Warehouses.SingleOrDefault(x => x.DbModel.GroupId == id);
 
         public static void Add(JobEntity jobEntity) => Jobs.Add(jobEntity);
 
@@ -174,10 +177,25 @@ namespace LSG.GM.Entities
         public static void Remove(WarehouseOrderEntity warehouseOrderEntity) => WarehouseOrders.Remove(warehouseOrderEntity);
         public static WarehouseOrderEntity GetWarehouseOrderById(int id) => WarehouseOrders.SingleOrDefault(o => o.DbModel.Id == id);
 
+        public static void Add(JobCenterEntity jobCenterEntity) => JobCenters.Add(jobCenterEntity);
+
 
         public static List<WarehouseOrderEntity> GetAllWarehouseOrders()
         {
             return WarehouseOrders;
+        }
+
+        public static List<JobEntityModel> GetJobs()
+        {
+            List<JobEntityModel> jobEntityModels = new List<JobEntityModel>();
+            Alt.Log($"Jobs length {Jobs.Count}");
+            foreach (JobEntity job in Jobs)
+            {
+                Alt.Log($"Dodaje {job.JobEntityModel.JobName} do listy");
+                jobEntityModels.Add(job.JobEntityModel);
+            }
+
+            return jobEntityModels;
         }
 
         // Tworzenie blipów, markerów itp (wszystko co jest lokalnie dla gracza gdy wchodzi na serwer)
@@ -221,7 +239,7 @@ namespace LSG.GM.Entities
             }
 
             //Do testów później tego nie będzie
-            foreach (WarehouseEntityOrder warehouse in Warehouses)
+            foreach (WarehouseEntity warehouse in Warehouses)
             {
                 await player.CreateMarker(warehouse.Marker);
             }
@@ -231,11 +249,15 @@ namespace LSG.GM.Entities
                 await player.CreateMarker(job.Marker);
                 await player.CreateBlip(job.Blip);
             }
+
+            foreach (JobCenterEntity jobCenter in JobCenters)
+            {
+                await player.CreateMarker(jobCenter.Marker);
+            }
         }
 
         public static async Task LoadServerEntity()
         {
-            Alt.Log("[LoadServerEntity]");
             RoleplayContext ctx = Singleton.GetDatabaseInstance();
 
             using (UnitOfWork unit = new UnitOfWork(ctx))
@@ -247,6 +269,41 @@ namespace LSG.GM.Entities
                 await GroupEntity.LoadGroupsAsync(unit);
                 await WarehouseOrderEntity.LoadWarehouseOrdersAsync();
             }
+
+            JobEntity courierJob = new JobEntity(new JobEntityModel()
+            {
+                JobName = "Kurier",
+                VehicleModel = AltV.Net.Enums.VehicleModel.Boxville2,
+                RespawnVehicle = true,
+                Position = new Position(26.1626f, -1300.59f, 29.2124f),
+                RespawnVehiclePosition = new Position(36.9495f, -1283.84f, 29.2799f),
+                RespawnVehicleRotation = new Rotation(0, 0, 1.53369f),
+                JobType = JobType.Courier,
+                MaxSalary = 400
+            });
+            courierJob.Create();
+
+            JobEntity junkerJob = new JobEntity(new JobEntityModel()
+            {
+                JobName = "Śmieciarz",
+                VehicleModel = AltV.Net.Enums.VehicleModel.Trash,
+                RespawnVehicle = true,
+                Position = new Position(500.334f, -652.009f, 24.8989f),
+                RespawnVehiclePosition = new Position(508.286f, -609.771f, 25.1348f),
+                RespawnVehicleRotation = new Rotation(0, 0, 1.63264f),
+                JobType = JobType.Junker,
+                MaxSalary = 400
+            });
+            junkerJob.Create();
+
+            JobCenterEntity jobCenter = new JobCenterEntity(new JobCenterModel()
+            {
+                Id = 0,
+                Position = new Position(104.73f, -934.075f, 29.8022f),
+                Jobs = EntityHelper.GetJobs()
+            });
+
+            jobCenter.Spawn();
         }
     }
 }

@@ -15,14 +15,14 @@ using System.Threading.Tasks;
 
 namespace LSG.GM.Entities.Core.Warehouse
 {
-    public class WarehouseEntityOrder
+    public class WarehouseEntity
     {
         public GroupEntity GroupEntity { get; set; }
         public WarehouseModel DbModel { get; set; }
         public IColShape ColShape { get; set; }
         public MarkerModel Marker { get; set; }
 
-        public WarehouseEntityOrder(GroupEntity group, WarehouseModel dbModel)
+        public WarehouseEntity(GroupEntity group, WarehouseModel dbModel)
         {
             GroupEntity = group;
             DbModel = dbModel;
