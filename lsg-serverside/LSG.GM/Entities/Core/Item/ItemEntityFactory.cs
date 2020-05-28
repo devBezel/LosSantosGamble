@@ -20,6 +20,7 @@ namespace LSG.GM.Entities.Core.Item
                 case DAL.Enums.ItemEntityType.Water: return new Water(item);
                 case DAL.Enums.ItemEntityType.Object: return new Object(item);
                 case DAL.Enums.ItemEntityType.CarPart: return new CarPart(item);
+                case DAL.Enums.ItemEntityType.Smartphone: return new Smartphone(item);
                 //case DAL.Enums.ItemEntityType.WeaponClip:
                 //case DAL.Enums.ItemEntityType.Food:
                 default:

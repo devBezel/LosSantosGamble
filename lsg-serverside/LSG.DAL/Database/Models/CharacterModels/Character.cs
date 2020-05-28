@@ -144,6 +144,9 @@ namespace LSG.DAL.Database.Models.CharacterModels
             writer.Name("gamblePoints");
             writer.Value(GamblePoints);
 
+            writer.Name("jobType");
+            writer.Value((int)JobType);
+
             //writer.Name("vehicles");
             //writer.Value(JsonConvert.SerializeObject(Vehicles));
 

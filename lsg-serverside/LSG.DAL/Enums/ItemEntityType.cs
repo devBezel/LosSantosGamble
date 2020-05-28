@@ -14,6 +14,7 @@ namespace LSG.DAL.Enums
         Clothes,
         Water,
         Object,
-        CarPart
+        CarPart,
+        Smartphone
     }
 }

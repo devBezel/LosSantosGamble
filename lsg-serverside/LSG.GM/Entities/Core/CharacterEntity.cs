@@ -11,6 +11,7 @@ using LSG.DAL.Enums;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Economy.Base.Jobs;
 using LSG.GM.Economy.Jobs.Base.Junker;
+//using LSG.GM.Entities.Common.Smartphone;
 using LSG.GM.Entities.Core.Group;
 using LSG.GM.Entities.Core.Item;
 using LSG.GM.Entities.Core.Item.Scripts;
@@ -46,7 +47,6 @@ namespace LSG.GM.Entities.Core
         public bool IsDragged { get; set; } = false;
         public bool PendingOffer { get; set; } = false;
 
-
         public JobEntity CasualJob { get; set; }
         public JobVehicleEntity CasualJobVehicle { get; set; }
 
@@ -55,6 +55,11 @@ namespace LSG.GM.Entities.Core
 
         // Śmieciarz
         public TrashPointModel CurrentTrashPoint { get; set; }
+
+
+        //Telefon
+        public Smartphone CurrentSmartphone { get; set; }
+        public bool IsTalking { get; set; }
 
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
 

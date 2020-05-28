@@ -634,6 +634,74 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Shops");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneContactModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsAlarmNumber");
+
+                    b.Property<bool>("IsFavorite");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Notes");
+
+                    b.Property<int>("Number");
+
+                    b.Property<int>("PhoneItemId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhoneItemId");
+
+                    b.ToTable("SmartphoneContacts");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneMessageModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CellphoneId");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int>("GetterNumber");
+
+                    b.Property<bool>("IsRead");
+
+                    b.Property<string>("Message");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CellphoneId");
+
+                    b.ToTable("SmartphoneMessages");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneRecentCallModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CallNumber");
+
+                    b.Property<int>("CallTime");
+
+                    b.Property<DateTime>("CalledDate");
+
+                    b.Property<bool>("IsAnwser");
+
+                    b.Property<int>("PhoneItemId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhoneItemId");
+
+                    b.ToTable("SmartphoneRecentCalls");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
                 {
                     b.Property<int>("Id")
@@ -914,6 +982,30 @@ namespace LSG.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneContactModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.ItemModels.ItemModel", "PhoneItem")
+                        .WithMany("SmartphoneContacts")
+                        .HasForeignKey("PhoneItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneMessageModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.ItemModels.ItemModel", "Cellphone")
+                        .WithMany("SmartphoneMessages")
+                        .HasForeignKey("CellphoneId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneRecentCallModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.ItemModels.ItemModel", "PhoneItem")
+                        .WithMany("SmartphoneRecentCalls")
+                        .HasForeignKey("PhoneItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
@@ -936,7 +1028,7 @@ namespace LSG.DAL.Migrations
             modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseModel", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
-                        .WithMany()
+                        .WithMany("Warehouses")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

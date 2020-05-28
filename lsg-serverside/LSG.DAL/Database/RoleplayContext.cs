@@ -7,6 +7,7 @@ using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.ShopModels;
+using LSG.DAL.Database.Models.SmartphoneModels;
 using LSG.DAL.Database.Models.VehicleModels;
 using LSG.DAL.Database.Models.WarehouseModels;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,10 @@ namespace LSG.DAL.Database
         public DbSet<WarehouseOrderModel> WarehouseOrders { get; set; }
         public DbSet<WarehouseItemModel> WarehouseItems { get; set; }
 
+        public DbSet<SmartphoneContactModel> SmartphoneContacts { get; set; }
+        public DbSet<SmartphoneRecentCallModel> SmartphoneRecentCalls { get; set; }
+        public DbSet<SmartphoneMessageModel> SmartphoneMessages { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,6 +62,7 @@ namespace LSG.DAL.Database
                 .HasMany(group => group.Ranks)
                 .WithOne(rank => rank.Group)
                 .HasForeignKey(rank => rank.GroupId);
+
         }
 
     }

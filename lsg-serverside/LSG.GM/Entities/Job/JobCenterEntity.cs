@@ -22,7 +22,7 @@ namespace LSG.GM.Entities.Job
 
         public void Spawn()
         {
-            Colshape = Alt.CreateColShapeCylinder(new Position(JobCenterModel.Position.X, JobCenterModel.Position.Y, JobCenterModel.Position.Z - 0.9f), 2f, 2f);
+            Colshape = Alt.CreateColShapeCylinder(new Position(JobCenterModel.Position.X, JobCenterModel.Position.Y, JobCenterModel.Position.Z - 0.9f), 1f, 2f);
             Marker = new MarkerModel()
             {
                 Type = 1,

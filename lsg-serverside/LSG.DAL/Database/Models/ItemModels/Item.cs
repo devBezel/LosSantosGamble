@@ -3,6 +3,7 @@ using LSG.DAL.Database.Models.AccountModels;
 using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Database.Models.GroupModels;
+using LSG.DAL.Database.Models.SmartphoneModels;
 using LSG.DAL.Database.Models.VehicleModels;
 using LSG.DAL.Database.Models.WarehouseModels;
 using LSG.DAL.Enums;
@@ -43,6 +44,11 @@ namespace LSG.DAL.Database.Models.ItemModels
         public Vehicle VehicleUpgrade { get; set; }
 
         public bool ItemInUse { get; set; }
+
+        //For Telephone
+        public List<SmartphoneContactModel> SmartphoneContacts { get; set; }
+        public List<SmartphoneRecentCallModel> SmartphoneRecentCalls { get; set; }
+        public List<SmartphoneMessageModel> SmartphoneMessages { get; set; }
 
 
         public void OnWrite(IMValueWriter writer)

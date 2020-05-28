@@ -1,7 +1,9 @@
 ﻿using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using LSG.DAL.Enums;
 using LSG.GM.Entities;
+using LSG.GM.Entities.Core;
 using LSG.GM.Entities.Job;
 using LSG.GM.Extensions;
 using LSG.GM.Helpers;
@@ -15,11 +17,6 @@ namespace LSG.GM.Economy.Jobs
 {
     public class JobCenterScript : IScript
     {
-
-        public JobCenterScript()
-        {
-
-        }
 
 
         [ScriptEvent(ScriptEventType.ColShape)]
@@ -51,12 +48,22 @@ namespace LSG.GM.Economy.Jobs
             {
                 player.GetData("current:job-center", out JobCenterEntity jobCenterEntity);
 
-                player.Emit("job-center:showWindow", jobCenterEntity.JobCenterModel.Jobs);
+                player.Emit("job-center:showWindow", (int)player.GetAccountEntity().characterEntity.DbModel.JobType, jobCenterEntity.JobCenterModel.Jobs);
             } 
             else
             {
                 player.SendChatMessageError("Musisz być w kółku, aby otworzyć menu pracy");
             }
+        }
+
+        [ClientEvent("job-center:setJob")]
+        public void SetJob(IPlayer player, int jobType)
+        {
+            CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
+            if (characterEntity == null) return;
+
+            characterEntity.DbModel.JobType = (JobType)jobType;
+            player.SendChatMessageInfo("Twoja praca została zmieniona z powodzeniem!");
         }
     }
 }

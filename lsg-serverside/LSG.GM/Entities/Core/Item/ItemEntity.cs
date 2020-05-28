@@ -18,6 +18,7 @@ namespace LSG.GM.Entities.Core.Item
         public string Name => DbModel.Name;
         public ItemEntityType ItemEntityType => DbModel.ItemEntityType;
 
+
         protected ItemModel DbModel { get; }
         protected ItemEntity(ItemModel item)
         {

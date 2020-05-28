@@ -220,6 +220,7 @@ namespace LSG.GM.Economy.Groups
             }
         }
 
+
         [Command("gzapros")]
         public void InvitePlayerToGroup(IPlayer sender, int groupSlot, int getterId)
         {
