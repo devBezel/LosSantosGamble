@@ -53,6 +53,7 @@ namespace LSG.GM.Entities
 
         private static readonly List<JobCenterEntity> JobCenters = new List<JobCenterEntity>();
         private static readonly List<JobEntity> Jobs = new List<JobEntity>();
+        private static readonly List<Smartphone> CurrentSmartphones = new List<Smartphone>();
 
         private static readonly List<DrawTextModel> VehicleTrunkDrawsText = new List<DrawTextModel>();
         
@@ -178,6 +179,28 @@ namespace LSG.GM.Entities
         public static WarehouseOrderEntity GetWarehouseOrderById(int id) => WarehouseOrders.SingleOrDefault(o => o.DbModel.Id == id);
 
         public static void Add(JobCenterEntity jobCenterEntity) => JobCenters.Add(jobCenterEntity);
+
+        public static void Add(Smartphone smartphone) => CurrentSmartphones.Add(smartphone);
+        public static void Remove(Smartphone smartphone) => CurrentSmartphones.Remove(smartphone);
+
+        public static bool IsSmartphoneActive(int number)
+        {
+            Smartphone smartphone = CurrentSmartphones.FirstOrDefault(x => x.SmartphoneNumber == number);
+            return smartphone == null ? false : true;
+        }
+
+        //TODO: Do naprawy
+        public static CharacterEntity GetCharacterBySmartphoneNumber(int number)
+        {
+            if(IsSmartphoneActive(number))
+            {
+                CharacterEntity characterEntity = Accounts.FirstOrDefault(x => x.characterEntity.CurrentSmartphone != null && x.characterEntity.CurrentSmartphone.SmartphoneNumber == number).characterEntity;
+
+                return characterEntity == null ? null : characterEntity;
+            }
+
+            return null;
+        }
 
 
         public static List<WarehouseOrderEntity> GetAllWarehouseOrders()

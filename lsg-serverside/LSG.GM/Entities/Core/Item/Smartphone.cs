@@ -1,11 +1,14 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using LSG.DAL.Database;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.SmartphoneModels;
 using LSG.DAL.Enums;
 using LSG.DAL.UnitOfWork;
+using LSG.GM.Entities.Common.SmartphoneOpt;
 using LSG.GM.Extensions;
 using LSG.GM.Utilities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,30 +30,27 @@ namespace LSG.GM.Entities.Core.Item
         //public List<SmartphoneMessageModel> SmartphoneMessages => DbModel.SmartphoneMessages;
         public List<SmartphoneMessageModel> SmartphoneMessages { get; set; }
 
+        public bool IsTalking { get; set; }
+
+        public SmartphoneIncomingCallModel IncomingCall { get; set; }
+        public SmartphoneCall CurrentCall { get; set; }
 
         public Smartphone(ItemModel item) : base(item)
         {
             SmartphoneMessages = new List<SmartphoneMessageModel>();
 
-            RoleplayContext ctx = Singleton.GetDatabaseInstance();
-            using (UnitOfWork unit = new UnitOfWork(ctx))
-            {
-                Task.Run(async () =>
-                {
-                    SmartphoneMessages = await unit.SmartphoneMessageRepository.GetAllMessagesFromNumber(SmartphoneNumber);
+            SmartphoneMessages = Singleton.GetDatabaseInstance().SmartphoneMessages.Include(c => c.Cellphone).Where(x => x.GetterNumber == SmartphoneNumber).ToList();
 
-                    foreach (SmartphoneMessageModel message in DbModel.SmartphoneMessages)
+            foreach (SmartphoneMessageModel message in DbModel.SmartphoneMessages)
+            {
+                if (message != null)
+                {
+                    if (!SmartphoneMessages.Any(x => x.Id == message.Id))
                     {
-                        if (message != null)
-                        {
-                            if (!SmartphoneMessages.Any(x => x.Id == message.Id))
-                            {
-                                SmartphoneMessages.Add(message);
-                            }
-                            
-                        }
+                        SmartphoneMessages.Add(message);
                     }
-                });
+
+                }
             }
         }
 
@@ -69,6 +69,8 @@ namespace LSG.GM.Entities.Core.Item
 
                 sender.ItemsInUse.Remove(this);
                 sender.CurrentSmartphone = null;
+
+                EntityHelper.Remove(this);
             }
             else
             {
@@ -78,7 +80,40 @@ namespace LSG.GM.Entities.Core.Item
                 sender.ItemsInUse.Add(this);
                 sender.CurrentSmartphone = this;
 
+                EntityHelper.Add(this);
                 // TODO: wysylanie wszystkich danych
+            }
+        }
+
+
+        public void SendMessage(CharacterEntity sender, int smartphoneId, int getterNumber, string message)
+        {
+            SmartphoneMessageModel smartphoneMessage = new SmartphoneMessageModel()
+            {
+                GetterNumber = getterNumber,
+                Cellphone = sender.CurrentSmartphone.DbModel,
+                CellphoneId = smartphoneId,
+                Message = message,
+                IsRead = false,
+                Date = DateTime.Now
+            };
+
+            SmartphoneMessages.Add(smartphoneMessage);
+
+            CharacterEntity getter = EntityHelper.GetCharacterBySmartphoneNumber(getterNumber);
+            if(getter != null)
+            {
+                if(getter.CurrentSmartphone != null)
+                {
+                    getter.CurrentSmartphone.SmartphoneMessages.Add(smartphoneMessage);
+                }
+            }
+
+            //Save();
+            RoleplayContext ctx = Singleton.GetDatabaseInstance();
+            using (UnitOfWork unit = new UnitOfWork(ctx))
+            {
+                unit.SmartphoneMessageRepository.Add(smartphoneMessage);
             }
         }
     }

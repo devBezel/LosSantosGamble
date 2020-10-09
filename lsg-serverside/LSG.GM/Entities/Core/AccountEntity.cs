@@ -135,6 +135,10 @@ namespace LSG.GM.Entities.Core
             characterEntity.SpentTimer.Stop();
             characterEntity.SpentTimer.Dispose();
 
+            if(characterEntity.CurrentSmartphone != null)
+            {
+                EntityHelper.Remove(characterEntity.CurrentSmartphone);
+            }
             IsLogged = false;
             characterEntity.Save();
             Save();

@@ -59,7 +59,6 @@ namespace LSG.GM.Entities.Core
 
         //Telefon
         public Smartphone CurrentSmartphone { get; set; }
-        public bool IsTalking { get; set; }
 
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
 
