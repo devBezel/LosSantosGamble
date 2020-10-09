@@ -31,8 +31,11 @@ namespace LSG.DAL.Database.Models.VehicleModels
         public bool State { get; set; }
         public int Health { get; set; }
         //public int Dimension { get; set; }
-
+        [InverseProperty("Vehicle")]
         public List<ItemModel> ItemsInVehicle { get; set; }
+
+        [InverseProperty("VehicleUpgrade")]
+        public List<ItemModel> VehicleUpgrades { get; set; }
 
 
         public void OnWrite(IMValueWriter writer)

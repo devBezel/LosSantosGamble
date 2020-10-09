@@ -9,7 +9,7 @@ using System.Drawing;
 using LSG.GM.Entities.Core;
 using LSG.GM.Entities;
 using System.Linq;
-using VehicleDb = LSG.DAL.Database.Models.VehicleModels.Vehicle;
+using VehicleDataModel = LSG.DAL.Database.Models.VehicleModels.Vehicle;
 using LSG.GM.Extensions;
 using LSG.GM.Enums;
 using AltV.Net.Enums;
@@ -21,7 +21,7 @@ namespace LSG.GM.Core.Admin
         [Command("createveh")]
         public void CreateGlobalVehicleCMD(IPlayer sender, int id, VehicleModel model)
         {
-            if (!sender.GetAccountEntity().HasRank((int)EAdmin.Administrator))
+            if (!sender.GetAccountEntity().HasRank((int)EAdmin.CommunityManager))
                 return;
 
             if (!sender.GetAccountEntity().OnAdminDuty)
@@ -38,8 +38,27 @@ namespace LSG.GM.Core.Admin
 
             if (model == 0) return;
 
-            VehicleEntity vehicle = VehicleEntity.Create(sender.Position, model, new Color(), new Color(), getter.GetAccountEntity().characterEntity.DbModel);
-            vehicle.Spawn(getter);
+            VehicleEntity vehicle = new VehicleEntity(new VehicleDataModel()
+            {
+                Id = 600,
+                Model = model.ToString(),
+                Owner = null,
+                Group = null,
+                PosX = sender.Position.X,
+                PosY = sender.Position.Y,
+                PosZ = sender.Position.Z,
+                RotPitch = sender.Rotation.Pitch,
+                RotRoll = sender.Rotation.Roll,
+                RotYaw = sender.Rotation.Yaw,
+                R = 255,
+                G = 255,
+                B = 255,
+                State = true,
+                Health = 1000
+            });
+
+            vehicle.Create();
+            vehicle.Spawn();
         }
 
 
@@ -56,6 +75,17 @@ namespace LSG.GM.Core.Admin
             
             player.Position = vehicleEntity.GameVehicle.Position;
             player.SendSuccessNotify(null, $"Przeteleportowałeś się do pojazdu o ID: {vehicleEntity.DbModel.Id}");
+        }
+
+        [Command("atuning")]
+        public void AdminTuningVehicleTemporary(IPlayer player, int category, int index)
+        {
+            IVehicle vehicle = player.Vehicle;
+            if (vehicle == null)
+                return;
+
+            vehicle.ModKit = 1;
+            vehicle.SetMod((byte)category, (byte)index);
         }
     }
 }

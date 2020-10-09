@@ -10,7 +10,7 @@ namespace LSG.GM.Core.VoiceChat
 {
     public class VoiceChatScript : IScript
     {
-        IVoiceChannel GlobalVoice = Alt.CreateVoiceChannel(true, 50);
+        IVoiceChannel GlobalVoice = Alt.CreateVoiceChannel(true, 20);
         IVoiceChannel MonoVoice = Alt.CreateVoiceChannel(false, 0);
 
         //public VoiceChatScript()
@@ -22,6 +22,12 @@ namespace LSG.GM.Core.VoiceChat
         public async Task OnPlayerConnectAsync(IPlayer player, string reason) => await AltAsync.Do(() =>
         {
             GlobalVoice.AddPlayer(player);
+        });
+
+        [ScriptEvent(ScriptEventType.PlayerDisconnect)]
+        public async Task OnPlayerDisconenctAsync(IPlayer player, string reason) => await AltAsync.Do(() =>
+        {
+            GlobalVoice.RemovePlayer(player);
         });
     }
 }

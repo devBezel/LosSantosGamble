@@ -70,7 +70,7 @@ namespace LSG.GM.Entities.Common.Shop
             int itemCountCalculate = itemObject.Count * countToBuy;
             int itemCostCalculate = itemObject.Cost * countToBuy;
 
-            if(!characterEntity.HasEnoughMoney(itemCostCalculate))
+            if(!characterEntity.HasEnoughMoney(itemCostCalculate, false))
             {
                 player.SendErrorNotify("Nie posiadasz tylu pieniędzy", "Udaj się do banku i wypłać pieniądze, aby móc kupić ten przedmiot");
                 return;
@@ -88,7 +88,7 @@ namespace LSG.GM.Entities.Common.Shop
                 CharacterId = characterEntity.DbModel.Id
             };
 
-            characterEntity.RemoveMoney(itemCostCalculate);
+            characterEntity.RemoveMoney(itemCostCalculate, false);
             player.SendSuccessNotify($"Kupiłeś {itemCountCalculate}x {itemObject.Name.ToLower()}", "Zakupione itemy znajdują się w twoim ekwipunku");
 
             ItemEntity itemEntity = InventoryScript.ItemFactory.Create(itemToCreate);

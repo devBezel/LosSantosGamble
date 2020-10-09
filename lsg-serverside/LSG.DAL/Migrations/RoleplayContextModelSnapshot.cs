@@ -241,6 +241,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float>("DirtyMoney");
 
+                    b.Property<float>("GamblePoints");
+
                     b.Property<bool>("Gender");
 
                     b.Property<float>("Health");
@@ -251,9 +253,17 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float>("Hunger");
 
+                    b.Property<int>("JobEarned");
+
+                    b.Property<DateTime>("JobEnded");
+
+                    b.Property<int>("JobType");
+
                     b.Property<float>("Money");
 
                     b.Property<string>("Name");
+
+                    b.Property<bool>("Online");
 
                     b.Property<string>("PicUrl");
 
@@ -263,11 +273,15 @@ namespace LSG.DAL.Migrations
 
                     b.Property<float>("PosZ");
 
+                    b.Property<DateTime>("RecentlyPlayed");
+
                     b.Property<float>("Rotation");
 
                     b.Property<string>("Surname");
 
                     b.Property<float>("Thirsty");
+
+                    b.Property<int>("TimeSpent");
 
                     b.Property<float>("Weight");
 
@@ -448,6 +462,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int>("CreatorId");
 
+                    b.Property<int>("DefaultRankId");
+
                     b.Property<int>("Grant");
 
                     b.Property<int>("GroupType");
@@ -476,7 +492,7 @@ namespace LSG.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("DefaultForGroupId");
+                    b.Property<int?>("DefaultForGroupId");
 
                     b.Property<int>("GroupId");
 
@@ -488,7 +504,8 @@ namespace LSG.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DefaultForGroupId");
+                    b.HasIndex("DefaultForGroupId")
+                        .IsUnique();
 
                     b.HasIndex("GroupId");
 
@@ -552,6 +569,8 @@ namespace LSG.DAL.Migrations
 
                     b.Property<int?>("VehicleId");
 
+                    b.Property<int?>("VehicleUpgradeId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BuildingId");
@@ -561,6 +580,8 @@ namespace LSG.DAL.Migrations
                     b.HasIndex("CreatorId");
 
                     b.HasIndex("VehicleId");
+
+                    b.HasIndex("VehicleUpgradeId");
 
                     b.ToTable("Items");
                 });
@@ -613,6 +634,74 @@ namespace LSG.DAL.Migrations
                     b.ToTable("Shops");
                 });
 
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneContactModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsAlarmNumber");
+
+                    b.Property<bool>("IsFavorite");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Notes");
+
+                    b.Property<int>("Number");
+
+                    b.Property<int>("PhoneItemId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhoneItemId");
+
+                    b.ToTable("SmartphoneContacts");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneMessageModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CellphoneId");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int>("GetterNumber");
+
+                    b.Property<bool>("IsRead");
+
+                    b.Property<string>("Message");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CellphoneId");
+
+                    b.ToTable("SmartphoneMessages");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneRecentCallModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CallNumber");
+
+                    b.Property<int>("CallTime");
+
+                    b.Property<DateTime>("CalledDate");
+
+                    b.Property<bool>("IsAnwser");
+
+                    b.Property<int>("PhoneItemId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhoneItemId");
+
+                    b.ToTable("SmartphoneRecentCalls");
+                });
+
             modelBuilder.Entity("LSG.DAL.Database.Models.VehicleModels.Vehicle", b =>
                 {
                     b.Property<int>("Id")
@@ -653,6 +742,84 @@ namespace LSG.DAL.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Vehicles");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseItemModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Cost");
+
+                    b.Property<int>("Count");
+
+                    b.Property<double?>("FirstParameter");
+
+                    b.Property<double?>("FourthParameter");
+
+                    b.Property<int>("ItemEntityType");
+
+                    b.Property<string>("Name");
+
+                    b.Property<double?>("SecondParameter");
+
+                    b.Property<double?>("ThirdParameter");
+
+                    b.Property<int>("WarehouseId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("WarehouseItems");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("GroupId");
+
+                    b.Property<float>("PosX");
+
+                    b.Property<float>("PosY");
+
+                    b.Property<float>("PosZ");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("Warehouses");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseOrderModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Count");
+
+                    b.Property<double?>("FirstParameter");
+
+                    b.Property<double?>("FourthParameter");
+
+                    b.Property<int>("ItemEntityType");
+
+                    b.Property<string>("Name");
+
+                    b.Property<double?>("SecondParameter");
+
+                    b.Property<double?>("ThirdParameter");
+
+                    b.Property<int>("WarehouseId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("WarehouseOrders");
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.AccountModels.AccountPremium", b =>
@@ -757,12 +924,11 @@ namespace LSG.DAL.Migrations
             modelBuilder.Entity("LSG.DAL.Database.Models.GroupModels.GroupRankModel", b =>
                 {
                     b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "DefaultForGroup")
-                        .WithMany()
-                        .HasForeignKey("DefaultForGroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithOne("DefaultRank")
+                        .HasForeignKey("LSG.DAL.Database.Models.GroupModels.GroupRankModel", "DefaultForGroupId");
 
                     b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
-                        .WithMany()
+                        .WithMany("Ranks")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -802,6 +968,10 @@ namespace LSG.DAL.Migrations
                     b.HasOne("LSG.DAL.Database.Models.VehicleModels.Vehicle", "Vehicle")
                         .WithMany("ItemsInVehicle")
                         .HasForeignKey("VehicleId");
+
+                    b.HasOne("LSG.DAL.Database.Models.VehicleModels.Vehicle", "VehicleUpgrade")
+                        .WithMany("VehicleUpgrades")
+                        .HasForeignKey("VehicleUpgradeId");
                 });
 
             modelBuilder.Entity("LSG.DAL.Database.Models.ShopModels.ShopAssortmentModel", b =>
@@ -809,6 +979,30 @@ namespace LSG.DAL.Migrations
                     b.HasOne("LSG.DAL.Database.Models.ShopModels.ShopModel", "Shop")
                         .WithMany("ShopAssortments")
                         .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneContactModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.ItemModels.ItemModel", "PhoneItem")
+                        .WithMany("SmartphoneContacts")
+                        .HasForeignKey("PhoneItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneMessageModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.ItemModels.ItemModel", "Cellphone")
+                        .WithMany("SmartphoneMessages")
+                        .HasForeignKey("CellphoneId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.SmartphoneModels.SmartphoneRecentCallModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.ItemModels.ItemModel", "PhoneItem")
+                        .WithMany("SmartphoneRecentCalls")
+                        .HasForeignKey("PhoneItemId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -821,6 +1015,30 @@ namespace LSG.DAL.Migrations
                     b.HasOne("LSG.DAL.Database.Models.CharacterModels.Character", "Owner")
                         .WithMany("Vehicles")
                         .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseItemModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.WarehouseModels.WarehouseModel", "Warehouse")
+                        .WithMany("Items")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.GroupModels.GroupModel", "Group")
+                        .WithMany("Warehouses")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LSG.DAL.Database.Models.WarehouseModels.WarehouseOrderModel", b =>
+                {
+                    b.HasOne("LSG.DAL.Database.Models.WarehouseModels.WarehouseModel", "Warehouse")
+                        .WithMany("WarehouseOrders")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

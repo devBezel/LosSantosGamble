@@ -17,5 +17,7 @@ namespace LSG.DAL.UnitOfWork
         IItemRepository ItemRepository { get; set; }
         IShopRepository ShopRepository { get; set; }
         IGroupRepository GroupRepository { get; set; }
+        IWarehouseRepository WarehouseRepository { get; set; }
+        ISmartphoneMessageRepository SmartphoneMessageRepository { get; set; }
     }
 }

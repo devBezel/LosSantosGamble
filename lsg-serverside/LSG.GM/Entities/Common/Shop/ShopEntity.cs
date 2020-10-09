@@ -81,7 +81,7 @@ namespace LSG.GM.Entities.Common.Shop
             ColShape.SetData("shop:data", this);
         });
 
-        public static async Task LoadShopAsync(UnitOfWork unit) => await AltAsync.Do(async () =>
+        public static async Task LoadShopAsync(UnitOfWork unit)
         {
             foreach (ShopModel shop in await unit.ShopRepository.GetAll())
             {
@@ -89,6 +89,6 @@ namespace LSG.GM.Entities.Common.Shop
                 ShopEntity shopEntity = new ShopEntity(shop);
                 await shopEntity.Spawn();
             }
-        });
+        }
     }
 }

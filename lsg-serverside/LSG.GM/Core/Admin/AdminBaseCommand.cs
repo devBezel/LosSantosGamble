@@ -97,7 +97,7 @@ namespace LSG.GM.Core.Admin
             {
                 sender.SendErrorNotify(null, $"Gracz o ID {id} nie jest w grze");
             }
-            getter.GetAccountEntity().characterEntity.AddMoney(amount);
+            getter.GetAccountEntity().characterEntity.AddMoney(amount, false);
             //getter.AddMoney(amount);
 
             sender.SendSuccessNotify(null, $"Nadałeś graczowi ID: {id} {amount}$");

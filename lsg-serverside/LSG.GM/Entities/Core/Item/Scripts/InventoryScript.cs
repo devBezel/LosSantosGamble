@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Resources.Chat.Api;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Enums;
+using LSG.GM.Economy.Offers;
 using LSG.GM.Enums;
 using LSG.GM.Extensions;
 using Newtonsoft.Json;
@@ -30,7 +31,7 @@ namespace LSG.GM.Entities.Core.Item.Scripts
         public void InventoryGetItems(IPlayer player)
         {
             List<ItemModel> items = player.GetAccountEntity().characterEntity.DbModel.Items.ToList();
-            List<ItemEntity> usedItems = player.GetAccountEntity().characterEntity.ItemsInUse.ToList();
+            //List<ItemEntity> usedItems = player.GetAccountEntity().characterEntity.ItemsInUse.ToList();
 
             //TODO: Wywala nulla przez co crashuje serwer, do naprawy
             player.Emit("inventory:items", items);
@@ -94,52 +95,6 @@ namespace LSG.GM.Entities.Core.Item.Scripts
             itemEntity.Create(getter.GetAccountEntity().characterEntity);
         }
 
-        [ClientEvent("inventory:offerPlayerItem")]
-        public void InventoryOfferPlayerItem(IPlayer sender, string itemModelJson, IPlayer getter, int costItem)
-        {
-            ItemModel itemModel = JsonConvert.DeserializeObject<ItemModel>(itemModelJson);
-            Alt.Log($"itemModel: {itemModel.Name}");
-            //IPlayer getter = (IPlayer)args[1];
-            //int costItem = Convert.ToInt32(args[2]);
-
-            if (getter == null) return;
-
-            if(sender == getter)
-            {
-                sender.SendErrorNotify("Wystąpił bląd", "Nie możesz zaoferować przedmiotu sam sobie");
-                return;
-            }
-
-            getter.Emit("inventory:sendRequestOffer", itemModel, costItem, sender.GetAccountEntity().ServerID);
-        }
-
-        [ClientEvent("inventory:offerRequestResult")]
-        public void InventoryOfferRequestResult(IPlayer getter, string itemModelJson, int costItem, int senderID, bool accept)
-        {
-            ItemModel itemModel = JsonConvert.DeserializeObject<ItemModel>(itemModelJson);
-            //int costItem = Convert.ToInt32(args[1]);
-            //int senderID = Convert.ToInt32(args[2]);
-            //bool accept = (bool)args[3];
-
-            IPlayer sender = PlayerExtenstion.GetPlayerById(senderID);
-
-            if (sender == null) 
-                return;
-
-            if(!accept)
-            {
-                sender.SendWarningNotify("Gracz odrzucił ofertę", "Twoja oferta została odrzucona");
-                return;
-            }
-
-            CharacterEntity senderEntity = sender.GetAccountEntity().characterEntity;
-            CharacterEntity getterEntity = getter.GetAccountEntity().characterEntity;
-
-
-            ItemEntity itemEntity = ItemFactory.Create(itemModel);
-
-            itemEntity.Offer(senderEntity, getterEntity, costItem);
-        }
 
     }
 }

@@ -22,7 +22,11 @@ namespace LSG.DAL.Repositories
         {
             List<GroupModel> groups = await _context.Groups
                 .Include(w => w.Workers)
+                .ThenInclude(c => c.Character)
                 .Include(v => v.Vehicles)
+                .Include(r => r.Ranks)
+                .Include(w => w.Workers)
+                .ThenInclude(r => r.GroupRank)
                 .ToListAsync();
 
             return groups;

@@ -24,6 +24,8 @@ namespace LSG.DAL.UnitOfWork
             ItemRepository = new ItemRepository(_context);
             ShopRepository = new ShopRepository(_context);
             GroupRepository = new GroupRepository(_context);
+            WarehouseRepository = new WarehouseRepository(_context);
+            SmartphoneMessageRepository = new SmartphoneMessageRepository(_context);
         }
         public IAccountRepository AccountRepository { get; set; }
         public ICharacterRepository CharacterRepository { get; set; }
@@ -39,6 +41,9 @@ namespace LSG.DAL.UnitOfWork
 
         public IGroupRepository GroupRepository { get; set; }
 
+        public IWarehouseRepository WarehouseRepository { get; set; }
+
+        public ISmartphoneMessageRepository SmartphoneMessageRepository { get; set; }
 
         public void Dispose()
         {

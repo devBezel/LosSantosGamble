@@ -7,6 +7,7 @@ namespace LSG.DAL.Enums
     public enum GroupType
     {
         Police,
-
+        Paramedic,
+        Mechanic
     }
 }

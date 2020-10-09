@@ -7,7 +7,9 @@ using LSG.DAL.Database.Models.CharacterModels;
 using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.ShopModels;
+using LSG.DAL.Database.Models.SmartphoneModels;
 using LSG.DAL.Database.Models.VehicleModels;
+using LSG.DAL.Database.Models.WarehouseModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
@@ -39,6 +41,29 @@ namespace LSG.DAL.Database
         public DbSet<GroupModel> Groups { get; set; }
         public DbSet<GroupWorkerModel> GroupWorkers { get; set; }
         public DbSet<GroupRankModel> GroupRanks { get; set; }
+        public DbSet<WarehouseModel> Warehouses { get; set; }
+        public DbSet<WarehouseOrderModel> WarehouseOrders { get; set; }
+        public DbSet<WarehouseItemModel> WarehouseItems { get; set; }
+
+        public DbSet<SmartphoneContactModel> SmartphoneContacts { get; set; }
+        public DbSet<SmartphoneRecentCallModel> SmartphoneRecentCalls { get; set; }
+        public DbSet<SmartphoneMessageModel> SmartphoneMessages { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<GroupModel>()
+                .HasOne(group => group.DefaultRank)
+                .WithOne(rank => rank.DefaultForGroup)
+                .HasForeignKey<GroupRankModel>(groupRank => groupRank.DefaultForGroupId);
+
+
+            modelBuilder.Entity<GroupModel>()
+                .HasMany(group => group.Ranks)
+                .WithOne(rank => rank.Group)
+                .HasForeignKey(rank => rank.GroupId);
+
+        }
 
     }
 }

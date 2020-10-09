@@ -18,41 +18,48 @@ using Newtonsoft.Json;
 using System.Linq;
 //using LSG.GM.Entities.Admin;
 using LSG.GM.Extensions;
+using LSG.DAL.Database.Models.GroupModels;
+using LSG.GM.Entities.Core.Group;
+using LSG.DAL.Database.Models.ItemModels;
+using LSG.DAL.Enums;
 
 namespace LSG.GM.Entities.Core.Vehicle
 {
-    public class VehicleEntity : GameEntity
+    public class VehicleEntity  /*GameEntity*/
     {
         public IVehicle GameVehicle { get; set; }
         public VehicleDb DbModel { get; set; }
-        private bool _nonDbVehicle;
+        private bool _nonDbVehicle { get; set; }
 
         public bool TrunkOpen { get; set; } = false;
+        public GroupEntity GroupOwner { get; set; }
 
-        public VehicleEntity(VehicleDb model)
+        public VehicleEntity(VehicleDb model, bool nonDbVehicle = false)
         {
             DbModel = model;
+            _nonDbVehicle = nonDbVehicle;
         }
 
-        public static VehicleEntity Create(Position position, VehicleModel model, Color color, Color sedondaryColor, Character character)
+        public VehicleEntity Create()
         {
             VehicleDb vehicle = new VehicleDb()
             {
-                Owner = character,
-                Model = model.ToString(),
-                PosX = position.X,
-                PosY = position.Y,
-                PosZ = position.Z,
-                R = color.R,
-                G = color.G,
-                B = color.B,
+                Owner = DbModel.Owner,
+                Model = DbModel.Model,
+                PosX = DbModel.PosX,
+                PosY = DbModel.PosY,
+                PosZ = DbModel.PosZ,
+                R = DbModel.R,
+                G = DbModel.G,
+                B = DbModel.B,
+                State = false,
                 Health = 1000
             };
 
-            bool nonDbVehicle = character == null;
+           
 
 
-            if(!nonDbVehicle)
+            if (!_nonDbVehicle)
             {
                 RoleplayContext ctx = Singleton.GetDatabaseInstance();
                 using(UnitOfWork unitOfWork = new UnitOfWork(ctx))
@@ -62,11 +69,16 @@ namespace LSG.GM.Entities.Core.Vehicle
             }
 
 
-            return new VehicleEntity(vehicle)
-            {
-                _nonDbVehicle = nonDbVehicle
-            };
+            return new VehicleEntity(vehicle, _nonDbVehicle);
 
+        }
+
+        public bool IsGroupVehicle
+        {
+            get
+            {
+                return DbModel.GroupId != null ? true : false;
+            }
         }
 
         public void ChangeSpawnPosition()
@@ -86,6 +98,9 @@ namespace LSG.GM.Entities.Core.Vehicle
 
         public void Save()
         {
+
+            if (_nonDbVehicle) return;
+
             Alt.Log("Zapisuje");
             DbModel.Health = GameVehicle.EngineHealth;
             DbModel.PosX = GameVehicle.Position.X;
@@ -101,7 +116,7 @@ namespace LSG.GM.Entities.Core.Vehicle
             DbModel.G = GameVehicle.PrimaryColorRgb.G;
             DbModel.B = GameVehicle.PrimaryColorRgb.B;
 
-            if (_nonDbVehicle) return;
+            
 
             RoleplayContext ctx = Singleton.GetDatabaseInstance();
             using (UnitOfWork unitOfWork = new UnitOfWork(ctx))
@@ -120,28 +135,48 @@ namespace LSG.GM.Entities.Core.Vehicle
             }
         }
 
-        public override void Dispose()
+        public void Dispose()
         {
             if (!_nonDbVehicle) Save();
 
-            GameVehicle.Remove();
-        }
-        
-        public override void Spawn(IPlayer player)
-        {
-            IEnumerable<IVehicle> veh = Alt.GetAllVehicles().Where(v => v.GetData("vehicle:data", out VehicleEntity vehicleData) && vehicleData.DbModel.Owner.Id == player.GetAccountEntity().characterEntity.DbModel.Id);
-            GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(DbModel.RotPitch, DbModel.RotPitch, DbModel.RotYaw));
 
-            GameVehicle.PrimaryColorRgb = new Rgba((byte)DbModel.R, (byte)DbModel.G, (byte)DbModel.B, 1);
-            GameVehicle.SetWheels(1, 2);
-            GameVehicle.NumberplateText = $"LS {DbModel.Id}";
+            GameVehicle.Remove();
+
+        }
+
+        public void Spawn()
+        {
+
+            GameVehicle = Alt.CreateVehicle(DbModel.Model.ToString(), new Position(DbModel.PosX, DbModel.PosY, DbModel.PosZ), new Rotation(DbModel.RotPitch, DbModel.RotPitch, DbModel.RotYaw));
             GameVehicle.EngineOn = false;
             GameVehicle.ManualEngineControl = true;
+            GameVehicle.ModKit = 1;
+
+           
+
+
+            GameVehicle.PrimaryColorRgb = new Rgba((byte)DbModel.R, (byte)DbModel.G, (byte)DbModel.B, 1);
+            GameVehicle.NumberplateText = $"LS {DbModel.Id}";
 
             GameVehicle.SetData("vehicle:data", this);
             GameVehicle.SetData("vehicle:id", DbModel.Id);
-            GameVehicle.SetData("vehicle:incrementId", veh.Count() + 1);
             GameVehicle.SetSyncedMetaData("vehicle:syncedData", DbModel);
+
+            if (_nonDbVehicle) return;
+
+            foreach (ItemModel upgrade in DbModel.VehicleUpgrades)
+            {
+                if((TuningType)upgrade.FirstParameter == TuningType.Wheels)
+                {
+                    GameVehicle.SetWheels((byte)upgrade.SecondParameter, (byte)upgrade.ThirdParameter);
+                }
+                else
+                {
+                    GameVehicle.SetMod((VehicleModType)upgrade.SecondParameter, (byte)upgrade.ThirdParameter);
+                }
+                
+            }
+
 
             //Save();
         }

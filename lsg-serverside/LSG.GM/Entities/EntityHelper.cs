@@ -7,6 +7,8 @@ using LSG.DAL.Database.Models.BankModels;
 using LSG.DAL.Database.Models.BuildingModels;
 using LSG.DAL.Database.Models.BusModels;
 using LSG.DAL.Database.Models.ShopModels;
+using LSG.DAL.Database.Models.WarehouseModels;
+using LSG.DAL.Enums;
 using LSG.DAL.UnitOfWork;
 using LSG.GM.Core.Streamers.ObjectStreamer;
 using LSG.GM.Entities.Common.Atm;
@@ -17,6 +19,8 @@ using LSG.GM.Entities.Core.Buidling;
 using LSG.GM.Entities.Core.Group;
 using LSG.GM.Entities.Core.Item;
 using LSG.GM.Entities.Core.Vehicle;
+using LSG.GM.Entities.Core.Warehouse;
+using LSG.GM.Entities.Job;
 using LSG.GM.Helpers;
 using LSG.GM.Helpers.Models;
 using LSG.GM.Utilities;
@@ -42,8 +46,14 @@ namespace LSG.GM.Entities
         private static readonly List<BuildingEntity> Buildings = new List<BuildingEntity>();
         private static readonly List<ShopEntity> Shops = new List<ShopEntity>();
         private static readonly List<GroupEntity> Groups = new List<GroupEntity>();
+        private static readonly List<WarehouseEntity> Warehouses = new List<WarehouseEntity>();
+        private static readonly List<WarehouseOrderEntity> WarehouseOrders = new List<WarehouseOrderEntity>();
 
         private static readonly List<ItemInWorldModel> ItemInWorld = new List<ItemInWorldModel>();
+
+        private static readonly List<JobCenterEntity> JobCenters = new List<JobCenterEntity>();
+        private static readonly List<JobEntity> Jobs = new List<JobEntity>();
+        private static readonly List<Smartphone> CurrentSmartphones = new List<Smartphone>();
 
         private static readonly List<DrawTextModel> VehicleTrunkDrawsText = new List<DrawTextModel>();
         
@@ -72,6 +82,19 @@ namespace LSG.GM.Entities
 
         }
 
+        public static bool AccountLogged(int id)
+        {
+            AccountEntity account = Accounts.Find(x => x.DbModel.Id == id);
+            if (account == null)
+            {
+                return false;
+            }
+            else
+            {
+                return account.IsLogged;
+            }
+        }
+
         public static void Add(AtmEntity atmEntity)
         {
             if (Atms.Any(a => a.DbModel.Id == atmEntity.DbModel.Id)) return;
@@ -92,7 +115,11 @@ namespace LSG.GM.Entities
         public static void Add(GroupEntity groupEntity) => Groups.Add(groupEntity);
 
         public static void Add(DrawTextModel drawTextModel) => VehicleTrunkDrawsText.Add(drawTextModel);
-        public static void Remove(DrawTextModel drawTextModel) => VehicleTrunkDrawsText.Remove(drawTextModel);
+        public static void RemoveVehicleTrunkDrawText(string uniqueID)
+        {
+            DrawTextModel trunkDrawTextToRemove = VehicleTrunkDrawsText.Find(x => x.UniqueID == uniqueID);
+            VehicleTrunkDrawsText.Remove(trunkDrawTextToRemove);
+        }
 
         public static void Add(DynamicObject dynamicObject) => WorldDynamicObjects.Add(dynamicObject);
         public static void Remove(DynamicObject dynamicObject) => WorldDynamicObjects.Remove(dynamicObject);
@@ -102,6 +129,11 @@ namespace LSG.GM.Entities
 
             return dynamicObject;
         }
+
+        public static void Add(WarehouseEntity warehouseModel) => Warehouses.Add(warehouseModel);
+        public static WarehouseEntity GetWarehouseByGroupId(int id) => Warehouses.SingleOrDefault(x => x.DbModel.GroupId == id);
+
+        public static void Add(JobEntity jobEntity) => Jobs.Add(jobEntity);
 
         public static VehicleEntity GetSpawnedVehicleById(int id)
         {
@@ -126,7 +158,7 @@ namespace LSG.GM.Entities
 
         public static VehicleDb GetVehicleDatabaseById(int id)
         {
-            VehicleDb vehicle = Singleton.GetDatabaseInstance().Vehicles.Include(item => item.ItemsInVehicle).SingleOrDefault(v => v.Id == id);
+            VehicleDb vehicle = Singleton.GetDatabaseInstance().Vehicles.Include(item => item.ItemsInVehicle).Include(upgrade => upgrade.VehicleUpgrades).SingleOrDefault(v => v.Id == id);
 
             return vehicle;
         }
@@ -142,8 +174,55 @@ namespace LSG.GM.Entities
 
         public static void Remove(BuildingEntity buildingEntity) => Buildings.Remove(buildingEntity);
 
+        public static void Add(WarehouseOrderEntity warehouseOrderEntity) => WarehouseOrders.Add(warehouseOrderEntity);
+        public static void Remove(WarehouseOrderEntity warehouseOrderEntity) => WarehouseOrders.Remove(warehouseOrderEntity);
+        public static WarehouseOrderEntity GetWarehouseOrderById(int id) => WarehouseOrders.SingleOrDefault(o => o.DbModel.Id == id);
+
+        public static void Add(JobCenterEntity jobCenterEntity) => JobCenters.Add(jobCenterEntity);
+
+        public static void Add(Smartphone smartphone) => CurrentSmartphones.Add(smartphone);
+        public static void Remove(Smartphone smartphone) => CurrentSmartphones.Remove(smartphone);
+
+        public static bool IsSmartphoneActive(int number)
+        {
+            Smartphone smartphone = CurrentSmartphones.FirstOrDefault(x => x.SmartphoneNumber == number);
+            return smartphone == null ? false : true;
+        }
+
+        //TODO: Do naprawy
+        public static CharacterEntity GetCharacterBySmartphoneNumber(int number)
+        {
+            if(IsSmartphoneActive(number))
+            {
+                CharacterEntity characterEntity = Accounts.FirstOrDefault(x => x.characterEntity.CurrentSmartphone != null && x.characterEntity.CurrentSmartphone.SmartphoneNumber == number).characterEntity;
+
+                return characterEntity == null ? null : characterEntity;
+            }
+
+            return null;
+        }
+
+
+        public static List<WarehouseOrderEntity> GetAllWarehouseOrders()
+        {
+            return WarehouseOrders;
+        }
+
+        public static List<JobEntityModel> GetJobs()
+        {
+            List<JobEntityModel> jobEntityModels = new List<JobEntityModel>();
+            Alt.Log($"Jobs length {Jobs.Count}");
+            foreach (JobEntity job in Jobs)
+            {
+                Alt.Log($"Dodaje {job.JobEntityModel.JobName} do listy");
+                jobEntityModels.Add(job.JobEntityModel);
+            }
+
+            return jobEntityModels;
+        }
+
         // Tworzenie blipów, markerów itp (wszystko co jest lokalnie dla gracza gdy wchodzi na serwer)
-        public static async Task LoadClientEntity(IPlayer player) => await AltAsync.Do(async () =>
+        public static async Task LoadClientEntity(IPlayer player)
         {
             Alt.Log("[LoadClientEntity]");
             foreach (AtmEntity atm in Atms)
@@ -181,11 +260,27 @@ namespace LSG.GM.Entities
             {
                 player.CreateDrawText(drawText);
             }
-        });
 
-        public static async Task LoadServerEntity() => await AltAsync.Do(async () =>
+            //Do testów później tego nie będzie
+            foreach (WarehouseEntity warehouse in Warehouses)
+            {
+                await player.CreateMarker(warehouse.Marker);
+            }
+
+            foreach (JobEntity job in Jobs)
+            {
+                await player.CreateMarker(job.Marker);
+                await player.CreateBlip(job.Blip);
+            }
+
+            foreach (JobCenterEntity jobCenter in JobCenters)
+            {
+                await player.CreateMarker(jobCenter.Marker);
+            }
+        }
+
+        public static async Task LoadServerEntity()
         {
-            Alt.Log("[LoadServerEntity]");
             RoleplayContext ctx = Singleton.GetDatabaseInstance();
 
             using (UnitOfWork unit = new UnitOfWork(ctx))
@@ -195,8 +290,43 @@ namespace LSG.GM.Entities
                 await BusEntity.LoadBusAsync(unit);
                 await ShopEntity.LoadShopAsync(unit);
                 await GroupEntity.LoadGroupsAsync(unit);
+                await WarehouseOrderEntity.LoadWarehouseOrdersAsync();
             }
-        });
 
+            JobEntity courierJob = new JobEntity(new JobEntityModel()
+            {
+                JobName = "Kurier",
+                VehicleModel = AltV.Net.Enums.VehicleModel.Boxville2,
+                RespawnVehicle = true,
+                Position = new Position(26.1626f, -1300.59f, 29.2124f),
+                RespawnVehiclePosition = new Position(36.9495f, -1283.84f, 29.2799f),
+                RespawnVehicleRotation = new Rotation(0, 0, 1.53369f),
+                JobType = JobType.Courier,
+                MaxSalary = 400
+            });
+            courierJob.Create();
+
+            JobEntity junkerJob = new JobEntity(new JobEntityModel()
+            {
+                JobName = "Śmieciarz",
+                VehicleModel = AltV.Net.Enums.VehicleModel.Trash,
+                RespawnVehicle = true,
+                Position = new Position(500.334f, -652.009f, 24.8989f),
+                RespawnVehiclePosition = new Position(508.286f, -609.771f, 25.1348f),
+                RespawnVehicleRotation = new Rotation(0, 0, 1.63264f),
+                JobType = JobType.Junker,
+                MaxSalary = 400
+            });
+            junkerJob.Create();
+
+            JobCenterEntity jobCenter = new JobCenterEntity(new JobCenterModel()
+            {
+                Id = 0,
+                Position = new Position(104.73f, -934.075f, 29.8022f),
+                Jobs = EntityHelper.GetJobs()
+            });
+
+            jobCenter.Spawn();
+        }
     }
 }

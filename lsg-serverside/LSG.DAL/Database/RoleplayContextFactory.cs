@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LSG.DAL.Database.Models.GroupModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,8 @@ namespace LSG.DAL.Database
         public RoleplayContext Create() => this.CreateDbContext(new[] { "" });
 
         private readonly string _connectionString;
-        //Server=51.38.142.78;Database=lsg;User=algorytm;Password=f7ufcuEXMcNpmaDwgAPuxpUt; convert zero datetime=True
         //Server=localhost;Database=lsg;User=root;Password=; convert zero datetime=True
-        public RoleplayContextFactory() : this("Server=localhost;Database=lsg;User=root;Password=; convert zero datetime=True") { }
+        public RoleplayContextFactory() : this("Server=localhost;Database=lsg;User=root;Password=root; convert zero datetime=True") { }
 
         public RoleplayContextFactory(string connectionString)
         {
@@ -28,5 +28,6 @@ namespace LSG.DAL.Database
 
             return new RoleplayContext(options.Options);
         }
+
     }
 }

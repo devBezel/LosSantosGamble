@@ -11,6 +11,7 @@ namespace LSG.DAL.Database.Models.GroupModels
 {
     public class GroupWorkerModel : IWritable
     {
+
         public int Id { get; set; }
         public int Salary { get; set; }
         public int DutyMinutes { get; set; }

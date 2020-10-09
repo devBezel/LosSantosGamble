@@ -123,6 +123,8 @@ namespace LSG.GM.Core.Streamers.ObjectStreamer
                 Visible = visible
             };
 
+            Alt.Log($"Tworze obiekt {obj.ToString()}");
+
             AltEntitySync.AddEntity(obj);
             return obj;
         }

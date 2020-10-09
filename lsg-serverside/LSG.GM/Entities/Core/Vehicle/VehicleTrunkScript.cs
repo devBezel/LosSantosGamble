@@ -3,7 +3,9 @@ using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
+using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.ItemModels;
+using LSG.GM.Entities.Core.Group;
 using LSG.GM.Extensions;
 using LSG.GM.Helpers;
 using LSG.GM.Helpers.Models;
@@ -43,20 +45,25 @@ namespace LSG.GM.Entities.Core.Vehicle
         });
 
         [AsyncScriptEvent(ScriptEventType.ColShape)]
-        public async Task OnEnterColshape(IColShape colShape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
+        public async Task OnEnterColshape(IColShape shape, IEntity targetEntity, bool state) => await AltAsync.Do(() =>
         {
             IPlayer player = targetEntity as IPlayer;
             if (!state) return;
 
 
-            if (colShape == null || !colShape.Exists) return;
+            if (shape == null || !shape.Exists) return;
             if (targetEntity.Type != BaseObjectType.Player) return;
             Alt.Log("Bagażniki");
 
-            if (!colShape.HasData("vehicle:trunk")) return;
+            if (!shape.HasData("vehicle:trunk")) return;
             Alt.Log("Wchodze w bagaznik colshape");
             new Interaction(player, "vehicle-trunk:open", "aby otworzyć ~g~bagażnik");
-            player.SetData("current:vehicle-trunk", colShape);
+            player.SetData("current:vehicle-trunk", shape);
+
+            //if (shape.HasData("vehicle:trunk"))
+            //{
+
+            //}
 
         });
         [ClientEvent("vehicle-interaction:openTrunkRequest")]
@@ -92,7 +99,6 @@ namespace LSG.GM.Entities.Core.Vehicle
             DrawTextHelper.CreateGlobalDrawText(drawTextModel);
 
             vehicleEntity.TrunkOpen = true;
-            EntityHelper.Add(drawTextModel);
         }
         [ClientEvent("vehicle-trunk:open")]
         public void OpenVehicleTrunk(IPlayer player)
@@ -104,25 +110,59 @@ namespace LSG.GM.Entities.Core.Vehicle
             if (vehicleEntity == null) return;
 
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
-            if(vehicleEntity.DbModel.OwnerId != characterEntity.DbModel.Id)
+
+
+            if(vehicleEntity.IsGroupVehicle)
             {
-                //TODO: Dorobić że typ grupy police może przeszukiwać bagażniki
-                player.SendErrorNotify("Nie masz uprawnień", "Nie jesteś właścicielem tego pojazdu");
-                return;
+                GroupEntity vehicleGroupOwner = vehicleEntity.GroupOwner;
+                if (vehicleGroupOwner == null) 
+                    return;
+
+                if(characterEntity.OnDutyGroup == null)
+                {
+                    player.SendErrorNotify("Musisz być na służbie grupy, aby otworzyć bagażnik");
+                    return;
+                }
+
+                if (vehicleGroupOwner != characterEntity.OnDutyGroup)
+                {
+                    player.SendChatMessageError("Ten pojazd nie należy do twojej grupy");
+                    return;
+                }
+
+                GroupWorkerModel worker = characterEntity.OnDutyGroup.DbModel.Workers.First(c => c.CharacterId == characterEntity.DbModel.Id);
+                if(!vehicleGroupOwner.CanPlayerVehicle(worker))
+                {
+                    player.SendChatMessageError("Nie masz uprawnień do tego, aby otworzyć bagażnik pojazdu");
+                    return;
+                }
+
             }
+            else
+            {
+                if (vehicleEntity.DbModel.OwnerId != characterEntity.DbModel.Id)
+                {
+                    //TODO: Dorobić że typ grupy police może przeszukiwać bagażniki
+                    player.SendErrorNotify("Nie masz uprawnień", "Nie jesteś właścicielem tego pojazdu");
+                    return;
+                }
+            }
+
 
             player.Emit("vehicle-trunk:data",
                 characterEntity.DbModel.Items,
                 vehicleEntity.DbModel.ItemsInVehicle);
         }
 
-        [AsyncClientEvent("vehicle-interaction:closeTrunkRequest")]
-        public async Task CloseVehicleTrunk(IPlayer player, IVehicle vehicle) => await AltAsync.Do(() =>
+        [ClientEvent("vehicle-interaction:closeTrunkRequest")]
+        public void CloseVehicleTrunk(IPlayer player, IVehicle vehicle)
         {
             //IVehicle vehicle = (IVehicle)args[0];
 
+            Alt.Log("[DEBUG]: Otrzymałem info o zamknięciu bagażnika, zamykam");
+
             DisposeVehicleTrunk(vehicle, player);
-        });
+        }
         [ClientEvent("trunk:putItemToEquipment")]
         public void PutItemToEquipmentFromTrunk(IPlayer player, int itemID)
         {
@@ -135,12 +175,42 @@ namespace LSG.GM.Entities.Core.Vehicle
             if (vehicleEntity == null) return;
 
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
-            if(vehicleEntity.DbModel.OwnerId != characterEntity.DbModel.Id)
+            
+            if(vehicleEntity.IsGroupVehicle)
             {
-                //TODO: Dorobić że typ grupy police może przeszukiwać bagażniki
-                player.SendErrorNotify("Nie masz uprawnień", "Nie jesteś właścicielem tego pojazdu");
-                return;
+                GroupEntity vehicleGroupOwner = vehicleEntity.GroupOwner;
+                if (vehicleGroupOwner == null)
+                    return;
+
+                if (characterEntity.OnDutyGroup == null)
+                {
+                    player.SendErrorNotify("Musisz być na służbie grupy, aby otworzyć bagażnik");
+                    return;
+                }
+
+                if (vehicleGroupOwner != characterEntity.OnDutyGroup)
+                {
+                    player.SendChatMessageError("Ten pojazd nie należy do twojej grupy");
+                    return;
+                }
+
+                GroupWorkerModel worker = characterEntity.OnDutyGroup.DbModel.Workers.First(c => c.CharacterId == characterEntity.DbModel.Id);
+                if (!vehicleGroupOwner.CanPlayerVehicle(worker))
+                {
+                    player.SendChatMessageError("Nie masz uprawnień do tego, aby otworzyć bagażnik pojazdu");
+                    return;
+                }
             }
+            else
+            {
+                if (vehicleEntity.DbModel.OwnerId != characterEntity.DbModel.Id)
+                {
+                    //TODO: Dorobić że typ grupy police może przeszukiwać bagażniki
+                    player.SendErrorNotify("Nie masz uprawnień", "Nie jesteś właścicielem tego pojazdu");
+                    return;
+                }
+            }
+
             ItemModel itemToChange = vehicleEntity.DbModel.ItemsInVehicle.SingleOrDefault(item => item.Id == itemID);
             vehicleEntity.DbModel.ItemsInVehicle.Remove(itemToChange);
             characterEntity.DbModel.Items.Add(itemToChange);
@@ -156,12 +226,42 @@ namespace LSG.GM.Entities.Core.Vehicle
             trunkColshape.GetData("vehicle:trunk", out VehicleEntity vehicleEntity);
             if (vehicleEntity == null) return;
             CharacterEntity characterEntity = player.GetAccountEntity().characterEntity;
-            if (vehicleEntity.DbModel.OwnerId != characterEntity.DbModel.Id)
+
+            if(vehicleEntity.IsGroupVehicle)
             {
-                //TODO: Dorobić że typ grupy police może przeszukiwać bagażniki
-                player.SendErrorNotify("Nie masz uprawnień", "Nie jesteś właścicielem tego pojazdu");
-                return;
+                GroupEntity vehicleGroupOwner = vehicleEntity.GroupOwner;
+                if (vehicleGroupOwner == null)
+                    return;
+
+                if (characterEntity.OnDutyGroup == null)
+                {
+                    player.SendErrorNotify("Musisz być na służbie grupy, aby otworzyć bagażnik");
+                    return;
+                }
+
+                if (vehicleGroupOwner != characterEntity.OnDutyGroup)
+                {
+                    player.SendChatMessageError("Ten pojazd nie należy do twojej grupy");
+                    return;
+                }
+
+                GroupWorkerModel worker = characterEntity.OnDutyGroup.DbModel.Workers.First(c => c.CharacterId == characterEntity.DbModel.Id);
+                if (!vehicleGroupOwner.CanPlayerVehicle(worker))
+                {
+                    player.SendChatMessageError("Nie masz uprawnień do tego, aby otworzyć bagażnik pojazdu");
+                    return;
+                }
             }
+            else
+            {
+                if (vehicleEntity.DbModel.OwnerId != characterEntity.DbModel.Id)
+                {
+                    //TODO: Dorobić że typ grupy police może przeszukiwać bagażniki
+                    player.SendErrorNotify("Nie masz uprawnień", "Nie jesteś właścicielem tego pojazdu");
+                    return;
+                }
+            }
+
             ItemModel itemToChange = characterEntity.DbModel.Items.SingleOrDefault(item => item.Id == itemID);
 
             if(itemToChange.ItemInUse)
@@ -185,8 +285,9 @@ namespace LSG.GM.Entities.Core.Vehicle
                 return;
             }
 
-            vehicleEntity.TrunkOpen = false;
 
+            vehicleEntity.TrunkOpen = false;
+            Alt.Log("[DEBUG]: Usuwan DxText i trunkColshape.Remove()");
             DrawTextHelper.RemoveGlobalDrawText($"VEHICLE_TRUNK_DRAW_TEXT{vehicleEntity.DbModel.Id}");
             trunkColshape.Remove();
 

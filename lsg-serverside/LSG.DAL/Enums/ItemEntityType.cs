@@ -13,6 +13,8 @@ namespace LSG.DAL.Enums
         Mask,
         Clothes,
         Water,
-        Obiect
+        Object,
+        CarPart,
+        Smartphone
     }
 }

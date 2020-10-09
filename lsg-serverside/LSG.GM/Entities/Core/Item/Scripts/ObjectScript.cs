@@ -24,7 +24,7 @@ namespace LSG.GM.Entities.Core.Item.Scripts
         }
 
         [ClientEvent("item:createWorldObject")]
-        public void CreateWorldItemObject(IPlayer player, uint objectHash, string positionJson, string rotationJson)
+        public void CreateWorldItemObject(IPlayer player, uint objectHash, string positionJson, string rotationJson, int itemID)
         {
 
             Vector3 position = JsonConvert.DeserializeObject<Vector3>(positionJson);
@@ -38,6 +38,7 @@ namespace LSG.GM.Entities.Core.Item.Scripts
             EntityHelper.Add(dynamicObject);
 
             player.SendSuccessNotify("Postawiono obiekt pomyślnie", "Twój obiekt został postawiony");
+            player.Emit("item:synchronizateWorldObjectWithClient", dynamicObject.Id, itemID);
         }
 
         [ClientEvent("item:removeWorldObject")]

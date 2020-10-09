@@ -1,17 +1,26 @@
 ﻿using AltV.Net;
 using LSG.DAL.Database.Models.CharacterModels;
+using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.VehicleModels;
+using LSG.DAL.Database.Models.WarehouseModels;
 using LSG.DAL.Enums;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace LSG.DAL.Database.Models.GroupModels
 {
     public class GroupModel : IWritable
     {
+        //public GroupModel()
+        //{
+        //    Workers = new HashSet<GroupWorkerModel>();
+        //    Ranks = new HashSet<GroupRankModel>();
+        //}
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Tag { get; set; }
@@ -30,8 +39,14 @@ namespace LSG.DAL.Database.Models.GroupModels
         public int LeaderId { get; set; }
         public Character Leader { get; set; }
 
+        [ForeignKey("DefaultRank")]
+        public int DefaultRankId { get; set; }
+        public virtual GroupRankModel DefaultRank { get; set; }
+
         public List<GroupWorkerModel> Workers { get; set; }
+        public List<GroupRankModel> Ranks { get; set; }
         public List<Vehicle> Vehicles { get; set; }
+        public List<WarehouseModel> Warehouses { get; set; }
 
         public void OnWrite(IMValueWriter writer)
         {

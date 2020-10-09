@@ -102,13 +102,13 @@ namespace LSG.GM.Entities.Core.Buidling
 
             if(buildingEntity.DbModel.EntryFee > 0 && (!buildingEntity.IsCharacterOwner(player) && !buildingEntity.IsCharacterTenant(player.GetAccountEntity().characterEntity)))
             {
-                if(!player.GetAccountEntity().characterEntity.HasEnoughMoney(buildingEntity.DbModel.EntryFee))
+                if(!player.GetAccountEntity().characterEntity.HasEnoughMoney(buildingEntity.DbModel.EntryFee, false))
                 {
                     player.SendNativeNotify(null, NotificationNativeType.Normal, 1, "Nie masz przy sobie gotówki", "~g~Budynek", $"Aby wejść do tego budynku potrzebujesz ~g~{buildingEntity.DbModel.EntryFee}$");
                     return;
                 }
 
-                player.GetAccountEntity().characterEntity.RemoveMoney(buildingEntity.DbModel.EntryFee);
+                player.GetAccountEntity().characterEntity.RemoveMoney(buildingEntity.DbModel.EntryFee, false);
                 buildingEntity.AddMoney(buildingEntity.DbModel.EntryFee);
 
                 player.SendNativeNotify(null, NotificationNativeType.Building, 1, "Pobrano opłatę", "~g~Budynek", $"Pobrano opłatę {buildingEntity.DbModel.EntryFee}$ za wejście do budynku", 1);
@@ -248,7 +248,7 @@ namespace LSG.GM.Entities.Core.Buidling
             }
 
             buildingEntity.RemoveMoney(toWithdraw);
-            player.GetAccountEntity().characterEntity.AddMoney(toWithdraw);
+            player.GetAccountEntity().characterEntity.AddMoney(toWithdraw, false);
 
             player.SendNativeNotify(null, NotificationNativeType.Building, 1, "Wypłaciłeś środki", "~g~Budynek", $"Wypłaciłeś z salda budynku ~g~{toWithdraw}$", 1);
         }

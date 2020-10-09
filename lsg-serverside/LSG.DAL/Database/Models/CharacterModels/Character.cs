@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using AltV.Net;
@@ -7,6 +8,7 @@ using LSG.DAL.Database.Models.AccountModels;
 using LSG.DAL.Database.Models.GroupModels;
 using LSG.DAL.Database.Models.ItemModels;
 using LSG.DAL.Database.Models.VehicleModels;
+using LSG.DAL.Enums;
 using Newtonsoft.Json;
 
 namespace LSG.DAL.Database.Models.CharacterModels
@@ -38,6 +40,16 @@ namespace LSG.DAL.Database.Models.CharacterModels
         public float Armor { get; set; }
         public float Thirsty { get; set; }
         public float Hunger { get; set; }
+        public bool Online { get; set; }
+        public int TimeSpent { get; set; }
+        public float GamblePoints { get; set; }
+
+        [EnumDataType(typeof(JobType))]
+        public JobType JobType { get; set; }
+        public int JobEarned { get; set; }
+        public DateTime JobEnded { get; set; }
+
+        public DateTime RecentlyPlayed { get; set; }
         public CharacterLook CharacterLook { get; set; }
 
 
@@ -122,6 +134,18 @@ namespace LSG.DAL.Database.Models.CharacterModels
 
             writer.Name("hunger");
             writer.Value(Hunger);
+
+            writer.Name("online");
+            writer.Value(Online);
+
+            writer.Name("timeSpent");
+            writer.Value(TimeSpent);
+
+            writer.Name("gamblePoints");
+            writer.Value(GamblePoints);
+
+            writer.Name("jobType");
+            writer.Value((int)JobType);
 
             //writer.Name("vehicles");
             //writer.Value(JsonConvert.SerializeObject(Vehicles));

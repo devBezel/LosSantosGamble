@@ -39,7 +39,7 @@ namespace LSG.GM.Core.Login
 
 
         [AsyncClientEvent("login:characterDetail")]
-        public async Task SetCharacterSettings(IPlayer player, int characterId) => await AltAsync.Do(() =>
+        public void SetCharacterSettings(IPlayer player, int characterId)
         {
             //Character characterClient = JsonConvert.DeserializeObject<Character>((string)args[0]);
 
@@ -48,15 +48,27 @@ namespace LSG.GM.Core.Login
             .Include(l => l.CharacterLook)
             .Include(g => g.GroupWorkers)
             .Include(i => i.Items)
+            .ThenInclude(s => s.SmartphoneContacts)
+            .Include(i => i.Items)
+            .ThenInclude(r => r.SmartphoneRecentCalls)
+            .Include(i => i.Items)
+            .ThenInclude(m => m.SmartphoneMessages)
+            .ThenInclude(c => c.Cellphone)
             .Include(v => v.Vehicles)
             .Include(a => a.Account)
             .ThenInclude(p => p.AccountPremium)
             .FirstOrDefault(c => c.Id == characterId);
 
-            Alt.Log("ilosc rzeczy z ekwipunku " + characterDatabase.Items.Count().ToString());
+            
+            if(EntityHelper.AccountLogged(characterDatabase.Account.Id))
+            {
+                player.SendChatMessageError("Ktoś już jest zalogowany na tym koncie!");
+                return;
+            }
+
             AccountEntity accountEntity = new AccountEntity(characterDatabase.Account, player);
             accountEntity.Login(characterDatabase);
-        });
+        }
         
         [ClientEvent("login:successWearChangeWorld")]
         public void ChangeCharacterWorld(IPlayer player)
@@ -76,14 +88,14 @@ namespace LSG.GM.Core.Login
 
 
         [AsyncScriptEvent(ScriptEventType.PlayerConnect)]
-        public async Task OnPlayerConnect(IPlayer player, string reason) => await AltAsync.Do(async () =>
+        public async Task OnPlayerConnect(IPlayer player, string reason)
         {
             await EntityHelper.LoadClientEntity(player);
             Calculation.AssignPlayerServerID(player);
 
 
             await player.EmitAsync("other:first-connect");
-        });
+        }
 
 
     }

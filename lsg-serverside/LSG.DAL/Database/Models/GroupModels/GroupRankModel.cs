@@ -19,7 +19,7 @@ namespace LSG.DAL.Database.Models.GroupModels
         public int GroupId { get; set; }
         public virtual GroupModel Group { get; set; }
 
-        public int DefaultForGroupId { get; set; }
+        public int? DefaultForGroupId { get; set; }
         public virtual GroupModel DefaultForGroup { get; set; }
         // navigation properties
         public virtual ICollection<GroupWorkerModel> Workers { get; set; }
@@ -45,7 +45,10 @@ namespace LSG.DAL.Database.Models.GroupModels
             writer.Value(GroupId);
 
             writer.Name("defaultForGroupId");
-            writer.Value(DefaultForGroupId);
+            if(DefaultForGroupId.HasValue)
+            {
+                writer.Value(DefaultForGroupId.Value);
+            }
 
             writer.EndObject();
         }

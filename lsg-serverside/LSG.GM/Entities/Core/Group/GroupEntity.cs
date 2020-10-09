@@ -6,8 +6,13 @@ using LSG.DAL.UnitOfWork;
 using LSG.GM.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using AltV.Net;
+using LSG.DAL.Database.Models.WarehouseModels;
+using LSG.GM.Entities.Core.Warehouse;
 
 namespace LSG.GM.Entities.Core.Group
 {
@@ -45,6 +50,26 @@ namespace LSG.GM.Entities.Core.Group
             return entityFactory.Create(groupModel);
         }
 
+        public IEnumerable<GroupWorkerModel> GetWorkers()
+        {
+            return DbModel.Workers.Where(w => w.Character != null);
+        }
+
+        public bool IsGroupOwner(GroupWorkerModel worker)
+        {
+            return DbModel.LeaderId == worker.CharacterId ? true : false;
+        }
+
+        public bool CanPlayerManageWorkers(GroupWorkerModel worker)
+        {
+            return worker.Rights.HasFlag(GroupRights.Recruitment) || IsGroupOwner(worker) ? true : false;
+        }
+
+        public bool CanPlayerVehicle(GroupWorkerModel worker)
+        {
+            return worker.Rights.HasFlag(GroupRights.Vehicle) || IsGroupOwner(worker) ? true : false;
+        }
+
         //public bool CanPlayerOpenGroupPanel(GroupWorkerModel worker)
         //{
         //    return worker?.Rights.HasFlag(GroupRights.Panel) ?? false;
@@ -67,6 +92,11 @@ namespace LSG.GM.Entities.Core.Group
             return (DbModel.Money >= money) ? true : false;
         }
 
+        public bool ContainsWorker(AccountEntity accountEntity)
+        {
+            return DbModel.Workers.Any(c => c.CharacterId == accountEntity.characterEntity.DbModel.Id);
+        }
+
         public void AddWorker(AccountEntity accountEntity)
         {
             GroupWorkerModel groupWorker = new GroupWorkerModel()
@@ -75,12 +105,13 @@ namespace LSG.GM.Entities.Core.Group
                 Character = accountEntity.characterEntity.DbModel,
                 Salary = 0,
                 Rights = GroupRights.None,
-                DutyMinutes = 0
+                DutyMinutes = 0,
             };
 
             DbModel.Workers.Add(groupWorker);
             Save();
         }
+
 
         public void Save()
         {
@@ -91,13 +122,22 @@ namespace LSG.GM.Entities.Core.Group
             }
         }
 
-        public static async Task LoadGroupsAsync(UnitOfWork unitOfWork) => await AltAsync.Do(async () =>
+        public static async Task LoadGroupsAsync(UnitOfWork unitOfWork)
         {
             GroupEntityFactory factory = new GroupEntityFactory();
             foreach (GroupModel group in await unitOfWork.GroupRepository.GetAll())
             {
-                factory.Create(group);
+                GroupEntity groupEntity = factory.Create(group);
+
+                foreach (WarehouseModel warehouse in await unitOfWork.WarehouseRepository.GetAll())
+                {
+                    if(groupEntity.DbModel.Id == warehouse.GroupId)
+                    {
+                        WarehouseEntity warehouseEntity = new WarehouseEntity(groupEntity, warehouse);
+                        warehouseEntity.Spawn();
+                    }
+                }
             }
-        });
+        }
     }
 }
